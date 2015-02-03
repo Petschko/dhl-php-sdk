@@ -75,4 +75,34 @@ After that, you can read the shipment infos
 	
 That's all. More will be hopefully coming soon.
 
+## Using the live API
+
+To use it in live environment, please create the Client as none sandboxed:
+
+    $dhl = new DHLBusinessShipment($credentials, $info, false);
+
+You need also to change the credentials a bit:
+
+	// your customer and api credentials from/for dhl
+	$credentials = array(
+    	'user' => 'geschaeftskunden_api',
+    	'signature' => 'Dhl_ep_test1',
+    	'ekp' => '5000000000',
+    	'api_user'  => '',
+    	'api_password'  => '',
+    	'log' => true
+    );
+
+`user`: Use the intraship username  
+`signature`: intraship password  
+`ekp`: Your dhl customer id  
+`api_user`: App ID from developer account  
+`api_password`: App token from developer account
+
+## WordPress and WooCommerce
+
+I build several Plugins for WordPress and WooCommerce - feel free to ask me for that.
+
+*Contact*  
+
 Check out my website: [www.tricd.de](http://www.tricd.de)
