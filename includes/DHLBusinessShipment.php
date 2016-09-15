@@ -39,9 +39,9 @@ class DHLBusinessShipment {
 	private $client;
 
 	/**
-	 * todo doc
+	 * Contains the error array
 	 *
-	 * @var array $errors
+	 * @var array $errors - Error-Array
 	 */
 	private $errors = array();
 
@@ -141,6 +141,13 @@ class DHLBusinessShipment {
 	}
 
 	/**
+	 * @param string $error
+	 */
+	private function addError($error) {
+		$this->errors[] = $error;
+	}
+
+	/**
 	 * @return boolean
 	 */
 	private function isSandbox() {
@@ -188,22 +195,22 @@ class DHLBusinessShipment {
 	private function buildClient() {
 		$header = $this->buildAuthHeader();
 
-		if($this->sandbox)
+		if($this->isSandbox())
 			$location = self::DHL_SANDBOX_URL;
 		else
 			$location = self::DHL_PRODUCTION_URL;
 
 		$auth_params = array(
-			'login' => $this->credentials['api_user'],
-			'password' => $this->credentials['api_password'],
+			'login' => $this->getCredentials()->getApiUser(),
+			'password' => $this->getCredentials()->getApiPassword(),
 			'location' => $location,
 			'trace' => 1
 		);
 
 		$this->log($auth_params);
-		$this->client = new SoapClient(self::API_URL, $auth_params);
-		$this->client->__setSoapHeaders($header);
-		$this->log($this->client);
+		$this->setClient(new SoapClient(self::API_URL, $auth_params));
+		$this->getClient()->__setSoapHeaders($header);
+		$this->log($this->getClient());
 	}
 
 	/**
@@ -231,7 +238,7 @@ class DHLBusinessShipment {
 		$s = array();
 		$s['ProductCode'] = 'EPN';
 		$s['ShipmentDate'] = date('Y-m-d');
-		$s['EKP'] = $this->credentials['ekp'];
+		$s['EKP'] = $this->getCredentials()->getEpk();
 
 		$s['Attendance'] = array();
 		$s['Attendance']['partnerID'] = '01';
@@ -251,39 +258,37 @@ class DHLBusinessShipment {
 		$shipper = array();
 		$shipper['Company'] = array();
 		$shipper['Company']['Company'] = array();
-		$shipper['Company']['Company']['name1'] = $this->info['company_name'];
+		$shipper['Company']['Company']['name1'] = $this->getInfo()->getCompanyName();
 
 		$shipper['Address'] = array();
-		$shipper['Address']['streetName'] = $this->info['street_name'];
-		$shipper['Address']['streetNumber'] = $this->info['street_number'];
+		$shipper['Address']['streetName'] = $this->getInfo()->getStreetName();
+		$shipper['Address']['streetNumber'] = $this->getInfo()->getStreetNumber();
 		$shipper['Address']['Zip'] = array();
-		$shipper['Address']['Zip'][strtolower($this->info['country'])] = $this->info['zip'];
-		$shipper['Address']['city'] = $this->info['city'];
+		$shipper['Address']['Zip'][$this->getInfo()->getCountry()] = $this->getInfo()->getZip();
+		$shipper['Address']['city'] = $this->getInfo()->getLocation();
 
 		$shipper['Address']['Origin'] = array('countryISOCode' => 'DE');
 
 		$shipper['Communication'] = array();
-		$shipper['Communication']['email'] = $this->info['email'];
-		$shipper['Communication']['phone'] = $this->info['phone'];
-		$shipper['Communication']['internet'] = $this->info['internet'];
-		$shipper['Communication']['contactPerson'] = $this->info['contact_person'];
-
+		$shipper['Communication']['email'] = $this->getInfo()->getEmail();
+		$shipper['Communication']['phone'] = $this->getInfo()->getPhone();
+		$shipper['Communication']['internet'] = $this->getInfo()->getInternet();
+		$shipper['Communication']['contactPerson'] = $this->getInfo()->getContactPerson();
 
 		$shipment['ShipmentOrder']['Shipment']['Shipper'] = $shipper;
 
 		$receiver = array();
-
 		$receiver['Company'] = array();
 		$receiver['Company']['Person'] = array();
-		$receiver['Company']['Person']['firstname'] = $customer_details['first_name'];
-		$receiver['Company']['Person']['lastname'] = $customer_details['last_name'];
+		$receiver['Company']['Person']['firstname'] = $customer_details->getFirstName();
+		$receiver['Company']['Person']['lastname'] = $customer_details->getLastName();
 
 		$receiver['Address'] = array();
-		$receiver['Address']['streetName'] = $customer_details['street_name'];
-		$receiver['Address']['streetNumber'] = $customer_details['street_number'];
+		$receiver['Address']['streetName'] = $customer_details->getStreetName();
+		$receiver['Address']['streetNumber'] = $customer_details->getStreetNumber();
 		$receiver['Address']['Zip'] = array();
-		$receiver['Address']['Zip'][strtolower($customer_details['country'])] = $customer_details['zip'];
-		$receiver['Address']['city'] = $customer_details['city'];
+		$receiver['Address']['Zip'][$customer_details->getCountry()] = $customer_details->getZip();
+		$receiver['Address']['city'] = $customer_details->getLocation();
 		$receiver['Communication'] = array();
 
 		$receiver['Address']['Origin'] = array('countryISOCode' => 'DE');
@@ -291,13 +296,13 @@ class DHLBusinessShipment {
 		$shipment['ShipmentOrder']['Shipment']['Receiver'] = $receiver;
 
 
-		$response = $this->client->CreateShipmentDD($shipment);
+		$response = $this->getClient()->CreateShipmentDD($shipment);
 
 		if(is_soap_fault($response) || $response->status->StatusCode != 0) {
 			if(is_soap_fault($response))
-				$this->errors[] = $response->faultstring;
+				$this->addError($response->faultstring);
 			else
-				$this->errors[] = $response->status->StatusMessage;
+				$this->addError($response->status->StatusMessage);
 
 			return false;
 		} else {
@@ -316,13 +321,10 @@ class DHLBusinessShipment {
 	 * @return SoapHeader
 	 */
 	private function buildAuthHeader() {
-		$head = $this->credentials;
-
 		$auth_params = array(
-			'user' => $this->credentials['user'],
-			'signature' => $this->credentials['signature'],
+			'user' => $this->getCredentials()->getUser(),
+			'signature' => $this->getCredentials()->getSignature(),
 			'type' => 0
-
 		);
 
 		return new SoapHeader('http://dhl.de/webservice/cisbase', 'Authentification', $auth_params);
