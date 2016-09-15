@@ -1,23 +1,52 @@
 <?php
 
+mb_internal_encoding('UTF-8');
 define('API_URL', 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl');
 define('DHL_SANDBOX_URL', 'https://cig.dhl.de/services/sandbox/soap');
 define('DHL_PRODUCTION_URL', 'https://cig.dhl.de/services/production/soap');
 
+require_once('Address.php');
+require_once('DHL_Credentials.php');
+require_once('DHL_Company.php');
+require_once('DHL_Receiver.php');
 
 /**
  * Class DHLBusinessShipment
  */
 class DHLBusinessShipment {
-
+	/**
+	 * todo doc
+	 *
+	 * @var type
+	 */
 	private $credentials;
 
+	/**
+	 * todo doc
+	 *
+	 * @var type
+	 */
 	private $info;
 
+	/**
+	 * todo doc
+	 *
+	 * @var
+	 */
 	private $client;
 
+	/**
+	 * todo doc
+	 *
+	 * @var array
+	 */
 	public $errors;
 
+	/**
+	 * todo doc
+	 *
+	 * @var bool
+	 */
 	protected $sandbox;
 
 	/**
@@ -38,55 +67,56 @@ class DHLBusinessShipment {
 
 	}
 
+	/**
+	 * todo doc
+	 *
+	 * @param $message
+	 */
 	private function log($message) {
-
 		if(isset($this->credentials['log'])) {
-
-			if(is_array($message) || is_object($message)) {
-
+			if(is_array($message) || is_object($message))
 				error_log(print_r($message, true));
-
-			} else {
-
+			else
 				error_log($message);
-
-			}
-
 		}
 
 	}
 
+	/**
+	 * todo doc
+	 */
 	private function buildClient() {
 
 		$header = $this->buildAuthHeader();
 
-		if($this->sandbox) {
+		if($this->sandbox)
 			$location = DHL_SANDBOX_URL;
-		} else {
+		else
 			$location = DHL_PRODUCTION_URL;
-		}
 
 		$auth_params = array(
 			'login' => $this->credentials['api_user'],
 			'password' => $this->credentials['api_password'],
 			'location' => $location,
 			'trace' => 1
-
 		);
 
 		$this->log($auth_params);
-
 		$this->client = new SoapClient(API_URL, $auth_params);
-
 		$this->client->__setSoapHeaders($header);
-
 		$this->log($this->client);
 
 
 	}
 
+	/**
+	 * todo doc
+	 *
+	 * @param $customer_details
+	 * @param null $shipment_details
+	 * @return array|bool
+	 */
 	function createNationalShipment($customer_details, $shipment_details = null) {
-
 		$this->buildClient();
 
 		$shipment = array();
@@ -94,11 +124,10 @@ class DHLBusinessShipment {
 		// Version
 		$shipment['Version'] = array('majorRelease' => '1', 'minorRelease' => '0');
 
-
 		// Order
 		$shipment['ShipmentOrder'] = array();
 
-		// Fixme
+		// Fixme/TODO
 		$shipment['ShipmentOrder']['SequenceNumber'] = '1';
 
 		// Shipment
@@ -111,20 +140,16 @@ class DHLBusinessShipment {
 		$s['Attendance']['partnerID'] = '01';
 
 		if($shipment_details == null) {
-
 			$s['ShipmentItem'] = array();
 			$s['ShipmentItem']['WeightInKG'] = '5';
 			$s['ShipmentItem']['LengthInCM'] = '50';
 			$s['ShipmentItem']['WidthInCM'] = '50';
 			$s['ShipmentItem']['HeightInCM'] = '50';
-			// FIXME: What is this
+			// FIXME/TODO: What is this - maybe pk for international pl is palette? see https://github.com/tobias-redmann/dhl-php-sdk/issues/2
 			$s['ShipmentItem']['PackageType'] = 'PL';
-
 		}
 
-
 		$shipment['ShipmentOrder']['Shipment']['ShipmentDetails'] = $s;
-
 
 		$shipper = array();
 		$shipper['Company'] = array();
@@ -172,21 +197,13 @@ class DHLBusinessShipment {
 		$response = $this->client->CreateShipmentDD($shipment);
 
 		if(is_soap_fault($response) || $response->status->StatusCode != 0) {
-
-			if(is_soap_fault($response)) {
-
+			if(is_soap_fault($response))
 				$this->errors[] = $response->faultstring;
-
-			} else {
-
+			else
 				$this->errors[] = $response->status->StatusMessage;
 
-			}
-
 			return false;
-
 		} else {
-
 			$r = array();
 			$r['shipment_number'] = (String) $response->CreationState->ShipmentNumber->shipmentNumber;
 			$r['piece_number'] = (String) $response->CreationState->PieceInformation->PieceNumber->licensePlate;
@@ -194,27 +211,14 @@ class DHLBusinessShipment {
 
 			return $r;
 		}
-
 	}
 
-
-	/*
-	  function getVersion() {
-
-		$this->buildClient();
-
-		$this->log("Response: \n");
-
-		$response = $this->client->getVersion(array('majorRelease' => '1', 'minorRelease' => '0'));
-
-		$this->log($response);
-
-	  }
-	  */
-
-
+	/**
+	 * todo doc
+	 *
+	 * @return SoapHeader
+	 */
 	private function buildAuthHeader() {
-
 		$head = $this->credentials;
 
 		$auth_params = array(
@@ -225,11 +229,14 @@ class DHLBusinessShipment {
 		);
 
 		return new SoapHeader('http://dhl.de/webservice/cisbase', 'Authentification', $auth_params);
-
-
 	}
 
-
+	/*
+	*function getVersion() {
+	*	$this->buildClient();
+	*	$this->log("Response: \n");
+	*	$response = $this->client->getVersion(array('majorRelease' => '1', 'minorRelease' => '0'));
+	*	$this->log($response);
+	*}
+	*/
 }
-
-?>
