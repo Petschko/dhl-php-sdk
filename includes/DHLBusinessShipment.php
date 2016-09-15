@@ -2,10 +2,6 @@
 
 // Set correct encoding
 mb_internal_encoding('UTF-8');
-//todo remove defines
-//define('API_URL', 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl');
-//define('DHL_SANDBOX_URL', 'https://cig.dhl.de/services/sandbox/soap');
-//define('DHL_PRODUCTION_URL', 'https://cig.dhl.de/services/production/soap');
 
 // Get required classes
 require_once('Address.php');
@@ -22,23 +18,23 @@ class DHLBusinessShipment {
 	const API_URL = 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl';
 
 	/**
-	 * todo doc
+	 * Contains the DHL_Credentials Object
 	 *
-	 * @var DHL_Credentials $credentials
+	 * @var DHL_Credentials $credentials - DHL_Credentials Object
 	 */
 	private $credentials;
 
 	/**
-	 * todo doc
+	 * Contains the DHL_Company Object
 	 *
-	 * @var DHL_Company $info
+	 * @var DHL_Company $info - DHL_Company Object
 	 */
 	private $info;
 
 	/**
-	 * todo doc & find out what it is
+	 * Contains the SoapClient Object
 	 *
-	 * @var
+	 * @var SoapClient $client - SoapClient Object
 	 */
 	private $client;
 
@@ -50,11 +46,18 @@ class DHLBusinessShipment {
 	private $errors = array();
 
 	/**
-	 * todo doc
+	 * Contains if the Object runs in Sandbox-Mode
 	 *
-	 * @var bool $sandbox
+	 * @var bool $sandbox - Run the Object in Sandbox mode
 	 */
 	private $sandbox;
+
+	/**
+	 * Contains if the Object had enabled Log-Messages
+	 *
+	 * @var bool $log - Has the Object enabled Log-Messages
+	 */
+	private $log = false;
 
 	/**
 	 * Constructor for Shipment SDK
@@ -78,6 +81,7 @@ class DHLBusinessShipment {
 		unset($this->client);
 		unset($this->errors);
 		unset($this->sandbox);
+		unset($this->log);
 	}
 
 	/**
@@ -109,14 +113,14 @@ class DHLBusinessShipment {
 	}
 
 	/**
-	 * @return mixed todo type
+	 * @return SoapClient
 	 */
 	private function getClient() {
 		return $this->client;
 	}
 
 	/**
-	 * @param mixed $client todo type
+	 * @param SoapClient $client
 	 */
 	private function setClient($client) {
 		$this->client = $client;
@@ -151,18 +155,31 @@ class DHLBusinessShipment {
 	}
 
 	/**
-	 * todo doc
+	 * @return boolean
+	 */
+	public function isLog() {
+		return $this->log;
+	}
+
+	/**
+	 * @param boolean $log
+	 */
+	public function setLog($log) {
+		$this->log = $log;
+	}
+
+	/**
+	 * Add the Massage to Log if enabled
 	 *
-	 * @param mixed $message
+	 * @param mixed $message - Message to add to Log
 	 */
 	private function log($message) {
-		if(isset($this->credentials['log'])) {
+		if($this->isLog()) {
 			if(is_array($message) || is_object($message))
 				error_log(print_r($message, true));
 			else
 				error_log($message);
 		}
-
 	}
 
 	/**
@@ -172,9 +189,9 @@ class DHLBusinessShipment {
 		$header = $this->buildAuthHeader();
 
 		if($this->sandbox)
-			$location = DHL_SANDBOX_URL;
+			$location = self::DHL_SANDBOX_URL;
 		else
-			$location = DHL_PRODUCTION_URL;
+			$location = self::DHL_PRODUCTION_URL;
 
 		$auth_params = array(
 			'login' => $this->credentials['api_user'],
@@ -184,7 +201,7 @@ class DHLBusinessShipment {
 		);
 
 		$this->log($auth_params);
-		$this->client = new SoapClient(API_URL, $auth_params);
+		$this->client = new SoapClient(self::API_URL, $auth_params);
 		$this->client->__setSoapHeaders($header);
 		$this->log($this->client);
 	}
@@ -226,7 +243,7 @@ class DHLBusinessShipment {
 			$s['ShipmentItem']['WidthInCM'] = '50';
 			$s['ShipmentItem']['HeightInCM'] = '50';
 			// FIXME/TODO: What is this - maybe pk for international pl is palette? see https://github.com/tobias-redmann/dhl-php-sdk/issues/2
-			$s['ShipmentItem']['PackageType'] = 'PL';
+			// $s['ShipmentItem']['PackageType'] = 'PL'; may removed?
 		}
 
 		$shipment['ShipmentOrder']['Shipment']['ShipmentDetails'] = $s;
