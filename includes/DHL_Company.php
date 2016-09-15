@@ -22,6 +22,13 @@ class DHL_Company extends Address {
 	private $company_name = 'MyCompany GmbH';
 
 	/**
+	 * Contains the Company contact E-Mail Address
+	 *
+	 * @var string $email - Company contact E-Mail Address
+	 */
+	private $email = 'myEMail@myCompany.com';
+
+	/**
 	 * Contains the Company Phone-Number
 	 *
 	 * @var string $phone - Company Phone-Number
@@ -54,6 +61,7 @@ class DHL_Company extends Address {
 	 */
 	public function __destruct() {
 		unset($this->company_name);
+		unset($this->email);
 		unset($this->phone);
 		unset($this->internet);
 		unset($this->contact_person);
@@ -72,6 +80,20 @@ class DHL_Company extends Address {
 	 */
 	public function setCompanyName($company_name) {
 		$this->company_name = $company_name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail() {
+		return $this->email;
+	}
+
+	/**
+	 * @param string $email
+	 */
+	public function setEmail($email) {
+		$this->email = $email;
 	}
 
 	/**
