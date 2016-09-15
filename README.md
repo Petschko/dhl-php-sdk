@@ -13,93 +13,118 @@ You need a DHL developer account and - as long as you want to use the API in pro
 ## Usage
 
 First of all you need to create the Shipment Object with your credentials and some information from you as shipper.
-
-	// your customer and api credentials from/for dhl
-	$credentials = array(
-    	'user' => 'geschaeftskunden_api', 
-    	'signature' => 'Dhl_ep_test1', 
-    	'ekp' => '5000000000',
-    	'api_user'  => '',
-    	'api_password'  => '',
-    	'log' => true
-    );
-
-
-	// your company info
-	$info = array(
-    	'company_name'    => 'Kindehochdrei GmbH',
-    	'street_name'     => 'Clayallee',
-    	'street_number'   => '241',
-    	'zip'             => '14165',
-    	'country'         => 'germany',
-    	'city'            => 'Berlin',
-    	'email'           => 'bestellung@kindhochdrei.de',
-    	'phone'           => '01788338795',
-    	'internet'        => 'http://www.kindhochdrei.de',
-    	'contact_person'  => 'Nina Boeing'
-	);
-
-With these infos you can create the object:
-
-	$dhl = new DHLBusinessShipment($credentials, $info);
+````php
+	// Your customer and api credentials from/for DHL
+	$credentials = new DHL_Credentials();
 	
+	$credentials->setUser('geschaeftskunden_api');
+	$credentials->setSignature('Dhl_ep_test1');
+	$credentials->setEpk('5000000000');
+	$credentials->setApiUser('');
+	$credentials->setApiPassword('');
+	
+	// Your Company Info
+	$info = new DHL_Company();
+	
+	$info->setCompanyName('Kindehochdrei GmbH');
+	$info->setStreetName('Clayallee');
+	$info->setStreetNumber('241');
+	$info->setZip('14165');
+	$info->setLocation('Berlin');
+	$info->setCountry('Germany'); // doesn't matter if you write something upper case
+	$info->setEmail('bestellung@kindhochdrei.de');
+	$info->setPhone('01788338795');
+	$info->setInternet('http://www.kindhochdrei.de');
+	$info->setContactPerson('Nina Boeing');
+````
+
+With these 2 Objects you can create the `DHLBusinessShipment` Object:
+
+````php
+	$dhl = new DHLBusinessShipment($credentials, $info, true);
+	
+	// If you want to have logging:
+	$dhl->setLog(true);
+````
+
 To create a shipment and get the shipment number and label, just create the receiver details:
 
-	// receiver details
-	$customer_details = array(
-    	'first_name'    => 'Tobias',
-    	'last_name'     => 'Redmann',
-    	'c/o'           => '',
-    	'street_name'   => 'Hocksteinweg',
-    	'street_number' => '11',
-    	'country'       => 'germany',
-    	'zip'           => '14165',
-    	'city'          => 'Berlin'
-	);
+````php
+	// Receiver details
+	$customer_details = new DHL_Receiver();
 	
+	$customer_details->setFirstName('Tobias');
+	$customer_details->setLastName('Redmann');
+	$customer_details->setCO(''); // Whatever
+	$customer_details->setFullStreet('Hocksteinweg 11');
+	$customer_details->setZip('14165');
+	$customer_details->setLocation('Berlin');
+	$customer_details->setCountry('Germany');
+````
+
+You can use `setFullStreet` if you want the class to split street name and number automatic or just use the 2 separate Functions `setStreetName` and `setStreetNumber`
+
+````php
+	$address = new Address();
+	
+	// This here:
+	$address->setFullStreet('Hocksteinweg 11');
+	
+	// Is the same as this:
+	$address->setStreetName('Hocksteinweg');
+	$address->setStreetNumber('11');
+````
+On the `setFullStreet` method you don't have to care about split the number from the street name.
+
+
 And the create a shipment
 
+````php
 	$response = $dhl->createNationalShipment($customer_details);
-	
+````
+
 After that, you can read the shipment infos
 
-	if($response !== false) {
-  
-  		var_dump($response);
-  
-	} else {
-  
-  		var_dump($dhl->errors);
-  
-	}
-	
+````php
+	if($response !== false)
+		var_dump($response);
+	else
+		var_dump($dhl->getErrors());
+````
+
 That's all. More will be hopefully coming soon.
 
 ## Using the live API
 
-To use it in live environment, please create the Client as none sandboxed:
+To use it in live environment, please create the Client as none sandboxed, just drop the last param:
 
-    $dhl = new DHLBusinessShipment($credentials, $info, false);
+````php
+	$dhl = new DHLBusinessShipment($credentials, $info);
+	
+	// You can also log in the Non-Sandbox Mode, turn it on as before:
+	$dhl->setLog(true);
+````
 
 You need also to change the credentials a bit:
 
-	// your customer and api credentials from/for dhl
-	$credentials = array(
-    	'user' => 'geschaeftskunden_api',
-    	'signature' => 'Dhl_ep_test1',
-    	'ekp' => '5000000000',
-    	'api_user'  => '',
-    	'api_password'  => '',
-    	'log' => true
-    );
+````php
+	// Your customer and api credentials from/for DHL
+	$credentials = new DHL_Credentials();
+	
+	$credentials->setUser('geschaeftskunden_api');
+	$credentials->setSignature('Dhl_ep_test1');
+	$credentials->setEpk('5000000000');
+	$credentials->setApiUser('');
+	$credentials->setApiPassword('');
+````
 
-`user`: Use the intraship username  
-`signature`: intraship password  
-`ekp`: Your dhl customer id  
-`api_user`: App ID from developer account  
-`api_password`: App token from developer account
+`setUser`: Use the intraship username  
+`setSignature`: intraship password  
+`setEkp`: Your dhl customer id  
+`setApiUser`: App ID from developer account  
+`setApiPassword`: App token from developer account
 
-## WordPress and WooCommerce
+## WordPress and WooCommerce (From Origin creator)
 
 I build several Plugins for WordPress and WooCommerce - feel free to ask me for that.
 

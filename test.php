@@ -5,6 +5,7 @@ require_once('includes' . DIRECTORY_SEPARATOR . 'DHLBusinessShipment.php');
 
 // Your customer and api credentials from/for DHL
 $credentials = new DHL_Credentials();
+
 $credentials->setUser('geschaeftskunden_api');
 $credentials->setSignature('Dhl_ep_test1');
 $credentials->setEpk('5000000000');
@@ -24,6 +25,7 @@ $credentials->setApiPassword('');
 
 // Your Company Info
 $info = new DHL_Company();
+
 $info->setCompanyName('Kindehochdrei GmbH');
 $info->setStreetName('Clayallee');
 $info->setStreetNumber('241');
@@ -52,6 +54,7 @@ $info->setContactPerson('Nina Boeing');
 
 // Receiver details
 $customer_details = new DHL_Receiver();
+
 $customer_details->setFirstName('Tobias');
 $customer_details->setLastName('Redmann');
 $customer_details->setCO(''); // Whatever
