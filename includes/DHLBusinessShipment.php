@@ -1,10 +1,13 @@
 <?php
 
+// Set correct encoding
 mb_internal_encoding('UTF-8');
-define('API_URL', 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl');
-define('DHL_SANDBOX_URL', 'https://cig.dhl.de/services/sandbox/soap');
-define('DHL_PRODUCTION_URL', 'https://cig.dhl.de/services/production/soap');
+//todo remove defines
+//define('API_URL', 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl');
+//define('DHL_SANDBOX_URL', 'https://cig.dhl.de/services/sandbox/soap');
+//define('DHL_PRODUCTION_URL', 'https://cig.dhl.de/services/production/soap');
 
+// Get required classes
 require_once('Address.php');
 require_once('DHL_Credentials.php');
 require_once('DHL_Company.php');
@@ -14,22 +17,26 @@ require_once('DHL_Receiver.php');
  * Class DHLBusinessShipment
  */
 class DHLBusinessShipment {
+	const DHL_SANDBOX_URL = 'https://cig.dhl.de/services/sandbox/soap';
+	const DHL_PRODUCTION_URL = 'https://cig.dhl.de/services/production/soap';
+	const API_URL = 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl';
+
 	/**
 	 * todo doc
 	 *
-	 * @var type
+	 * @var DHL_Credentials $credentials
 	 */
 	private $credentials;
 
 	/**
 	 * todo doc
 	 *
-	 * @var type
+	 * @var DHL_Company $info
 	 */
 	private $info;
 
 	/**
-	 * todo doc
+	 * todo doc & find out what it is
 	 *
 	 * @var
 	 */
@@ -38,39 +45,115 @@ class DHLBusinessShipment {
 	/**
 	 * todo doc
 	 *
-	 * @var array
+	 * @var array $errors
 	 */
-	public $errors;
+	private $errors = array();
 
 	/**
 	 * todo doc
 	 *
-	 * @var bool
+	 * @var bool $sandbox
 	 */
-	protected $sandbox;
+	private $sandbox;
 
 	/**
 	 * Constructor for Shipment SDK
 	 *
-	 * @param type $api_credentials
-	 * @param type $customer_info
-	 * @param boolean $sandbox use sandbox or production environment
+	 * @param DHL_Credentials $api_credentials
+	 * @param DHL_Company $customer_info
+	 * @param boolean $sandbox - Use sandbox or production environment (Default false)
 	 */
-	function __construct($api_credentials, $customer_info, $sandbox = true) {
-
+	public function __construct($api_credentials, $customer_info, $sandbox = false) {
 		$this->credentials = $api_credentials;
 		$this->info = $customer_info;
-
 		$this->sandbox = $sandbox;
+	}
 
-		$this->errors = array();
+	/**
+	 * Clears Memory
+	 */
+	public function __destruct() {
+		unset($this->credentials);
+		unset($this->info);
+		unset($this->client);
+		unset($this->errors);
+		unset($this->sandbox);
+	}
 
+	/**
+	 * @return DHL_Credentials
+	 */
+	private function getCredentials() {
+		return $this->credentials;
+	}
+
+	/**
+	 * @param DHL_Credentials $credentials
+	 */
+	private function setCredentials($credentials) {
+		$this->credentials = $credentials;
+	}
+
+	/**
+	 * @return DHL_Company
+	 */
+	private function getInfo() {
+		return $this->info;
+	}
+
+	/**
+	 * @param DHL_Company $info
+	 */
+	private function setInfo($info) {
+		$this->info = $info;
+	}
+
+	/**
+	 * @return mixed todo type
+	 */
+	private function getClient() {
+		return $this->client;
+	}
+
+	/**
+	 * @param mixed $client todo type
+	 */
+	private function setClient($client) {
+		$this->client = $client;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getErrors() {
+		return $this->errors;
+	}
+
+	/**
+	 * @param array $errors
+	 */
+	private function setErrors($errors) {
+		$this->errors = $errors;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	private function isSandbox() {
+		return $this->sandbox;
+	}
+
+	/**
+	 * @param boolean $sandbox
+	 */
+	private function setSandbox($sandbox) {
+		$this->sandbox = $sandbox;
 	}
 
 	/**
 	 * todo doc
 	 *
-	 * @param $message
+	 * @param mixed $message
 	 */
 	private function log($message) {
 		if(isset($this->credentials['log'])) {
@@ -86,7 +169,6 @@ class DHLBusinessShipment {
 	 * todo doc
 	 */
 	private function buildClient() {
-
 		$header = $this->buildAuthHeader();
 
 		if($this->sandbox)
@@ -105,15 +187,13 @@ class DHLBusinessShipment {
 		$this->client = new SoapClient(API_URL, $auth_params);
 		$this->client->__setSoapHeaders($header);
 		$this->log($this->client);
-
-
 	}
 
 	/**
 	 * todo doc
 	 *
-	 * @param $customer_details
-	 * @param null $shipment_details
+	 * @param DHL_Receiver $customer_details
+	 * @param null $shipment_details - todo param not used yet? leave it to null
 	 * @return array|bool
 	 */
 	function createNationalShipment($customer_details, $shipment_details = null) {
