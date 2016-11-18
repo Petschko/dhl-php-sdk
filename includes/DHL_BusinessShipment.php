@@ -68,9 +68,9 @@ class DHL_BusinessShipment {
 	 * @param boolean $sandbox - Use sandbox or production environment (Default false)
 	 */
 	public function __construct($api_credentials, $customer_info, $sandbox = false) {
-		$this->credentials = $api_credentials;
-		$this->info = $customer_info;
-		$this->sandbox = $sandbox;
+		$this->setCredentials($api_credentials);
+		$this->setInfo($customer_info);
+		$this->setSandbox($sandbox);
 	}
 
 	/**
@@ -132,13 +132,6 @@ class DHL_BusinessShipment {
 	 */
 	public function getErrors() {
 		return $this->errors;
-	}
-
-	/**
-	 * @param array $errors
-	 */
-	private function setErrors($errors) {
-		$this->errors = $errors;
 	}
 
 	/**
@@ -323,7 +316,7 @@ class DHL_BusinessShipment {
 	}
 
 	/**
-	 * todo doc
+	 * Build SOAP-Header
 	 *
 	 * @return SoapHeader
 	 */
@@ -336,13 +329,4 @@ class DHL_BusinessShipment {
 
 		return new SoapHeader('http://dhl.de/webservice/cisbase', 'Authentification', $auth_params);
 	}
-
-	/*
-	*function getVersion() {
-	*	$this->buildClient();
-	*	$this->log("Response: \n");
-	*	$response = $this->client->getVersion(array('majorRelease' => '1', 'minorRelease' => '0'));
-	*	$this->log($response);
-	*}
-	*/
 }
