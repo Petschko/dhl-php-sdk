@@ -14,12 +14,6 @@
  * Class DHL_ShipmentDetails
  */
 class DHL_ShipmentDetails {
-	/*$s['ShipmentItem'] = array();
-			$s['ShipmentItem']['WeightInKG'] = '5';
-			$s['ShipmentItem']['LengthInCM'] = '50';
-			$s['ShipmentItem']['WidthInCM'] = '50';
-			$s['ShipmentItem']['HeightInCM'] = '50';
-			$s['ShipmentItem']['PackageType'] = 'PK';*/
 	/**
 	 * DHL-Package-Type "Palette"
 	 */
