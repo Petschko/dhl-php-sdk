@@ -6,11 +6,11 @@ require_once('includes' . DIRECTORY_SEPARATOR . 'DHL_BusinessShipment.php');
 // Your customer and api credentials from/for DHL
 $credentials = new DHL_Credentials();
 
-$credentials->setUser('geschaeftskunden_api');
-$credentials->setSignature('Dhl_ep_test1');
-$credentials->setEpk('5000000000');
-$credentials->setApiUser('');
-$credentials->setApiPassword('');
+$credentials->setUser('geschaeftskunden_api');	// DHL-User (Production: Your DHL-User in Lower-Case)
+$credentials->setSignature('Dhl_ep_test1');		// DHL-Password (Production: Your DHL-Password)
+$credentials->setEpk('5234167890');				// Customer Number (production: 10 first digits)
+$credentials->setApiUser('');					// API-User (dev: your dev ID | production: ApplicationID)
+$credentials->setApiPassword('');				// API-Password (dev: your dev password | production: ApplicationToken)
 
 
 // Your Company Info
