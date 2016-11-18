@@ -250,7 +250,7 @@ class DHLBusinessShipment {
 			$s['ShipmentItem']['WidthInCM'] = '50';
 			$s['ShipmentItem']['HeightInCM'] = '50';
 			// FIXME/TODO: What is this - maybe pk for international pl is palette? see https://github.com/tobias-redmann/dhl-php-sdk/issues/2
-			// $s['ShipmentItem']['PackageType'] = 'PL'; may removed?
+			$s['ShipmentItem']['PackageType'] = 'PK';
 		}
 
 		$shipment['ShipmentOrder']['Shipment']['ShipmentDetails'] = $s;
