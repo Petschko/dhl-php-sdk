@@ -8,6 +8,7 @@ require_once('Address.php');
 require_once('DHL_Credentials.php');
 require_once('DHL_Company.php');
 require_once('DHL_Receiver.php');
+require_once('DHL_ShipmentDetails.php');
 
 /**
  * Class DHLBusinessShipment
@@ -225,6 +226,10 @@ class DHL_BusinessShipment {
 
 		$shipment = array();
 
+		// Set default values for details if none are given
+		if($shipment_details === null)
+			$shipment_details = new DHL_ShipmentDetails();
+
 		// Version
 		$shipment['Version'] = array('majorRelease' => '1', 'minorRelease' => '0');
 
@@ -242,16 +247,8 @@ class DHL_BusinessShipment {
 
 		$s['Attendance'] = array();
 		$s['Attendance']['partnerID'] = '01';
-
-		if($shipment_details == null) {
-			$s['ShipmentItem'] = array();
-			$s['ShipmentItem']['WeightInKG'] = '5';
-			$s['ShipmentItem']['LengthInCM'] = '50';
-			$s['ShipmentItem']['WidthInCM'] = '50';
-			$s['ShipmentItem']['HeightInCM'] = '50';
-			// FIXME/TODO: What is this - maybe pk for international pl is palette? see https://github.com/tobias-redmann/dhl-php-sdk/issues/2
-			$s['ShipmentItem']['PackageType'] = 'PK';
-		}
+		// Add Details
+		$s['ShipmentItem'] = $shipment_details->toDHLArray();
 
 		$shipment['ShipmentOrder']['Shipment']['ShipmentDetails'] = $s;
 
