@@ -37,9 +37,12 @@ class DHL_Response {
 
 	/**
 	 * DHL_Response constructor.
+	 *
+	 * @param null|Object $response - DHL-Response
 	 */
-	public function __construct() {
-		// VOID
+	public function __construct($response = null) {
+		if($response !== null)
+			$this->loadResponse($response);
 	}
 
 	/**
@@ -98,7 +101,7 @@ class DHL_Response {
 	 *
 	 * @param Object $response - DHL-Response
 	 */
-	public function loadResponse($response) {
+	private function loadResponse($response) {
 		$this->setShipmentNumber((string) $response->CreationState->ShipmentNumber->shipmentNumber);
 		$this->setPieceNumber((string) $response->CreationState->PieceInformation->PieceNumber->licensePlate);
 		$this->setLabelUrl((string) $response->CreationState->Labelurl);

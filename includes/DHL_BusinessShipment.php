@@ -305,8 +305,7 @@ class DHL_BusinessShipment {
 
 			return false;
 		} else {
-			$r = new DHL_Response();
-			$r->loadResponse($response);
+			$r = new DHL_Response($response);
 
 			return $r;
 		}
