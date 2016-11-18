@@ -9,6 +9,7 @@ require_once('DHL_Credentials.php');
 require_once('DHL_Company.php');
 require_once('DHL_Receiver.php');
 require_once('DHL_ShipmentDetails.php');
+require_once('DHL_Response.php');
 
 /**
  * Class DHLBusinessShipment
