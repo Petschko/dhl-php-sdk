@@ -12,7 +12,7 @@ require_once('DHL_Receiver.php');
 /**
  * Class DHLBusinessShipment
  */
-class DHLBusinessShipment {
+class DHL_BusinessShipment {
 	const DHL_SANDBOX_URL = 'https://cig.dhl.de/services/sandbox/soap';
 	const DHL_PRODUCTION_URL = 'https://cig.dhl.de/services/production/soap';
 	const API_URL = 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl';
@@ -190,7 +190,7 @@ class DHLBusinessShipment {
 	}
 
 	/**
-	 * todo doc
+	 * Auth Client on DHL-API
 	 */
 	private function buildClient() {
 		$header = $this->buildAuthHeader();
@@ -214,13 +214,13 @@ class DHLBusinessShipment {
 	}
 
 	/**
-	 * todo doc
+	 * Creates a nation Shipment
 	 *
 	 * @param DHL_Receiver $customer_details
-	 * @param null $shipment_details - todo param not used yet? leave it to null
+	 * @param DHL_ShipmentDetails $shipment_details - Shipment details
 	 * @return array|bool - Response or false on error
 	 */
-	function createNationalShipment($customer_details, $shipment_details = null) {
+	public function createNationalShipment($customer_details, $shipment_details = null) {
 		$this->buildClient();
 
 		$shipment = array();

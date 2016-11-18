@@ -1,7 +1,7 @@
 <?php
 
 // Require the MAin-Class (other classes will included by this file)
-require_once('includes' . DIRECTORY_SEPARATOR . 'DHLBusinessShipment.php');
+require_once('includes' . DIRECTORY_SEPARATOR . 'DHL_BusinessShipment.php');
 
 // Your customer and api credentials from/for DHL
 $credentials = new DHL_Credentials();
