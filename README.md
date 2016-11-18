@@ -17,11 +17,12 @@ First of all you need to create the Shipment Object with your credentials and so
 	// Your customer and api credentials from/for DHL
 	$credentials = new DHL_Credentials();
 	
-	$credentials->setUser('geschaeftskunden_api');
-	$credentials->setSignature('Dhl_ep_test1');
-	$credentials->setEpk('5000000000');
-	$credentials->setApiUser('');
-	$credentials->setApiPassword('');
+	// If you wanna Test it you have to require a dev account on DHL
+	$credentials->setUser('geschaeftskunden_api'); // DHL-User (Production: Your DHL-User in Lower-Case)
+	$credentials->setSignature('Dhl_ep_test1'); // DHL-Password (Production: Your DHL-Password)
+	$credentials->setEpk('5000000000'); // Customer Number (production: 10 first digits)
+	$credentials->setApiUser(''); // API-User (dev: your dev ID | production: ApplicationID)
+	$credentials->setApiPassword(''); // API-Password (dev: your dev password | production: ApplicationToken)
 	
 	// Your Company Info
 	$info = new DHL_Company();
@@ -83,7 +84,21 @@ And the create a shipment
 	$response = $dhl->createNationalShipment($customer_details);
 ````
 
-After that, you can read the shipment infos
+You can also specify more stuff with your shipping but its optional. You have to create the `DHL_ShipmentDetails` Object:
+
+````php
+	$details = new DHL_ShipmentDetails();
+	$details->setWeight(5); // Weight in KG (Default: 5)
+	$details->setLength(50); // Length in CM (Default: 50)
+	$details->setWidth(50); // Width in CM (Default: 50)
+	$details->setHeight(50); // Height in CM (Default: 50)
+	$details->setPackageType(DHL_ShipmentDetails::PACKAGE); // Package type (2 predefined constances but not sure if they correct)
+	
+	// Add Details as 2nd param
+	$response = $dhl->createNationalShipment($customer_details, $details);
+````
+
+After that, you can read the Shipment Infos
 
 ````php
 	if($response !== false)
@@ -92,7 +107,12 @@ After that, you can read the shipment infos
 		var_dump($dhl->getErrors());
 ````
 
-That's all. More will be hopefully coming soon.
+The response (Here as `$response`) will stored in an Object `DHL_Response` you can get the 3 results:  
+`getShipmentNumber`: Get the Shipment Number  
+`getPieceNumber`: IDK what this is please edit if you know  
+`getLabelUrl`: URL to the Label for your Shipment  
+
+That's all.
 
 ## Using the live API
 
@@ -120,7 +140,7 @@ You need also to change the credentials a bit:
 
 `setUser`: Use the intraship username  
 `setSignature`: intraship password  
-`setEkp`: Your dhl customer id  
+`setEkp`: Your DHL customer id (first 10 digits)  
 `setApiUser`: App ID from developer account  
 `setApiPassword`: App token from developer account
 
@@ -128,6 +148,6 @@ You need also to change the credentials a bit:
 
 I build several Plugins for WordPress and WooCommerce - feel free to ask me for that.
 
-*Contact*  
+*Contact* (Origin creator)  
 
 Check out my website: [www.tricd.de](http://www.tricd.de)
