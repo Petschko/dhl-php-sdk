@@ -218,7 +218,7 @@ class DHLBusinessShipment {
 	 *
 	 * @param DHL_Receiver $customer_details
 	 * @param null $shipment_details - todo param not used yet? leave it to null
-	 * @return array|bool
+	 * @return array|bool - Response or false on error
 	 */
 	function createNationalShipment($customer_details, $shipment_details = null) {
 		$this->buildClient();
@@ -295,8 +295,16 @@ class DHLBusinessShipment {
 
 		$shipment['ShipmentOrder']['Shipment']['Receiver'] = $receiver;
 
+		$response = null;
 
-		$response = $this->getClient()->CreateShipmentDD($shipment);
+		// Create Shipment
+		try {
+			$response = $this->getClient()->CreateShipmentDD($shipment);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
 
 		if(is_soap_fault($response) || $response->status->StatusCode != 0) {
 			if(is_soap_fault($response))
@@ -310,6 +318,8 @@ class DHLBusinessShipment {
 			$r['shipment_number'] = (String) $response->CreationState->ShipmentNumber->shipmentNumber;
 			$r['piece_number'] = (String) $response->CreationState->PieceInformation->PieceNumber->licensePlate;
 			$r['label_url'] = (String) $response->CreationState->Labelurl;
+
+			var_dump($r);
 
 			return $r;
 		}
