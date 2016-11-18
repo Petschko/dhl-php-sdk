@@ -153,4 +153,20 @@ class DHL_ShipmentDetails {
 	public function setPackageType($packageType) {
 		$this->packageType = $packageType;
 	}
+
+	/**
+	 * Returns an Array of this Object for DHL-Shipment Details
+	 *
+	 * @return array - Array with Values of this object
+	 */
+	public function toDHLArray() {
+		$array = array();
+		$array['WeightInKG'] = $this->getWeight();
+		$array['LengthInCM'] = $this->getLength();
+		$array['WidthInCM'] = $this->getWidth();
+		$array['HeightInCM'] = $this->getHeight();
+		$array['PackageType'] = $this->getPackageType();
+
+		return $array;
+	}
 }
