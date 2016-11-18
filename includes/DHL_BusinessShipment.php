@@ -213,7 +213,7 @@ class DHL_BusinessShipment {
 	 *
 	 * @param DHL_Receiver $customer_details
 	 * @param DHL_ShipmentDetails $shipment_details - Shipment details
-	 * @return array|bool - Response or false on error
+	 * @return DHL_Response|bool - Response or false on error
 	 */
 	public function createNationalShipment($customer_details, $shipment_details = null) {
 		$this->buildClient();
@@ -305,12 +305,8 @@ class DHL_BusinessShipment {
 
 			return false;
 		} else {
-			$r = array();
-			$r['shipment_number'] = (String) $response->CreationState->ShipmentNumber->shipmentNumber;
-			$r['piece_number'] = (String) $response->CreationState->PieceInformation->PieceNumber->licensePlate;
-			$r['label_url'] = (String) $response->CreationState->Labelurl;
-
-			var_dump($r);
+			$r = new DHL_Response();
+			$r->loadResponse($response);
 
 			return $r;
 		}
