@@ -96,10 +96,13 @@ class DHL_Credentials {
 	}
 
 	/**
-	 * @return string
+	 * Get the first 10 Digits of the EPK
+	 *
+	 * @param null|int $len - Max-Chars to get from this String or null for all
+	 * @return string - EPK-Number with x Chars
 	 */
-	public function getEpk() {
-		return $this->epk;
+	public function getEpk($len = null) {
+		return mb_substr($this->epk, 0, $len);
 	}
 
 	/**
