@@ -15,7 +15,26 @@
  */
 class DHL_Credentials {
 	/**
+	 * DHL Business-API Test-User
+	 */
+	const DHL_BUSINESS_TEST_USER = '2222222222_01';
+
+	/**
+	 * DHL Business-API Test-User-Password
+	 */
+	const DHL_BUSINESS_TEST_USER_PASSWORD = 'pass';
+
+	/**
+	 * DHL Business-API Test-EPK
+	 */
+	const DHL_BUSINESS_TEST_EPK = '2222222222';
+
+	/**
 	 * Contains the DHL-Intraship Username
+	 *
+	 * TEST: Use the Test-User for Business-Shipment - Use in constructor true as 1st param
+	 * LIVE: Your DHL-Account same when you Login to the DHL-Business-Customer-Portal
+	 * (Same as on this Page: https://www.dhl-geschaeftskundenportal.de/ )
 	 *
 	 * @var string $user - DHL-Intraship Username
 	 */
@@ -24,12 +43,19 @@ class DHL_Credentials {
 	/**
 	 * Contains the DHL-Intraship Password
 	 *
+	 * TEST: Use the Test-Password for Business-Shipment - Use in constructor true as 1st param
+	 * LIVE: Your DHL-Account-Password same when you Login to the DHL-Business-Customer-Portal
+	 * (Same as on this Page: https://www.dhl-geschaeftskundenportal.de/ )
+	 *
 	 * @var string $signature - DHL-Intraship Password
 	 */
 	private $signature = '';
 
 	/**
 	 * Contains the DHL-Customer ID
+	 *
+	 * TEST: Use the Test-EPK for Business-Shipment - Use in constructor true as 1st param
+	 * LIVE: Your DHL-Customer-Number (At least the first 10 Numbers - Can be more)
 	 *
 	 * @var string $epk - DHL-Customer ID
 	 */
@@ -38,6 +64,12 @@ class DHL_Credentials {
 	/**
 	 * Contains the App ID from the developer Account
 	 *
+	 * TEST: Your-DHL-Developer-Account-Name (Not E-Mail!)
+	 * (You can create yourself an Account for free here: https://entwickler.dhl.de/group/ep )
+	 *
+	 * LIVE: Your Applications-ID
+	 * (You can get this here: https://entwickler.dhl.de/group/ep/home?myaction=viewFreigabe )
+	 *
 	 * @var string $api_user - App ID from the developer Account
 	 */
 	private $api_user = '';
@@ -45,15 +77,29 @@ class DHL_Credentials {
 	/**
 	 * Contains the App token from the developer Account
 	 *
+	 * TEST: Your-DHL-Developer-Accounts-Password
+	 * (You can create yourself an Account for free here: https://entwickler.dhl.de/group/ep )
+	 *
+	 * LIVE: Your Applications-Token
+	 * (You can get this here: https://entwickler.dhl.de/group/ep/home?myaction=viewFreigabe )
+	 *
 	 * @var string $api_password - Contains the App token from the developer Account
 	 */
 	private $api_password = '';
 
 	/**
 	 * DHL_Credentials constructor.
+	 *
+	 * If Test-Modus is true it will set Test-User, Test-Signature, Test-EPK for you!
+	 *
+	 * @param bool $useTest - Use Test-Modus or Live Modus (true = test | false = live)
 	 */
-	public function __construct() {
-		// VOID
+	public function __construct($useTest = false) {
+		if($useTest) {
+			$this->setUser(self::DHL_BUSINESS_TEST_USER);
+			$this->setSignature(self::DHL_BUSINESS_TEST_USER_PASSWORD);
+			$this->setEpk(self::DHL_BUSINESS_TEST_EPK);
+		}
 	}
 
 	/**
