@@ -19,6 +19,7 @@ class DHL_Response extends DHL_Version {
 	 */
 	const DHL_ERROR_NOT_SET = -1;
 	const DHL_ERROR_NO_ERROR = 0;
+	const DHL_ERROR_WEAK_WARNING = 1;
 	const DHL_ERROR_SERVICE_TMP_NOT_AVAILABLE = 500;
 	const DHL_ERROR_GENERAL = 1000;
 	const DHL_ERROR_AUTH_FAILED = 1001;
@@ -231,6 +232,20 @@ class DHL_Response extends DHL_Version {
 	/**
 	 * @return string
 	 */
+	public function getStatusText() {
+		return $this->statusText;
+	}
+
+	/**
+	 * @param string $statusText
+	 */
+	private function setStatusText($statusText) {
+		$this->statusText = $statusText;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getStatusMessage() {
 		return $this->statusMessage;
 	}
@@ -248,9 +263,23 @@ class DHL_Response extends DHL_Version {
 	 * @param Object $response - DHL-Response
 	 */
 	private function loadResponse_v1($response) {
-		$this->setShipmentNumber((string) $response->CreationState->ShipmentNumber->shipmentNumber);
-		$this->setPieceNumber((string) $response->CreationState->PieceInformation->PieceNumber->licensePlate);
-		$this->setLabel((string) $response->CreationState->Labelurl);
+		// Set Shipment-Number if exists
+		if(isset($response->CreationState->ShipmentNumber->shipmentNumber))
+			$this->setShipmentNumber((string) $response->CreationState->ShipmentNumber->shipmentNumber);
+
+		if(isset($response->CreationState->PieceInformation->PieceNumber->licensePlate))
+			$this->setPieceNumber((string) $response->CreationState->PieceInformation->PieceNumber->licensePlate);
+
+		// Set Label if exists
+		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+			if(isset($response->CreationState->Labeldata)) // todo: is valid???
+				$this->setLabel($response->CreationState->Labeldata);
+		} else if(isset($response->CreationState->Labelurl))
+			$this->setLabel($response->CreationState->Labelurl);
+
+		$this->setStatusCode((int) $response->status->StatusCode);
+		$this->setStatusMessage($response->status->StatusMessage);
+		//todo add more from v1
 	}
 
 	/**
@@ -259,15 +288,38 @@ class DHL_Response extends DHL_Version {
 	 * @param Object $response - DHL-Response
 	 */
 	private function loadResponse_v2($response) {
-		$this->setShipmentNumber((string) $response->CreationState->LabelData->shipmentNumber);
-		if(isset($response->CreationState->LabelData->labelUrl))
-			$this->setLabel((string) $response->CreationState->LabelData->labelUrl);
-		else
-			$this->setLabel((string) $response->CreationState->LabelData->labelData);
+		// Set Shipment-Number if exists
+		if(isset($response->CreationState->LabelData->shipmentNumber))
+			$this->setShipmentNumber((string) $response->CreationState->LabelData->shipmentNumber);
+
+		// Set Label if exists
+		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+			if(isset($response->CreationState->LabelData->labelData))
+				$this->setLabel($response->CreationState->LabelData->labelData);
+		} else if(isset($response->CreationState->LabelData->labelUrl))
+			$this->setLabel($response->CreationState->LabelData->labelUrl);
+
+		// Set Return Label if exists
+		if(isset($response->CreationState->LabelData->returnLabelUrl))
+			$this->setReturnLabel($response->CreationState->LabelData->returnLabelUrl);
+		else if(isset($response->CreationState->LabelData->returnLabelData))
+			$this->setReturnLabel($response->CreationState->LabelData->returnLabelData);
+
+		// Set all other System values
+		$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
+		$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
+		$this->setStatusText($response->CreationState->LabelData->Status->statusText);
+		$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
+
+		// Change Status-Code if a weak-validation error occurs
+		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
+			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
 	}
 
 	/**
 	 * Returns null
+	 *
+	 * This function is not used here!
 	 *
 	 * @return null
 	 */
