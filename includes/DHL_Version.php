@@ -104,6 +104,20 @@ abstract class DHL_Version {
 	}
 
 	/**
+	 * Returns the Version DHL-Class
+	 *
+	 * @return StdClass - Version DHL-Class
+	 */
+	protected function getVersionClass() {
+		$class = new StdClass;
+
+		$class->majorRelease = $this->getMayor();
+		$class->minorRelease = $this->getMinor();
+
+		return $class;
+	}
+
+	/**
 	 * Gets the API-URL by Version
 	 *
 	 * @return string - API-Url
