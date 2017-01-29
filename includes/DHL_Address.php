@@ -216,6 +216,24 @@ abstract class DHL_Address {
 	}
 
 	/**
+	 * Alias for getLocation
+	 *
+	 * @return string
+	 */
+	public function getCity() {
+		return $this->location;
+	}
+
+	/**
+	 * Alias for setLocation
+	 *
+	 * @param string $city
+	 */
+	public function setCity($city) {
+		$this->location = $city;
+	}
+
+	/**
 	 * @return string|null
 	 */
 	public function getCountry() {
