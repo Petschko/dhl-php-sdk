@@ -1,44 +1,79 @@
 <?php
+/**
+ * Author: Peter Dragicevic [peter-91@hotmail.de]
+ * Authors-Website: http://petschko.org/
+ * Date: 26.01.2017
+ * Time: 15:37
+ * Update: -
+ * Version: 0.0.1
+ *
+ * Notes: Contains all Functions/Values for DHL-Business-Shipment
+ * Todo: Document better if time
+ */
 
 // Set correct encoding
 mb_internal_encoding('UTF-8');
 
 // Get required classes
-require_once('Address.php');
+// Abstract classes first
+require_once('DHL_Version.php');
+require_once('DHL_Address.php');
+require_once('DHL_SendPerson.php');
+
+// Now all other classes
+require_once('DHL_BankData.php');
 require_once('DHL_Credentials.php');
-require_once('DHL_Company.php');
+require_once('DHL_ExportDocument.php');
+require_once('DHL_IdentCheck.php');
 require_once('DHL_Receiver.php');
-require_once('DHL_ShipmentDetails.php');
 require_once('DHL_Response.php');
+require_once('DHL_ReturnReceiver.php');
+require_once('DHL_Sender.php');
+require_once('DHL_Service.php');
+require_once('DHL_ShipmentDetails.php');
+
 
 /**
- * Class DHLBusinessShipment
+ * Class DHL_BusinessShipment
  */
-class DHL_BusinessShipment {
+class DHL_BusinessShipment extends DHL_Version {
+	/**
+	 * DHL-Soap-Header URL
+	 */
+	const DHL_SOAP_HEADER_URI = 'http://dhl.de/webservice/cisbase';
+
+	/**
+	 * DHL-Sandbox SOAP-URL
+	 */
 	const DHL_SANDBOX_URL = 'https://cig.dhl.de/services/sandbox/soap';
+
+	/**
+	 * DHL-Live SOAP-URL
+	 */
 	const DHL_PRODUCTION_URL = 'https://cig.dhl.de/services/production/soap';
-	const API_URL = 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/1.0/geschaeftskundenversand-api-1.0.wsdl';
 
 	/**
-	 * Contains the DHL_Credentials Object
-	 *
-	 * @var DHL_Credentials $credentials - DHL_Credentials Object
+	 * Newest-Version
 	 */
-	private $credentials;
+	const NEWEST_VERSION = '2.2';
 
 	/**
-	 * Contains the DHL_Company Object
-	 *
-	 * @var DHL_Company $info - DHL_Company Object
+	 * Response-Type URL
 	 */
-	private $info;
+	const RESPONSE_TYPE_URL = 'URL';
 
 	/**
-	 * Contains the SoapClient Object
-	 *
-	 * @var SoapClient $client - SoapClient Object
+	 * Response-Type Base64
 	 */
-	private $client;
+	const RESPONSE_TYPE_B64 = 'B64';
+
+	// System-Fields
+	/**
+	 * Contains the Soap Client
+	 *
+	 * @var SoapClient|null $soapClient - Soap-Client
+	 */
+	private $soapClient = null;
 
 	/**
 	 * Contains the error array
@@ -47,43 +82,263 @@ class DHL_BusinessShipment {
 	 */
 	private $errors = array();
 
+	// Setting-Fields
 	/**
 	 * Contains if the Object runs in Sandbox-Mode
 	 *
-	 * @var bool $sandbox - Run the Object in Sandbox mode
+	 * @var bool $test - Is Sandbox-Mode
 	 */
-	private $sandbox;
+	private $test;
 
 	/**
-	 * Contains if the Object had enabled Log-Messages
+	 * Contains if Log is enabled
 	 *
-	 * @var bool $log - Has the Object enabled Log-Messages
+	 * @var bool $log - Is Logging enabled
 	 */
 	private $log = false;
 
+	// Object-Fields
 	/**
-	 * Constructor for Shipment SDK
+	 * Contains the DHL_Credentials Object
 	 *
-	 * @param DHL_Credentials $api_credentials
-	 * @param DHL_Company $customer_info
-	 * @param boolean $sandbox - Use sandbox or production environment (Default false)
+	 * Notes: Is required every time! Used to login
+	 *
+	 * @var DHL_Credentials $credentials - DHL_Credentials Object
 	 */
-	public function __construct($api_credentials, $customer_info, $sandbox = false) {
-		$this->setCredentials($api_credentials);
-		$this->setInfo($customer_info);
-		$this->setSandbox($sandbox);
+	private $credentials;
+
+	/**
+	 * Contains the Shipment Details
+	 *
+	 * @var DHL_ShipmentDetails $shipmentDetails - Shipment Details Object
+	 */
+	private $shipmentDetails;
+
+	/**
+	 * Contains the Service Object (Many settings for the Shipment)
+	 *
+	 * Note: Optional
+	 *
+	 * @var DHL_Service|null $service - Service Object
+	 */
+	private $service = null;
+
+	/**
+	 * Contains the Bank-Object
+	 *
+	 * Note: Optional
+	 *
+	 * @var DHL_BankData|null $bank - Bank-Object
+	 */
+	private $bank = null;
+
+	/**
+	 * Contains the Sender-Object
+	 *
+	 * @var DHL_Sender $sender - Sender Object
+	 */
+	private $sender;
+
+	/**
+	 * Contains the Receiver-Object
+	 *
+	 * @var DHL_Receiver $receiver - Receiver Object
+	 */
+	private $receiver;
+
+	/**
+	 * Contains the Return Receiver Object
+	 *
+	 * Note: Optional
+	 *
+	 * @var DHL_ReturnReceiver|null $returnReceiver - Return Receiver Object
+	 */
+	private $returnReceiver = null;
+
+	/**
+	 * Contains the Export-Document-Settings Object
+	 *
+	 * Note: Optional
+	 *
+	 * @var DHL_ExportDocument|null $exportDocument - Export-Document-Settings Object
+	 */
+	private $exportDocument = null;
+
+	// Fields
+	/**
+	 * Contains the Sequence-Number
+	 *
+	 * Min-Len: -
+	 * Max-Len: 30
+	 *
+	 * @var string $sequenceNumber - Sequence-Number
+	 */
+	private $sequenceNumber = '1';
+
+	/**
+	 * Contains the Receiver-E-Mail (Used for Notification to the Receiver)
+	 *
+	 * Note: Optional
+	 * Min-Len: -
+	 * Max-Len: 70
+	 *
+	 * @var string|null $receiverEmail - Receiver-E-Mail
+	 */
+	private $receiverEmail = null;
+
+	/**
+	 * Contains if the label will be only be printable, if the receiver address is valid.
+	 *
+	 * Note: Optional
+	 *
+	 * @var bool|null $printOnlyIfReceiverIsValid - true will only print if receiver address is valid else false (null uses default)
+	 */
+	private $printOnlyIfReceiverIsValid = null;
+
+	/**
+	 * Contains if how the Label-Response-Type will be
+	 *
+	 * Note: Optional
+	 * Values:
+	 * RESPONSE_TYPE_URL -> Url
+	 * RESPONSE_TYPE_B64 -> Base64
+	 *
+	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's)
+	 */
+	private $labelResponseType = null;
+
+	/**
+	 * DHL_BusinessShipment constructor.
+	 *
+	 * @param DHL_Credentials $credentials - DHL-Credentials-Object
+	 * @param bool $testModus - Uses the Sandbox-Modus or Live (True uses test-Modus)
+	 * @param null|string $version - Version to use or null for the newest
+	 */
+	public function __construct($credentials, $testModus = false, $version = null) {
+		// Set Version
+		if($version === null)
+			$version = self::NEWEST_VERSION;
+
+		parent::__construct($version);
+
+		// Set Test-Modus
+		$this->setTest($testModus);
+
+		// Set Credentials
+		if($this->isTest()) {
+			$c = new DHL_Credentials(true);
+			$c->setApiUser($credentials->getApiUser());
+			$c->setApiPassword($credentials->getApiPassword());
+
+			$credentials = $c;
+		}
+
+		$this->setCredentials($credentials);
+
+		// Set DHL_Shipment-Class
+		$this->setShipmentDetails(new DHL_ShipmentDetails($credentials->getEpk(10) . '0101'));
+
+		// Create Soap-Client
+		$this->buildSoapClient();
 	}
 
 	/**
 	 * Clears Memory
 	 */
 	public function __destruct() {
-		unset($this->credentials);
-		unset($this->info);
-		unset($this->client);
+		parent::__destruct();
+		unset($this->soapClient);
 		unset($this->errors);
-		unset($this->sandbox);
+		unset($this->test);
 		unset($this->log);
+		unset($this->credentials);
+		unset($this->shipmentDetails);
+		unset($this->service);
+		unset($this->bank);
+		unset($this->sender);
+		unset($this->receiver);
+		unset($this->returnReceiver);
+		unset($this->exportDocument);
+		unset($this->sequenceNumber);
+		unset($this->receiverEmail);
+		unset($this->printOnlyIfReceiverIsValid);
+		unset($this->labelResponseType);
+	}
+
+	/**
+	 * Get the Business-API-URL for this Version
+	 *
+	 * @return string - Business-API-URL
+	 */
+	protected function getAPIUrl() {
+		return 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/' . $this->getVersion() .
+			'/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
+	}
+
+	/**
+	 * @return null|SoapClient
+	 */
+	private function getSoapClient() {
+		if($this->soapClient === null)
+			$this->setSoapClient($this->buildSoapClient());
+
+		return $this->soapClient;
+	}
+
+	/**
+	 * @param null|SoapClient $soapClient
+	 */
+	private function setSoapClient($soapClient) {
+		$this->soapClient = $soapClient;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getErrors() {
+		return $this->errors;
+	}
+
+	/**
+	 * @param array $errors
+	 */
+	public function setErrors($errors) {
+		$this->errors = $errors;
+	}
+
+	/**
+	 * @param string $error
+	 */
+	private function addError($error) {
+		$this->errors[] = $error;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isTest() {
+		return $this->test;
+	}
+
+	/**
+	 * @param bool $test
+	 */
+	private function setTest($test) {
+		$this->test = $test;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isLog() {
+		return $this->log;
+	}
+
+	/**
+	 * @param bool $log
+	 */
+	public function setLog($log) {
+		$this->log = $log;
 	}
 
 	/**
@@ -96,78 +351,162 @@ class DHL_BusinessShipment {
 	/**
 	 * @param DHL_Credentials $credentials
 	 */
-	private function setCredentials($credentials) {
+	public function setCredentials($credentials) {
 		$this->credentials = $credentials;
 	}
 
 	/**
-	 * @return DHL_Company
+	 * @return DHL_ShipmentDetails
 	 */
-	private function getInfo() {
-		return $this->info;
+	public function getShipmentDetails() {
+		return $this->shipmentDetails;
 	}
 
 	/**
-	 * @param DHL_Company $info
+	 * @param DHL_ShipmentDetails $shipmentDetails
 	 */
-	private function setInfo($info) {
-		$this->info = $info;
+	public function setShipmentDetails($shipmentDetails) {
+		$this->shipmentDetails = $shipmentDetails;
 	}
 
 	/**
-	 * @return SoapClient
+	 * @return DHL_Service|null
 	 */
-	private function getClient() {
-		return $this->client;
+	public function getService() {
+		return $this->service;
 	}
 
 	/**
-	 * @param SoapClient $client
+	 * @param DHL_Service|null $service
 	 */
-	private function setClient($client) {
-		$this->client = $client;
+	public function setService($service) {
+		$this->service = $service;
 	}
 
 	/**
-	 * @return array
+	 * @return DHL_BankData|null
 	 */
-	public function getErrors() {
-		return $this->errors;
+	public function getBank() {
+		return $this->bank;
 	}
 
 	/**
-	 * @param string $error
+	 * @param DHL_BankData|null $bank
 	 */
-	private function addError($error) {
-		$this->errors[] = $error;
+	public function setBank($bank) {
+		$this->bank = $bank;
 	}
 
 	/**
-	 * @return boolean
+	 * @return DHL_SendPerson
 	 */
-	private function isSandbox() {
-		return $this->sandbox;
+	public function getSender() {
+		return $this->sender;
 	}
 
 	/**
-	 * @param boolean $sandbox
+	 * @param DHL_SendPerson $sender
 	 */
-	private function setSandbox($sandbox) {
-		$this->sandbox = $sandbox;
+	public function setSender($sender) {
+		$this->sender = $sender;
 	}
 
 	/**
-	 * @return boolean
+	 * @return DHL_SendPerson
 	 */
-	public function isLog() {
-		return $this->log;
+	public function getReceiver() {
+		return $this->receiver;
 	}
 
 	/**
-	 * @param boolean $log
+	 * @param DHL_SendPerson $receiver
 	 */
-	public function setLog($log) {
-		$this->log = $log;
+	public function setReceiver($receiver) {
+		$this->receiver = $receiver;
+	}
+
+	/**
+	 * @return DHL_SendPerson|null
+	 */
+	public function getReturnReceiver() {
+		return $this->returnReceiver;
+	}
+
+	/**
+	 * @param DHL_SendPerson|null $returnReceiver
+	 */
+	public function setReturnReceiver($returnReceiver) {
+		$this->returnReceiver = $returnReceiver;
+	}
+
+	/**
+	 * @return DHL_ExportDocument|null
+	 */
+	public function getExportDocument() {
+		return $this->exportDocument;
+	}
+
+	/**
+	 * @param DHL_ExportDocument|null $exportDocument
+	 */
+	public function setExportDocument($exportDocument) {
+		$this->exportDocument = $exportDocument;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSequenceNumber() {
+		return $this->sequenceNumber;
+	}
+
+	/**
+	 * @param string $sequenceNumber
+	 */
+	public function setSequenceNumber($sequenceNumber) {
+		$this->sequenceNumber = $sequenceNumber;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getReceiverEmail() {
+		return $this->receiverEmail;
+	}
+
+	/**
+	 * @param null|string $receiverEmail
+	 */
+	public function setReceiverEmail($receiverEmail) {
+		$this->receiverEmail = $receiverEmail;
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	public function getPrintOnlyIfReceiverIsValid() {
+		return $this->printOnlyIfReceiverIsValid;
+	}
+
+	/**
+	 * @param bool|null $printOnlyIfReceiverIsValid
+	 */
+	public function setPrintOnlyIfReceiverIsValid($printOnlyIfReceiverIsValid) {
+		$this->printOnlyIfReceiverIsValid = $printOnlyIfReceiverIsValid;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getLabelResponseType() {
+		return $this->labelResponseType;
+	}
+
+	/**
+	 * @param null|string $labelResponseType
+	 */
+	public function setLabelResponseType($labelResponseType) {
+		$this->labelResponseType = $labelResponseType;
 	}
 
 	/**
@@ -185,12 +524,27 @@ class DHL_BusinessShipment {
 	}
 
 	/**
-	 * Auth Client on DHL-API
+	 * Build SOAP-Auth-Header
+	 *
+	 * @return SoapHeader
 	 */
-	private function buildClient() {
+	private function buildAuthHeader() {
+		$auth_params = array(
+			'user' => $this->getCredentials()->getUser(),
+			'signature' => $this->getCredentials()->getSignature(),
+			'type' => 0
+		);
+
+		return new SoapHeader(self::DHL_SOAP_HEADER_URI, 'Authentification', $auth_params);
+	}
+
+	/**
+	 * Builds the Soap-Client
+	 */
+	private function buildSoapClient() {
 		$header = $this->buildAuthHeader();
 
-		if($this->isSandbox())
+		if($this->isTest())
 			$location = self::DHL_SANDBOX_URL;
 		else
 			$location = self::DHL_PRODUCTION_URL;
@@ -203,126 +557,114 @@ class DHL_BusinessShipment {
 		);
 
 		$this->log($auth_params);
-		$this->setClient(new SoapClient(self::API_URL, $auth_params));
-		$this->getClient()->__setSoapHeaders($header);
-		$this->log($this->getClient());
+		$this->setSoapClient(new SoapClient($this->getAPIUrl(), $auth_params));
+		$this->getSoapClient()->__setSoapHeaders($header);
+		$this->log($this->getSoapClient());
 	}
 
 	/**
-	 * Creates a nation Shipment
+	 * Creates the Shipment-Order
 	 *
-	 * @param DHL_Receiver $customer_details
-	 * @param DHL_ShipmentDetails $shipment_details - Shipment details
-	 * @return DHL_Response|bool - Response or false on error
+	 * @param Object|array $data - Shipment-Data
+	 * @return Object - DHL-Response
 	 */
-	public function createNationalShipment($customer_details, $shipment_details = null) {
-		$this->buildClient();
+	private function sendCreateRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				return $this->getSoapClient()->CreateShipmentDD($data);
+			case 2:
+			default:
+				return $this->getSoapClient()->createShipmentOrder($data);
+		}
+	}
 
-		$shipment = array();
-
-		// Set default values for details if none are given
-		if($shipment_details === null)
-			$shipment_details = new DHL_ShipmentDetails();
-
-		// Version
-		$shipment['Version'] = array('majorRelease' => '1', 'minorRelease' => '0');
-
-		// Order
-		$shipment['ShipmentOrder'] = array();
-
-		// Fixme/TODO
-		$shipment['ShipmentOrder']['SequenceNumber'] = '1';
-
-		// Shipment
-		$s = array();
-		$s['ProductCode'] = 'EPN';
-		$s['ShipmentDate'] = date('Y-m-d');
-		$s['EKP'] = $this->getCredentials()->getEpk();
-
-		$s['Attendance'] = array();
-		$s['Attendance']['partnerID'] = '01';
-		// Add Details
-		$s['ShipmentItem'] = $shipment_details->toDHLArray();
-
-		$shipment['ShipmentOrder']['Shipment']['ShipmentDetails'] = $s;
-
-		$shipper = array();
-		$shipper['Company'] = array();
-		$shipper['Company']['Company'] = array();
-		$shipper['Company']['Company']['name1'] = $this->getInfo()->getCompanyName();
-
-		$shipper['Address'] = array();
-		$shipper['Address']['streetName'] = $this->getInfo()->getStreetName();
-		$shipper['Address']['streetNumber'] = $this->getInfo()->getStreetNumber();
-		$shipper['Address']['Zip'] = array();
-		$shipper['Address']['Zip'][$this->getInfo()->getCountry()] = $this->getInfo()->getZip();
-		$shipper['Address']['city'] = $this->getInfo()->getLocation();
-
-		$shipper['Address']['Origin'] = array('countryISOCode' => 'DE');
-
-		$shipper['Communication'] = array();
-		$shipper['Communication']['email'] = $this->getInfo()->getEmail();
-		$shipper['Communication']['phone'] = $this->getInfo()->getPhone();
-		$shipper['Communication']['internet'] = $this->getInfo()->getInternet();
-		$shipper['Communication']['contactPerson'] = $this->getInfo()->getContactPerson();
-
-		$shipment['ShipmentOrder']['Shipment']['Shipper'] = $shipper;
-
-		$receiver = array();
-		$receiver['Company'] = array();
-		$receiver['Company']['Person'] = array();
-		$receiver['Company']['Person']['firstname'] = $customer_details->getFirstName();
-		$receiver['Company']['Person']['lastname'] = $customer_details->getLastName();
-
-		$receiver['Address'] = array();
-		$receiver['Address']['streetName'] = $customer_details->getStreetName();
-		$receiver['Address']['streetNumber'] = $customer_details->getStreetNumber();
-		$receiver['Address']['Zip'] = array();
-		$receiver['Address']['Zip'][$customer_details->getCountry()] = $customer_details->getZip();
-		$receiver['Address']['city'] = $customer_details->getLocation();
-		$receiver['Communication'] = array();
-
-		$receiver['Address']['Origin'] = array('countryISOCode' => 'DE');
-
-		$shipment['ShipmentOrder']['Shipment']['Receiver'] = $receiver;
+	public function createShipment() {
+		switch($this->getMayor()) {
+			case 1:
+				$data = $this->createShipmentClass_v1();
+				break;
+			case 2:
+			default:
+				$data = $this->createShipmentClass_v2();
+		}
 
 		$response = null;
 
 		// Create Shipment
 		try {
-			$response = $this->getClient()->CreateShipmentDD($shipment);
+			$response = $this->sendCreateRequest($data);
 		} catch(Exception $e) {
 			$this->addError($e->getMessage());
 
 			return false;
 		}
 
-		if(is_soap_fault($response) || $response->status->StatusCode != 0) {
-			if(is_soap_fault($response))
-				$this->addError($response->faultstring);
-			else
-				$this->addError($response->status->StatusMessage);
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
 
 			return false;
-		} else {
-			$r = new DHL_Response($response);
-
-			return $r;
-		}
+		} else
+			return new DHL_Response($this->getVersion(), $response, $this->getLabelResponseType());
 	}
 
-	/**
-	 * Build SOAP-Header
-	 *
-	 * @return SoapHeader
-	 */
-	private function buildAuthHeader() {
-		$auth_params = array(
-			'user' => $this->getCredentials()->getUser(),
-			'signature' => $this->getCredentials()->getSignature(),
-			'type' => 0
-		);
+	private function createShipmentClass_v1() {
+		$data = new StdClass;
 
-		return new SoapHeader('http://dhl.de/webservice/cisbase', 'Authentification', $auth_params);
+		//todo
+
+		return $data;
+	}
+
+	private function createShipmentClass_v2() {
+		$data = new StdClass;
+		$data->Version = $this->getVersionClass();
+		$data->ShipmentOrder = new StdClass;
+		$data->ShipmentOrder->sequenceNumber = $this->getSequenceNumber();
+
+		// Shipment
+		$data->ShipmentOrder->Shipment = new StdClass;
+		$data->ShipmentOrder->Shipment->ShipmentDetails = $this->getShipmentDetails()->getShipmentDetailsClass_v2();
+
+		// Service
+		if($this->getService() !== null)
+			$data->ShipmentOrder->Shipment->ShipmentDetails->Service = $this->getService()->getServiceClass_v2($this->getShipmentDetails()->getProduct());
+
+		// Notification
+		if($this->getReceiverEmail() !== null) {
+			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification = new StdClass;
+			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification->recipientEmailAddress = $this->getReceiverEmail();
+		}
+
+		// Bank-Data
+		if($this->getBank() !== null)
+			$data->ShipmentOrder->Shipment->ShipmentDetails->BankData = $this->getBank()->getBankClass_v2();
+
+		// Shipper
+		$data->ShipmentOrder->Shipment->Shipper = $this->getSender()->getClass_v2();
+
+		// Receiver
+		$data->ShipmentOrder->Shipment->Receiver = $this->getReceiver()->getClass_v2();
+
+		// Return-Receiver
+		if($this->getReturnReceiver() !== null)
+			$data->ShipmentOrder->Shipment->ReturnReceiver = $this->getReturnReceiver()->getClass_v2();
+
+		// Export-Document
+		if($this->getExportDocument() !== null)
+			$data->ShipmentOrder->Shipment->ExportDocument = $this->getExportDocument()->getExportDocumentClass_v2();
+
+		// Other Settings
+		if($this->getPrintOnlyIfReceiverIsValid() !== null) {
+			$data->ShipmentOrder->PrintOnlyIfCodeable = new StdClass;
+			$data->ShipmentOrder->PrintOnlyIfCodeable->active = (int) $this->getPrintOnlyIfReceiverIsValid();
+		}
+		if($this->getLabelResponseType() !== null)
+			$data->ShipmentOrder->labelResponseType = $this->getLabelResponseType();
+
+		return $data;
+	}
+
+	public function deleteShipment($shipmentNumber) {
+		// todo
 	}
 }
