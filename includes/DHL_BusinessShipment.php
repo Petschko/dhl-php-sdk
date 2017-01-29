@@ -286,6 +286,18 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
+	 * Returns the Last XML-Request or null
+	 *
+	 * @return null|string - Last XML-Request or null if none
+	 */
+	public function getLastXML() {
+		if($this->getSoapClient() === null)
+			return null;
+
+		return $this->getSoapClient()->__getLastRequest();
+	}
+
+	/**
 	 * @param null|SoapClient $soapClient
 	 */
 	private function setSoapClient($soapClient) {
@@ -563,7 +575,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
-	 * Creates the Shipment-Order
+	 * Creates the Shipment-Order Request
 	 *
 	 * @param Object|array $data - Shipment-Data
 	 * @return Object - DHL-Response
@@ -578,6 +590,11 @@ class DHL_BusinessShipment extends DHL_Version {
 		}
 	}
 
+	/**
+	 * Creates the Shipment-Request
+	 *
+	 * @return bool|DHL_Response - false on error or DHL-Response Object
+	 */
 	public function createShipment() {
 		switch($this->getMayor()) {
 			case 1:
@@ -607,6 +624,11 @@ class DHL_BusinessShipment extends DHL_Version {
 			return new DHL_Response($this->getVersion(), $response, $this->getLabelResponseType());
 	}
 
+	/**
+	 * Creates the Data-Object for the Request
+	 *
+	 * @return StdClass - Data-Object
+	 */
 	private function createShipmentClass_v1() {
 		$data = new StdClass;
 
@@ -615,6 +637,11 @@ class DHL_BusinessShipment extends DHL_Version {
 		return $data;
 	}
 
+	/**
+	 * Creates the Data-Object for the Request
+	 *
+	 * @return StdClass - Data-Object
+	 */
 	private function createShipmentClass_v2() {
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
@@ -664,7 +691,80 @@ class DHL_BusinessShipment extends DHL_Version {
 		return $data;
 	}
 
+	/**
+	 * Creates the Shipment-Order-Delete Request
+	 *
+	 * @param Object|array $data - Delete-Data
+	 * @return Object - DHL-Response
+	 */
+	private function sendDeleteRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				return $this->getSoapClient()->DeleteShipmentDD($data);
+			case 2:
+			default:
+				return $this->getSoapClient()->deleteShipmentOrder($data);
+		}
+	}
+
+	/**
+	 * Deletes a Shipment
+	 *
+	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @return bool|DHL_Response - Response
+	 */
 	public function deleteShipment($shipmentNumber) {
-		// todo
+		switch($this->getMayor()) {
+			case 1:
+				$data = $this->createDeleteClass_v1($shipmentNumber);
+				break;
+			case 2:
+			default:
+				$data = $this->createDeleteClass_v2($shipmentNumber);
+		}
+
+		try {
+			$response = $this->sendDeleteRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new DHL_Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Creates Data-Object for Deletion
+	 *
+	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @return StdClass - Data-Object
+	 */
+	private function createDeleteClass_v1($shipmentNumber) {
+		$data = new StdClass;
+
+		//todo
+
+		return $data;
+	}
+
+	/**
+	 * Creates Data-Object for Deletion
+	 *
+	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @return StdClass - Data-Object
+	 */
+	private function createDeleteClass_v2($shipmentNumber) {
+		$data = new StdClass;
+
+		$data->Version = $this->getVersionClass();
+		$data->shipmentNumber = $shipmentNumber;
+
+		return $data;
 	}
 }
