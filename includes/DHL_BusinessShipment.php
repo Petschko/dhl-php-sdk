@@ -410,42 +410,42 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
-	 * @return DHL_SendPerson
+	 * @return DHL_Sender
 	 */
 	public function getSender() {
 		return $this->sender;
 	}
 
 	/**
-	 * @param DHL_SendPerson $sender
+	 * @param DHL_Sender $sender
 	 */
 	public function setSender($sender) {
 		$this->sender = $sender;
 	}
 
 	/**
-	 * @return DHL_SendPerson
+	 * @return DHL_Receiver
 	 */
 	public function getReceiver() {
 		return $this->receiver;
 	}
 
 	/**
-	 * @param DHL_SendPerson $receiver
+	 * @param DHL_Receiver $receiver
 	 */
 	public function setReceiver($receiver) {
 		$this->receiver = $receiver;
 	}
 
 	/**
-	 * @return DHL_SendPerson|null
+	 * @return DHL_ReturnReceiver|null
 	 */
 	public function getReturnReceiver() {
 		return $this->returnReceiver;
 	}
 
 	/**
-	 * @param DHL_SendPerson|null $returnReceiver
+	 * @param DHL_ReturnReceiver|null $returnReceiver
 	 */
 	public function setReturnReceiver($returnReceiver) {
 		$this->returnReceiver = $returnReceiver;
