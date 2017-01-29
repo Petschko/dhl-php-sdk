@@ -1,3 +1,9 @@
+TODO: Change description if time
+
+OLD-VERSION >.< Please wait until i updates the readme please or get the old version of this script:
+
+[Download old Code](https://github.com/Petschko/dhl-php-sdk/releases/download/v0.1/dhl-php-sdk_v0.1.zip)
+
 # DHL PHP SDK
 
 This *unofficial* library is wrapping some functions of the DHL SOAP API in order to easy create shipments and labels.
