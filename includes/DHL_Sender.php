@@ -7,7 +7,7 @@
  * Update: -
  * Version: 0.0.1
  *
- * Notes: -
+ * Notes: Contains the DHL_Sender Class
  */
 
 /**
@@ -50,6 +50,8 @@ class DHL_Sender extends DHL_SendPerson {
 			$class->Address->dispatchingInformation = $this->getDispatchingInfo();
 		$class->Address->zip = $this->getZip();
 		$class->Address->city = $this->getLocation();
+
+		// Origin
 		if($this->getCountryISOCode() !== null) {
 			$class->Address->Origin = new StdClass;
 			if($this->getCountry() !== null)
@@ -58,6 +60,8 @@ class DHL_Sender extends DHL_SendPerson {
 			if($this->getState() !== null)
 				$class->Address->Origin->state = $this->getState();
 		}
+
+		// Communication
 		$class->Communication = new StdClass;
 		if($this->getPhone() !== null)
 			$class->Communication->phone = $this->getPhone();
