@@ -48,7 +48,7 @@ class DHL_Receiver extends DHL_SendPerson {
 		$class->Address = new StdClass;
 		if($this->getName2() !== null)
 			$class->Address->name2 = $this->getName2();
-		if($this->$this->getName3() !== null)
+		if($this->getName3() !== null)
 			$class->Address->name3 = $this->getName3();
 		$class->Address->streetName = $this->getStreetName();
 		$class->Address->streetNumber = $this->getStreetNumber();
