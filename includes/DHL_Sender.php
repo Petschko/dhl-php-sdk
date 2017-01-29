@@ -3,18 +3,17 @@
  * Author: Peter Dragicevic [peter-91@hotmail.de]
  * Authors-Website: http://petschko.org/
  * Date: 28.01.2017
- * Time: 19:17
+ * Time: 19:15
  * Update: -
  * Version: 0.0.1
  *
- * Notes: Contains the DHL_Receiver class
+ * Notes: -
  */
 
 /**
- * Class DHL_Receiver
+ * Class DHL_Sender
  */
-class DHL_Receiver extends DHL_SendPerson {
-
+class DHL_Sender extends DHL_SendPerson {
 	/**
 	 * Returns a Class for the DHL-SendPerson
 	 *

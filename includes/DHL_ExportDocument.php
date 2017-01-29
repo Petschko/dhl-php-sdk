@@ -15,4 +15,13 @@
  */
 class DHL_ExportDocument {
 	// todo later
+
+	/**
+	 * @return StdClass
+	 */
+	public function getExportDocumentClass_v2() {
+		$class = new StdClass;
+		// todo implement
+		return $class;
+	}
 }
