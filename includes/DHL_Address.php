@@ -90,12 +90,13 @@ abstract class DHL_Address {
 	/**
 	 * Contains the country ISO-Code
 	 *
+	 * Note: Optional
 	 * Min-Len: 2
 	 * Max-Len: 2
 	 *
-	 * @var string $countryISOCode - Country-ISO-Code
+	 * @var string|null $countryISOCode - Country-ISO-Code
 	 */
-	private $countryISOCode = 'DE';
+	private $countryISOCode = null;
 
 	/**
 	 * Contains the Name of the State
@@ -215,31 +216,37 @@ abstract class DHL_Address {
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getCountry() {
 		return $this->country;
 	}
 
 	/**
-	 * @param string $country
+	 * @param string|null $country
 	 */
 	public final function setCountry($country) {
-		$this->country = mb_strtolower($country);
+		if($country !== null)
+			$this->country = mb_strtolower($country);
+		else
+			$this->country = null;
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getCountryISOCode() {
 		return $this->countryISOCode;
 	}
 
 	/**
-	 * @param string $countryISOCode
+	 * @param string|null $countryISOCode
 	 */
 	public final function setCountryISOCode($countryISOCode) {
-		$this->countryISOCode = mb_strtoupper($countryISOCode);
+		if($countryISOCode !== null)
+			$this->countryISOCode = mb_strtoupper($countryISOCode);
+		else
+			$this->countryISOCode = null;
 	}
 
 	/**
