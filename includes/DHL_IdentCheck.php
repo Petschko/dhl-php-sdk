@@ -15,21 +15,32 @@
  */
 class DHL_IdentCheck {
 	/**
-	 * @var string $lastName
+	 * Contains the Last-Name of the Person
+	 *
+	 * @var string $lastName - Last-Name
 	 */
 	private $lastName;
+
 	/**
-	 * @var string $firstName
+	 * Contains the First-Name of the Person
+	 *
+	 * @var string $firstName - First-Name
 	 */
 	private $firstName;
+
 	/**
+	 * Contains the Birthday of the Person
+	 *
 	 * Note: ISO-Date-Format (YYYY-MM-DD)
 	 *
-	 * @var string $birthday
+	 * @var string $birthday - Birthday
 	 */
 	private $birthday;
+
 	/**
-	 * @var int $minimumAge
+	 * Contains the "minimum age of the person for ident check"
+	 *
+	 * @var int $minimumAge - "minimum age of the person for ident check"
 	 */
 	private $minimumAge;
 
