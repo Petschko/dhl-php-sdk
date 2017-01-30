@@ -66,9 +66,9 @@ class DHL_Response extends DHL_Version {
 	/**
 	 * Sequence-Number
 	 *
-	 * @var string $sequenceNumber - Sequence-Number of the Request (Usefull for AJAX-Requests)
+	 * @var string|null $sequenceNumber - Sequence-Number of the Request (Useful for AJAX-Requests)
 	 */
-	private $sequenceNumber;
+	private $sequenceNumber = null;
 
 	/**
 	 * Contains the Status-Code
@@ -80,16 +80,16 @@ class DHL_Response extends DHL_Version {
 	/**
 	 * Contains the Status-Text
 	 *
-	 * @var string $statusText - Status-Text
+	 * @var string|null $statusText - Status-Text
 	 */
-	private $statusText;
+	private $statusText = null;
 
 	/**
 	 * Contains the Status-Message (Mostly more detailed, but longer)
 	 *
-	 * @var string $statusMessage - Status-Message
+	 * @var string|null $statusMessage - Status-Message
 	 */
-	private $statusMessage;
+	private $statusMessage = null;
 
 	/**
 	 * DHL_Response constructor.
@@ -202,14 +202,14 @@ class DHL_Response extends DHL_Version {
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getSequenceNumber() {
 		return $this->sequenceNumber;
 	}
 
 	/**
-	 * @param string $sequenceNumber
+	 * @param string|null $sequenceNumber
 	 */
 	private function setSequenceNumber($sequenceNumber) {
 		$this->sequenceNumber = $sequenceNumber;
@@ -230,28 +230,28 @@ class DHL_Response extends DHL_Version {
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getStatusText() {
 		return $this->statusText;
 	}
 
 	/**
-	 * @param string $statusText
+	 * @param string|null $statusText
 	 */
 	private function setStatusText($statusText) {
 		$this->statusText = $statusText;
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getStatusMessage() {
 		return $this->statusMessage;
 	}
 
 	/**
-	 * @param string $statusMessage
+	 * @param string|null $statusMessage
 	 */
 	private function setStatusMessage($statusMessage) {
 		$this->statusMessage = $statusMessage;
