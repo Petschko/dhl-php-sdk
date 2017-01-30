@@ -15,107 +15,163 @@
  */
 class DHL_Service {
 	/**
-	 * Note: Optional
+	 * Contains if the Shipment should delivered on a specific Day
 	 *
-	 * @var bool|null $dayOfDeliveryEnabled
+	 * Note: Optional
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+	 *
+	 * @var bool|null $dayOfDeliveryEnabled - Is this enabled | null uses default
 	 */
 	private $dayOfDeliveryEnabled = null;
 
 	/**
-	 *
+	 * Contains the Day, when the Shipment should be delivered
 	 *
 	 * Note: Optional|ISO-Date-Format (YYYY-MM-DD)|Required if $dayOfDeliveryEnabled
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 * Min-Len: 10
 	 * Max-Len: 10
 	 *
-	 * @var string|null $dayOfDeliveryDate
+	 * @var string|null $dayOfDeliveryDate - Delivery-Date
 	 */
 	private $dayOfDeliveryDate = null;
 
 	/**
-	 * Note: Optional
+	 * Contains if the Shipment should be delivered on a specific Time-Frame
 	 *
-	 * @var bool|null $deliveryTimeframeEnabled
+	 * Note: Optional
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+	 *
+	 * @var bool|null $deliveryTimeframeEnabled - Is this enabled | null uses default
 	 */
 	private $deliveryTimeframeEnabled = null;
 
 	/**
+	 * Contains the Time-Frame when the Shipment should be delivered
+	 *
 	 * Note: Optional|Required if $deliveryTimeframeEnabled
 	 * Write the Values like this 10:00 - 12:30 => (Correct Value) 10001230
 	 * or 9:13 - 10:00 => 09131000
 	 * or 16:00 - 19:00 => 16001900
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 * Min-Len: 8
 	 * Max-Len: 8
 	 *
-	 * @var string|null $deliveryTimeframe
+	 * @var string|null $deliveryTimeframe - Time-Frame for delivery
 	 */
 	private $deliveryTimeframe = null;
 
 	/**
-	 * Note: Optional
+	 * Contains if preferred delivery Time is enabled
 	 *
-	 * @var bool|null $preferredTimeEnabled
+	 * Note: Optional
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
+	 *
+	 * @var bool|null $preferredTimeEnabled - Is this enabled | null uses default
 	 */
 	private $preferredTimeEnabled = null;
 
 	/**
+	 * Contains the preferred delivery Time-Frame
+	 *
 	 * Note: Optional|Required if $preferredTimeEnabled
 	 * Write the Values like this 10:00 - 12:30 => (Correct Value) 10001230
 	 * or 9:13 - 10:00 => 09131000
 	 * or 16:00 - 19:00 => 16001900
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
 	 * Min-Len: 8
 	 * Max-Len: 8
 	 *
-	 * @var string|null $preferredTime
+	 * @var string|null $preferredTime - Preferred delivery Time-Frame
 	 */
 	private $preferredTime = null;
 
 	/**
-	 * Note: Optional
+	 * Contains if an individual sender requirement is enabled (and required)
 	 *
-	 * @var bool|null $individualSenderRequiredmentsEnabled
+	 * Note: Optional
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+	 *
+	 * @var bool|null $individualSenderRequiredmentsEnabled - Is this enabled | null uses default
 	 */
 	private $individualSenderRequiredmentsEnabled = null;
 
 	/**
+	 * Contains the Requirement (Free text)
+	 *
 	 * Note: Optional|Required if $individualSenderRequiredmentsEnabled
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 * Min-Len: 1
 	 * Max-Len: 250
 	 *
-	 * @var string|null $individualSenderRequiredmentsText
+	 * @var string|null $individualSenderRequiredmentsText - Sender Requirement (Free text)
 	 */
 	private $individualSenderRequiredmentsText = null;
 
 	/**
+	 * Contains if Packaging return is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $packagingReturn
+	 * @var bool|null $packagingReturn - Is this enabled | null uses default
 	 */
 	private $packagingReturn = null;
 
 	/**
-	 * Note: Optional
+	 * Contains if return immediately if the Shipment failed
 	 *
-	 * @var bool|null $returnImmediatlyIfShipmentFailed
+	 * Note: Optional
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
+	 *
+	 * @var bool|null $returnImmediatlyIfShipmentFailed - Is this enabled | null uses default
 	 */
 	private $returnImmediatlyIfShipmentFailed = null;
 
 	/**
+	 * Contains if Notice on Non-Deliverable is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $noticeNonDeliverability
+	 * @var bool|null $noticeNonDeliverability - Is this enabled | null uses default
 	 */
 	private $noticeNonDeliverability = null;
 
 	/**
-	 * Note: Optional
+	 * Contains if Shipment-Handling is enabled
 	 *
-	 * @var bool|null $shipmentHandlingEnabled
+	 * Note: Optional
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+	 *
+	 * @var bool|null $shipmentHandlingEnabled - Is this enabled | null uses default
 	 */
 	private $shipmentHandlingEnabled = null;
 
 	/**
+	 * Contains the Shipment-Handling Type
+	 *
 	 * Note: Optional|Required if $shipmentHandlingEnabled
+	 * Available for:
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 * Min-Len: 1
 	 * Max-Len: 1
 	 *
@@ -126,18 +182,22 @@ class DHL_Service {
 	 * d: Remove bag from of cooling unit and handover to customer;
 	 * e: Remove content, apply return label und seal box, return box
 	 *
-	 * @var string|null
+	 * @var string|null $shipmentHandlingType - Shipment-Handling Type
 	 */
 	private $shipmentHandlingType = null;
 
 	/**
+	 * Contains if the Service "Endorsement" is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $endorsementEnabled
+	 * @var bool|null $endorsementEnabled - Is this enabled | null uses default
 	 */
 	private $endorsementEnabled = null;
 
 	/**
+	 * Contains the Type for the "Endorsement"-Service
+	 *
 	 * Note: Optional|Required if $endorsementEnabled
 	 *
 	 * for national:
@@ -148,18 +208,22 @@ class DHL_Service {
 	 *  AFTER_DEADLINE (Sending back immediately to sender after expiration of time),
 	 *  ABANDONMENT (Abandonment of parcel at the hands of sender (free of charge))
 	 *
-	 * @var string|null $endorsementType
+	 * @var string|null $endorsementType - Endorsement-Service Type
 	 */
 	private $endorsementType = null;
 
 	/**
+	 * Contains if Age-Check is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $visualCheckOfAgeEnabled
+	 * @var bool|null $visualCheckOfAgeEnabled - Is this enabled | null uses default
 	 */
 	private $visualCheckOfAgeEnabled = null;
 
 	/**
+	 * Contains the Age that the Receiver should be at least
+	 *
 	 * Note: Optional|Required if $visualCheckOfAgeEnabled
 	 * Min-Len: 3
 	 * Max-Len: 3
@@ -168,160 +232,209 @@ class DHL_Service {
 	 * A16
 	 * A18
 	 *
-	 * @var string|null $visualCheckOfAgeType
+	 * @var string|null $visualCheckOfAgeType - Minimum-Age of the Receiver
 	 */
 	private $visualCheckOfAgeType = null;
 
 	/**
+	 * Contains if preferred Location is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $preferredLocationEnabled
+	 * @var bool|null $preferredLocationEnabled - Is this enabled | null uses default
 	 */
 	private $preferredLocationEnabled = null;
 
 	/**
+	 * Contains details of the preferred Location (Free text)
+	 *
 	 * Note: Optional|Required if $preferredLocationEnabled
 	 * Min-Len: 1
 	 * Max-Len: 100
 	 *
-	 * @var string|null $preferredLocationDetails
+	 * @var string|null $preferredLocationDetails - Details of the preferred Location (Free text)
 	 */
 	private $preferredLocationDetails = null;
 
 	/**
+	 * Contains if preferred Neighbour is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $preferredNeighbourEnabled
+	 * @var bool|null $preferredNeighbourEnabled - Is this enabled | null uses default
 	 */
 	private $preferredNeighbourEnabled = null;
 
 	/**
+	 * Contains the details of the preferred Neighbour (Free text)
+	 *
 	 * Note: Optional|Required if $preferredNeighbourEnabled
 	 * Min-Len: 1
 	 * Max-Len: 100
 	 *
-	 * @var string|null
+	 * @var string|null $preferredNeighbourText - Details of the preferred Neighbour (Free text)
 	 */
 	private $preferredNeighbourText = null;
 
 	/**
+	 * Contains if preferred Day is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $preferredDayEnabled
+	 * @var bool|null $preferredDayEnabled - Is this enabled | null uses default
 	 */
 	private $preferredDayEnabled = null;
 
 	/**
+	 * Contains the details of the preferred Day (Free text)
+	 *
 	 * Note: Optional|Required if $preferredDayEnabled
 	 * Min-Len: 1
 	 * Max-Len: 100
 	 *
-	 * @var string|null $preferredDayText
+	 * @var string|null $preferredDayText - Details of the preferred Day (Free text)
 	 */
 	private $preferredDayText = null;
 
 	/**
-	 * Note: Optional
+	 * Contains if GoGreen is enabled
 	 *
-	 * @var bool|null $goGreen
+	 * Note: Optional|Version 1 ONLY
+	 *
+	 * @var bool|null $goGreen - Is this enabled | null uses default
 	 */
 	private $goGreen = null;
 
 	/**
+	 * Contains if deliver Perishables
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $perishables
+	 * @var bool|null $perishables - Is this enabled | null uses default
 	 */
 	private $perishables = null;
 
 	/**
+	 * Contains if personal handover is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $personalHandover
+	 * @var bool|null $personalHandover - Is this enabled | null uses default
 	 */
 	private $personalHandover = null;
 
 	/**
+	 * Contains if Neighbour delivery is disabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $disableNeighbourDelivery
+	 * @var bool|null $disableNeighbourDelivery - Is this enabled | null uses default
 	 */
 	private $disableNeighbourDelivery = null;
 
 	/**
+	 * Contains if named Person can only accept delivery
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $namedPersonOnly
+	 * @var bool|null $namedPersonOnly - Is this enabled | null uses default
 	 */
 	private $namedPersonOnly = null;
 
 	/**
+	 * Contains if return receipt is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $returnReceipt
+	 * @var bool|null $returnReceipt - Is this enabled | null uses default
 	 */
 	private $returnReceipt = null;
 
 	/**
+	 * Contains if Premium is enabled (for fast and safe delivery of international shipments)
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $premium
+	 * @var bool|null $premium - Is this enabled | null uses default
 	 */
 	private $premium = null;
 
 	/**
+	 * Contains if cash on delivery is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $cashOnDeliveryEnabled
+	 * @var bool|null $cashOnDeliveryEnabled - Is this enabled | null uses default
 	 */
 	private $cashOnDeliveryEnabled = null;
 
 	/**
+	 * Contains if the "AddFee" is enabled
+	 * Explanation from DHL: (COD = CashOnDelivery)
+	 * Configuration whether the transmission fee to be added to the COD amount or not by DHL.
+	 * Select the option then the new COD amount will automatically printed on the shipping label and will transferred
+	 * to the end of the day to DHL. Do not select the option and the specified COD amount remains unchanged.
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $cashOnDeliveryAddFee
+	 * @var bool|null $cashOnDeliveryAddFee - Is this enabled | null uses default
 	 */
 	private $cashOnDeliveryAddFee = null;
 
 	/**
+	 * Contains the Amount how much the receiver must pay
+	 * Explanation from DHL: (COD = CashOnDelivery)
+	 * Money amount to be collected. Mandatory if COD is chosen.
+	 * Attention: Please add the additional 2 EURO transmittal fee when entering the COD Amount
+	 *
 	 * Note: Optional|Required if $cashOnDeliveryEnabled
 	 *
-	 * @var float|null $cashOnDeliveryAmount
+	 * @var float|null $cashOnDeliveryAmount - CashOnDelivery Amount
 	 */
 	private $cashOnDeliveryAmount = null;
 
 	/**
+	 * Contains if the Shipment is insured with a higher standard
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $additionalInsuranceEnabled
+	 * @var bool|null $additionalInsuranceEnabled - Is this enabled | null uses default
 	 */
 	private $additionalInsuranceEnabled = null;
 
 	/**
+	 * Contains the Amount with that the Shipment is insured
+	 *
 	 * Note: Optional|Required if $additionalInsuranceEnabled
 	 *
-	 * @var float|null $additionalInsuranceAmount
+	 * @var float|null $additionalInsuranceAmount - Insure-Amount
 	 */
 	private $additionalInsuranceAmount = null;
 
 	/**
+	 * Contains if you deliver Bulky-Goods
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $bulkyGoods
+	 * @var bool|null $bulkyGoods - Is this enabled | null uses default
 	 */
 	private $bulkyGoods = null;
 
 	/**
+	 * Contains if the Ident-Check is enabled
+	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $identCheckEnabled
+	 * @var bool|null $identCheckEnabled - Is this enabled | null uses default
 	 */
 	private $identCheckEnabled = null;
 
 	/**
+	 * Contains the Ident-Check Object
+	 *
 	 * Note: Optional|Required if $indentCheckEnabled
 	 *
-	 * @var DHL_IdentCheck|null $identCheckObj
+	 * @var DHL_IdentCheck|null $identCheckObj - Ident-Check Object
 	 */
 	private $identCheckObj = null;
 
