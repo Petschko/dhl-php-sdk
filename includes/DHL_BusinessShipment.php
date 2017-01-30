@@ -454,14 +454,14 @@ class DHL_BusinessShipment extends DHL_Version {
 	/**
 	 * @return DHL_ExportDocument|null
 	 */
-	public function getExportDocument() {
+	private function getExportDocument() { // Todo: Enable if implemented
 		return $this->exportDocument;
 	}
 
 	/**
 	 * @param DHL_ExportDocument|null $exportDocument
 	 */
-	public function setExportDocument($exportDocument) {
+	private function setExportDocument($exportDocument) { // Todo: Enable if implemented
 		$this->exportDocument = $exportDocument;
 	}
 
