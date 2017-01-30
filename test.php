@@ -6,22 +6,22 @@ require_once('includes' . DIRECTORY_SEPARATOR . 'DHL_BusinessShipment.php');
 $testModus = true;
 $version = '2.2';
 
-// Set this to true then you can skip set the "User§, "Signature" and "EPK" (Just for test-Modus) else false or empty
+// Set this to true then you can skip set the "User", "Signature" and "EPK" (Just for test-Modus) else false or empty
 $credentials = new DHL_Credentials($testModus);
 
 if(! $testModus) {
-	$credentials->setUser('Your-DHL-Account');	// Don't need if initialed with true - Test-Modus
-	$credentials->setSignature('Your-DHL-Account-Password'); // Don't need if initialed with true - Test-Modus
-	$credentials->setEpk('EPK-Account-Number');	// Don't need if initialed with true - Test-Modus
+	$credentials->setUser('Your-DHL-Account');	// Don't needed if initialed with true - Test-Modus
+	$credentials->setSignature('Your-DHL-Account-Password'); // Don't needed if initialed with true - Test-Modus
+	$credentials->setEpk('EPK-Account-Number');	// Don't needed if initialed with true - Test-Modus
 }
 
-// Set your api login
+// Set your API-Login
 $credentials->setApiUser('');			// Test-Modus: Your DHL-Dev-Account | Production: Your Applications-ID
 $credentials->setApiPassword('');		// Test-Modus: Your DHL-Dev-Account Password | Production: Your Applications-Token
 
 // Set Shipment Details
-$shipmentDetails = new DHL_ShipmentDetails($credentials->getEpk(10) . '0101');
-$shipmentDetails->setShipmentDate('2017-01-30'); // Need to be in the future and NOT on a sunday
+$shipmentDetails = new DHL_ShipmentDetails($credentials->getEpk(10) . '0101'); // Create a Shipment-Details with the first 10 digits of your EPK-Number and 0101 (?)
+$shipmentDetails->setShipmentDate('2017-01-30'); // Optional: Need to be in the future and NOT on a sunday | null or drop it, to use today
 //$shipmentDetails->setReturnAccountNumber(return EPK 14 len); // Needed if you want to print a return label
 
 // Set Sender
@@ -43,13 +43,14 @@ $receiver->setCountry('Germany');
 $receiver->setCountryISOCode('DE');
 
 $returnReceiver = new DHL_ReturnReceiver(); // Needed if you want to print an return label
+// If want to use it, please set Address etc of the return receiver to!
 
 // Set Service stuff (look at the class member - many settings here - just set them you need)
 $service = new DHL_Service();
-$service->setGoGreen(false); // Sadly don't work yet... i have to made a ticked bec the documentation is may wrong about this
+// Set stuff you want in that class - This is very optional
 
-// Required just Credentials also accept test-modus and version
-$dhl = new DHL_BusinessShipment($credentials, $testModus, $version);
+// Required just Credentials also accept Test-Modus and Version
+$dhl = new DHL_BusinessShipment($credentials, /*Optional*/$testModus, /*Optional*/$version);
 // Don't forget to assign the created objects to the DHL_BusinessShipment!
 $dhl->setSequenceNumber('1'); // Just needed for ajax or such stuff can dynamic an other value
 $dhl->setSender($sender);
@@ -60,17 +61,22 @@ $dhl->setShipmentDetails($shipmentDetails);
 $dhl->setReceiverEmail('receiver@mail.com'); // Needed if you want inform the receiver via mail
 $dhl->setLabelResponseType(DHL_BusinessShipment::RESPONSE_TYPE_URL);
 
-$response = $dhl->createShipment(); // Create the request
+$response = $dhl->createShipment(); // Creates the request
 
 // For deletion you just need the shipment number and credentials
 // $dhlDel = new DHL_BusinessShipment($credentials, $testModus, $version);
 // $response_del = $dhlDel->deleteShipment('shipment_number'); // Deletes a Shipment
 
-// Get the result
+// To re-get the Label you can use the getShipmentLabel method - the shipment must be created with createShipment before
+//$dhlReGetLabel = new DHL_BusinessShipment($credentials, $testModus, $version);
+//$dhlReGetLabel->setLabelResponseType(DHL_BusinessShipment::RESPONSE_TYPE_B64); // Optional: Set the Label-Response-Type
+//$reGetLabelResponse = $dhlReGetLabel->getShipmentLabel('shipmentNumber'); // ReGet Label
+
+// Get the result (just use var_dump to show all results)
 if($response !== false)
 	var_dump($response);
 else
 	var_dump($dhl->getErrors());
 
-// You can show the XML-Request as string
+// You can show yourself also the XML-Request as string
 var_dump($dhl->getLastXML());
