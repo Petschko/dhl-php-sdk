@@ -220,10 +220,20 @@ class DHL_ShipmentDetails {
 	}
 
 	/**
-	 * @param string|null $shipmentDate
+	 * Set the Shipment-Date
+	 *
+	 * @param string|int|null $shipmentDate - Shipment-Date
+	 * @param bool $useTimeStamp - Use a Time-Stamp
 	 */
-	public function setShipmentDate($shipmentDate) {
-		$this->shipmentDate = $shipmentDate;
+	public function setShipmentDate($shipmentDate, $useTimeStamp = false) {
+		if($useTimeStamp) {
+			// Convert Time-Stamp to Date
+			$this->shipmentDate = date('Y-m-d', $shipmentDate);
+
+			if($this->shipmentDate === false)
+				$this->setShipmentDate($shipmentDate);
+		} else
+			$this->shipmentDate = $shipmentDate;
 	}
 
 	/**
