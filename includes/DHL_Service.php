@@ -223,6 +223,13 @@ class DHL_Service {
 	/**
 	 * Note: Optional
 	 *
+	 * @var bool|null $goGreen
+	 */
+	private $goGreen = null;
+
+	/**
+	 * Note: Optional
+	 *
 	 * @var bool|null $perishables
 	 */
 	private $perishables = null;
@@ -352,6 +359,7 @@ class DHL_Service {
 		unset($this->preferredNeighbourText);
 		unset($this->preferredDayEnabled);
 		unset($this->preferredDayText);
+		unset($this->goGreen);
 		unset($this->perishables);
 		unset($this->personalHandover);
 		unset($this->disableNeighbourDelivery);
@@ -693,6 +701,20 @@ class DHL_Service {
 	/**
 	 * @return bool|null
 	 */
+	public function getGoGreen() {
+		return $this->goGreen;
+	}
+
+	/**
+	 * @param bool|null $goGreen
+	 */
+	public function setGoGreen($goGreen) {
+		$this->goGreen = $goGreen;
+	}
+
+	/**
+	 * @return bool|null
+	 */
 	public function getPerishables() {
 		return $this->perishables;
 	}
@@ -884,6 +906,17 @@ class DHL_Service {
 	 */
 	public function setIdentCheckObj($identCheckObj) {
 		$this->identCheckObj = $identCheckObj;
+	}
+
+	/**
+	 * Get the Class of this Service-Object
+	 *
+	 * @param string $productType - Type of the Product
+	 * @return StdClass - Service-DHL-Class
+	 */
+	public function getServiceClass_v1($productType) {
+		//todo implement
+		return new StdClass;
 	}
 
 	/**
