@@ -332,6 +332,16 @@ class DHL_ShipmentDetails {
 	 *
 	 * @return StdClass - ShipmentDetailsClass
 	 */
+	public function getShipmentDetailsClass_v1() {
+		// todo implement
+		return new StdClass;
+	}
+
+	/**
+	 * Returns an DHL-Class of this Object for DHL-Shipment Details
+	 *
+	 * @return StdClass - ShipmentDetailsClass
+	 */
 	public function getShipmentDetailsClass_v2() {
 		$class = new StdClass;
 
