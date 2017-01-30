@@ -38,28 +38,36 @@ class DHL_ShipmentDetails {
 	const PRODUCT_TYPE_CONNECT_PACKAGE = 'V87PARCEL';
 
 	/**
-	 * @var string $product
+	 * Contains which Product is used
+	 *
+	 * @var string $product - Product to use
 	 */
 	private $product = self::PRODUCT_TYPE_NATIONAL_PACKAGE;
 
 	/**
+	 * Contains the Account-Number (10 Digits) plus 0101 | todo: figure out for what 0101 is
+	 *
 	 * Min-Len: 14
 	 * Max-Len: 14
 	 *
-	 * @var string $accountNumber
+	 * @var string $accountNumber - Account-Number plus 0101
 	 */
 	private $accountNumber;
 
 	/**
+	 * Contains the Customer-Reference
+	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $customerReference
+	 * @var string|null $customerReference - Customer Reference or null for disabling
 	 */
 	private $customerReference = null;
 
 	/**
+	 * Contains the Shipment-Date
+	 *
 	 * Note: ISO-Date-Format (YYYY-MM-DD)
 	 * Min-Len: 10
 	 * Max-Len: 10
@@ -69,20 +77,24 @@ class DHL_ShipmentDetails {
 	private $shipmentDate = null;
 
 	/**
+	 * Contains the Return-Account-Number (EPK)
+	 *
 	 * Note: Optional
 	 * Min-Len: 14
 	 * Max-Len: 14
 	 *
-	 * @var string|null $returnAccountNumber
+	 * @var string|null $returnAccountNumber - Return-Account-Number or null for disabling
 	 */
 	private $returnAccountNumber = null;
 
 	/**
+	 * Contains the Return-Reference
+	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $returnReference
+	 * @var string|null $returnReference - Return-Reference or null for disabling
 	 */
 	private $returnReference = null;
 
