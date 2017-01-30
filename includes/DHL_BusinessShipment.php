@@ -767,4 +767,83 @@ class DHL_BusinessShipment extends DHL_Version {
 
 		return $data;
 	}
+
+	/**
+	 * Requests a Label again
+	 *
+	 * @param Object $data - Label-Data
+	 * @return Object - DHL-Response
+	 */
+	private function sendGetLabelRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				return $this->getSoapClient()->getLabelDD($data);
+			case 2:
+			default:
+				return $this->getSoapClient()->getLabel($data);
+		}
+	}
+
+	/**
+	 * Requests a Shipment-Label again
+	 *
+	 * @param string $shipmentNumber - Shipment-Number of the Label
+	 * @return bool|DHL_Response - Response or false on error
+	 */
+	public function getShipmentLabel($shipmentNumber) {
+		switch($this->getMayor()) {
+			case 1:
+				$data = $this->getLabelClass_v1($shipmentNumber);
+				break;
+			case 2:
+			default:
+				$data = $this->getLabelClass_v2($shipmentNumber);
+		}
+
+		try {
+			$response = $this->sendGetLabelRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new DHL_Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Creates Data-Object for Label-Request
+	 *
+	 * @param string $shipmentNumber - Number of the Shipment
+	 * @return StdClass - Data-Object
+	 */
+	private function getLabelClass_v1($shipmentNumber) {
+		$data = new StdClass;
+
+		// todo
+
+		return $data;
+	}
+
+	/**
+	 * Creates Data-Object for Label-Request
+	 *
+	 * @param string $shipmentNumber - Number of the Shipment
+	 * @return StdClass - Data-Object
+	 */
+	private function getLabelClass_v2($shipmentNumber) {
+		$data = new StdClass;
+
+		$data->Version = $this->getVersionClass();
+		$data->shipmentNumber = $shipmentNumber;
+		if($this->getLabelResponseType() !== null)
+			$data->labelResponseType = $this->getLabelResponseType();
+
+		return $data;
+	}
 }
