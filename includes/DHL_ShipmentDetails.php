@@ -64,9 +64,9 @@ class DHL_ShipmentDetails {
 	 * Min-Len: 10
 	 * Max-Len: 10
 	 *
-	 * @var string $shipmentDate
+	 * @var string|null $shipmentDate - Shipment-Data or null (= Today if Sunday then +1 Day)
 	 */
-	private $shipmentDate;
+	private $shipmentDate = null;
 
 	/**
 	 * Note: Optional
@@ -201,11 +201,14 @@ class DHL_ShipmentDetails {
 	 * @return string
 	 */
 	public function getShipmentDate() {
+		if($this->shipmentDate === null)
+			$this->setShipmentDate($this->createDefaultShipmentDate());
+
 		return $this->shipmentDate;
 	}
 
 	/**
-	 * @param string $shipmentDate
+	 * @param string|null $shipmentDate
 	 */
 	public function setShipmentDate($shipmentDate) {
 		$this->shipmentDate = $shipmentDate;
@@ -307,6 +310,21 @@ class DHL_ShipmentDetails {
 	 */
 	public function setPackageType($packageType) {
 		$this->packageType = $packageType;
+	}
+
+	/**
+	 * Creates a Default Shipment-Date (Today or if Sunday the next Day)
+	 *
+	 * @return string - Default-Date
+	 */
+	private function createDefaultShipmentDate() {
+		$now = time();
+		$weekDay = date('w', $now);
+
+		if($weekDay === 0)
+			$now += 86400; // Increase Day by 1 if Sunday
+
+		return date('Y-m-d', $now);
 	}
 
 	/**
