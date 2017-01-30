@@ -223,13 +223,6 @@ class DHL_Service {
 	/**
 	 * Note: Optional
 	 *
-	 * @var bool|null $goGreen
-	 */
-	private $goGreen = null;
-
-	/**
-	 * Note: Optional
-	 *
 	 * @var bool|null $perishables
 	 */
 	private $perishables = null;
@@ -359,7 +352,6 @@ class DHL_Service {
 		unset($this->preferredNeighbourText);
 		unset($this->preferredDayEnabled);
 		unset($this->preferredDayText);
-		unset($this->goGreen);
 		unset($this->perishables);
 		unset($this->personalHandover);
 		unset($this->disableNeighbourDelivery);
@@ -701,20 +693,6 @@ class DHL_Service {
 	/**
 	 * @return bool|null
 	 */
-	public function getGoGreen() {
-		return $this->goGreen;
-	}
-
-	/**
-	 * @param bool|null $goGreen
-	 */
-	public function setGoGreen($goGreen) {
-		$this->goGreen = $goGreen;
-	}
-
-	/**
-	 * @return bool|null
-	 */
 	public function getPerishables() {
 		return $this->perishables;
 	}
@@ -1007,10 +985,6 @@ class DHL_Service {
 			$class->PreferredDay = new StdClass;
 			$class->PreferredDay->active = (int) $this->getPreferredDayEnabled();
 			$class->PreferredDay->details = $this->getPreferredDayText();
-		}
-		if($this->getGoGreen() !== null) {
-			$class->GoGreen = new StdClass;
-			$class->GoGreen->active = (int) $this->getGoGreen();
 		}
 		if($this->getPerishables() !== null) {
 			$class->Perishables = new StdClass;
