@@ -355,7 +355,7 @@ class DHL_ShipmentDetails {
 	 * @return StdClass - ShipmentDetailsClass
 	 */
 	public function getShipmentDetailsClass_v1() {
-		// todo implement
+		// todo implement getClass_v1()
 		return new StdClass;
 	}
 

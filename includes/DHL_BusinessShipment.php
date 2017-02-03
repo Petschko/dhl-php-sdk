@@ -8,7 +8,6 @@
  * Version: 0.0.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
- * Todo: Document better if time
  */
 
 // Set correct encoding

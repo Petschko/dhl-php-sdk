@@ -1028,7 +1028,7 @@ class DHL_Service {
 	 * @return StdClass - Service-DHL-Class
 	 */
 	public function getServiceClass_v1($productType) {
-		//todo implement
+		//todo implement getClass_v1()
 		return new StdClass;
 	}
 
