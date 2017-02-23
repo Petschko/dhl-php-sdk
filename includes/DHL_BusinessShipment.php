@@ -37,6 +37,11 @@ require_once('DHL_ShipmentDetails.php');
  */
 class DHL_BusinessShipment extends DHL_Version {
 	/**
+	 * DHL Origin WSDL-Lib-URL
+	 */
+	const DHL_WSDL_LIB_URL = 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/';
+
+	/**
 	 * DHL-Soap-Header URL
 	 */
 	const DHL_SOAP_HEADER_URI = 'http://dhl.de/webservice/cisbase';
@@ -265,13 +270,24 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
+	 * Get the full Server-URL to the WSDL-Directory
+	 *
+	 * @return string - Server URL Pointing to the /includes/lib/ (WSDL-Dir)
+	 */
+	private static function getWSDLDirURL() {
+		//todo check if ok else use dhl soap url to dir
+		return (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' .
+			trim(str_replace(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '', str_replace('\\', '/', __DIR__)), '/') . '/lib/';
+	}
+
+	/**
 	 * Get the Business-API-URL for this Version
 	 *
 	 * @return string - Business-API-URL
 	 */
 	protected function getAPIUrl() {
-		// todo check if up to date
-		return 'lib/' . $this->getVersion() . '/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
+		// todo check if up to date & if file exists
+		return self::getWSDLDirURL() . $this->getVersion() . '/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
 	}
 
 	/**
