@@ -270,8 +270,8 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * @return string - Business-API-URL
 	 */
 	protected function getAPIUrl() {
-		return 'https://cig.dhl.de/cig-wsdls/com/dpdhl/wsdl/geschaeftskundenversand-api/' . $this->getVersion() .
-			'/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
+		// todo check if up to date
+		return 'lib/' . $this->getVersion() . '/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
 	}
 
 	/**

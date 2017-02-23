@@ -1,0 +1,4406 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+		History: 
+		v0.02 + Element Account added in PickupBookingInformationType 
+		v0.03 + Element Attendance added in PickupBookingInformationType + Type of time in DDServiceGroupDateTimeOptionType->DeliveryOnTime changed from xs:time to xs:string 
+		v0.04 + PackageType in ShipmentItemDDType is mandatory now + LengthInCM, WidthInCM and HeightInCM in ShipmentItemType are now of type xs:integer (formerly xs:decimal) + Element licensePlate deleted in DeleteShipmentTDData and DeleteShipmentDDData + In GetLabelTD/DD, DoManifesetTD/DD and DeleteShipmentTD/DD the shipment number is always read from ShipmentNumberType->licenseplate 
+		v0.05 + Use of ShipmentNumberType adjusted to fit the new cis_base (v096)
+		v0.06 + TDService GoGreen added to service group OTHER -> TDServiceGroupOtherType v0.07 + GetVersionResponse added + DD-Service GoGreen (service group "other") deleted 
+		v0.08 + cis:Version added to each response-type 
+		v0.09 + Datatype of field Attendance changed to cis:partnerID + CreateShipmentTDRequest and CreateShipmentDDRequest: maxOccurs of ShipmentOrder is decreased to one + PickupBookingInformationType: Elements PickupLocation,AmountOfPieces,AmountOfPallets,WeightInKG,CountOfShipments,TotalVolumeWeight,MaxLengthInCM,MaxWidthInCM,MaxHeightInCM are now optional + Documentation added for several elements + Element name "AdditionalFee" corrected. + PickupAddress is now mandatory in BookPickupRequest 
+		v0.10 + Multiple ShipmentOrder elements allowed in CreateShipmentTDRequest and CreateShipmentDDRequest. + In ShipmentOrder it is now possible to choose the type of label data. + CreationState extended by new element XMLLabel. The XMLLabel contains the xml label data if requested in CreateShipmentTD/DD + LabelData extended by new Element XMLLabel 
+		v0.11 + Optional field WithElectronicExportNtfctn added in ExportDocumentDDType
+		v0.12 + completely merged Intraship offline documentation into schema annotations; no logical changes(07.09.2009)
+		v0.13 + Elements added for GetExportDoc webservice: GetExportDocTDRequest, GetExportDocDDRequest, GetExportDocResponse, ExportDocData, Service ShipmentAdvisory (DHLPaket) and Ident Premium added. 
+		v0.14a + Fieldlengths added; no logical changes(11.12.2009)
+		v0.14b + DocType in GetExportDocTDRequest and GetExportDocDDRequest can have the value "URL" for requesting an url for downloading the exportdoc
+	      	      + ExportDocData extended by optional element ExportDocURL
+	    v0.15 + DeveloperAuthentification added
+    	v0.16 + Service Endorsement added to DDServiceGroupDHLPaketType
+    		  + Type EndorsementServiceconfiguration added
+    		  + Type EndorsementServiceconfigurationTeZu added
+    		  + Field "CommodityCode" added to ExportDocumentTDType->ExportDocPosition
+    	v0.17 + Service IdentPlusAge is not longer in use
+    	      + New Service CheckMinimumAge added 
+    	      + Service IdentPremium extended by the following Elements:   	
+    	        Nationality, FreeText1, FreeText2, CorrOfNameAllowed, CorrOfFirstNameAllowed, CorrOfDayOfBirthAllowed, CorrOfMinimumAgeAllowed, CorrOfIdentityCardTypeAllowed, 
+    	        CorrOfIdentityCardNumberAllowed, CorrOfAddressAllowed, CorrOfContractAllowed, CorrOfContractIdAllowed, CorrOfNationalityAllowed, CorrOfFreetextsAllowed
+    	      + Service Economy added DDServiceGroupBusinessPackInternationalType
+    	v0.18 + occurrence of maxOccurs="unbounded" replaced by maxOccurs="999"
+    	v0.19 + CommodityCode is now optional for ExportDocumentDDType and ExportDocumentDDType->ExportDocPosition
+    	v0.20 + Optional element NotificationEmailText added to ShipmentDetailsTDType and ShipmentDetailsDDType
+    	      + New types PackstationType and PostfilialeType added
+    	      + ReceiverType extended by choice of address / packstation / postfiliale
+    	v0.21 + ShipmentOrderDDType extended by optional element PRINTONLYIFCODEABLE
+    		  + GetManifestDDRequest and GetManifestDDResponse added
+    		  + UpdateShipmentDDRequest and UpdateShipmentResponse added
+    	v0.22 + ExportDocumentDDType extended by MRNNumber
+    	v0.23 + PostNumber is now optional in PostfilialeType
+	-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:is="http://de.ws.intraship" xmlns:cis="http://dhl.de/webservice/cisbase"
+	targetNamespace="http://de.ws.intraship">
+	<annotation>
+		<documentation><![CDATA[
+	
+	<extension id="identCode">
+  
+     <context id="CreateShipmentResponse">
+        <context id="ShipmentNumber">
+          Obsolete in ShipmentNumber where either shipmentNumber or airwayBill is used. Exception: certain BPI combinations might return identCode.
+        </context>
+        </context>
+        <context id="PieceNumber">
+          Obsolete in PieceNumber where only LicensePlate is used. 
+        </context>
+     
+
+		 <context id="DeleteShipmentResponse">
+				<context id="ShipmentNumber">
+						Ident code number returned only for some BPI combinations. Else, ShipmentNumber contains either ShipmentNumber (DD) or airwayBill (TD).
+				</context>
+		 </context>
+	
+     <context id="DeleteShipmentTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for DeleteShipmentTDRequest).
+					</context>
+			</context>
+     
+      <context id="DeleteShipmentDDRequest">
+				<context id="ShipmentNumber">
+					(can be used only in cases of certain BPI combinations that return identCode, else obsolete for DeleteShipmentDDRequest).
+				</context>
+		 </context>
+     
+     <context id="GetLabelDDRequest">
+				<context id="ShipmentNumber">
+					(can be used only in cases of certain BPI combinations that return identCode, else obsolete for GetLabelDDRequest).
+					</context>
+			</context>
+  
+     <context id="GetLabelTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetLabelTDRequest).
+					</context>
+			</context>
+			
+		 <context id="GetLabelResponse">
+				<context id="ShipmentNumber">
+					Obsolete in ShipmentNumber where either shipmentNumber (DD) or airwayBill (TD) is returned.
+					</context>
+	               </context>		
+		<context id="GetExportDocTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetExportDocTDRequest).
+					</context>	
+          </context>		
+		<context id="GetExportDocDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetExportDocDDRequest).
+					</context>	
+		</context>
+		<context id="GetExportDocResponse">
+				<context id="ShipmentNumber">
+					Obsolete in ShipmentNumber where either shipmentNumber (DD) or airwayBill (TD) is returned.
+					</context>		
+			</context>
+			
+			
+  </extension>
+
+
+
+<extension id="shipmentNumber">
+  
+     <context id="CreateShipmentResponse">
+        
+        <context id="PieceNumber">
+          Obsolete in PieceNumber where only LicensePlate is used.
+        </context>
+     </context>
+ 
+		 <context id="DeleteShipmentResponse">
+				<context id="ShipmentNumber">
+						(obsolete for DeleteShipmentTDRequest).
+				</context>
+		 </context>
+	
+     <context id="DeleteShipmentTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for DeleteShipmentTDRequest).
+					</context>
+		 </context>   
+  
+     <context id="GetLabelTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetLabelTDRequest).
+					</context>
+		 </context>
+			
+		 <context id="GetLabelResponse">
+				<context id="ShipmentNumber">
+					(obsolete for GetLabelTDRequest).
+				</context>
+			</context>
+		 <context id="GetExportDocTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetExportDocTDRequest).
+					</context>	
+		 </context>
+  </extension>
+
+
+<extension id="licensePlate">
+  
+     <context id="CreateShipmentResponse">
+        
+        <context id="ShipmentNumber">
+          Obsolete in ShipmentNumber where either shipmentNumber or airwayBill is used.
+        </context>
+     </context>
+ 
+		 <context id="DeleteShipmentResponse">
+				<context id="ShipmentNumber">
+						Obsolete in ShipmentNumber where either shipmentNumber (DD) or airwayBill (TD) is used.
+				</context>
+		 </context>
+	
+     <context id="DeleteShipmentDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for DeleteShipmentDDRequest).
+					</context>
+		 </context>   
+  
+     <context id="DeleteShipmentTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for DeleteShipmentTDRequest).
+					</context>
+		 </context>   
+  
+     <context id="GetLabelTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetLabelTDRequest).
+					</context>
+		 </context>
+			
+		 <context id="GetLabelDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetLabelDDRequest).
+					</context>
+		 </context>
+		 
+		 <context id="GetLabelResponse">
+				<context id="ShipmentNumber">
+					Obsolete in ShipmentNumber where either shipmentNumber (DD) or airwayBill (TD) is returned.
+					</context>
+		 </context>
+		 <context id="GetExportDocTDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetExportDocTDRequest).
+					</context>	
+	     </context>	 
+		 <context id="GetExportDocDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetExportDocDDRequest).
+				</context>	
+		 </context>
+         <context id="GetExportDocResponse">
+				<context id="ShipmentNumber">
+					Obsolete in ShipmentNumber where either shipmentNumber (DD) or airwayBill (TD) is returned.
+				</context>	
+		 </context>
+		 </extension>
+
+
+<extension id="airwayBill">
+  
+     <context id="CreateShipmentResponse">
+        
+        <context id="PieceNumber">
+          Obsolete in PieceNumber where only LicensePlate is used.
+        </context>
+     </context>
+ 
+		 <context id="DeleteShipmentResponse">
+				<context id="ShipmentNumber">
+						(obsolete for DeleteShipmentDDRequest).
+				</context>
+		 </context>
+	
+     <context id="DeleteShipmentDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for DeleteShipmentDDRequest).
+					</context>
+		 </context>       
+			
+		 <context id="GetLabelDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetLabelDDRequest).
+					</context>
+		 </context>
+	 <context id="GetExportDocDDRequest">
+				<context id="ShipmentNumber">
+					(obsolete for GetExportDocDDRequest).
+					</context>		 
+     </context>
+</extension>
+
+
+<extension id="Person">
+  
+     <context id="CreateShipmentDDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+        <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+       </context>		 
+		 
+</extension>
+
+<extension id="salutation">
+  
+     <context id="CreateShipmentDDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+</extension>
+
+<extension id="title">
+  
+     <context id="CreateShipmentDDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+</extension>
+
+<extension id="firstname">
+  
+     <context id="CreateShipmentDDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+
+</extension>
+
+<extension id="middlename">
+  
+     <context id="CreateShipmentDDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+
+</extension>
+
+<extension id="lastname">
+  
+     <context id="CreateShipmentDDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 
+</extension>
+
+
+
+<extension id="Person">
+  
+     <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 
+</extension>
+
+<extension id="salutation">
+  
+     <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 
+</extension>
+
+<extension id="title">
+  
+     <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 
+</extension>
+
+<extension id="firstname">
+  
+     <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 
+</extension>
+
+<extension id="middlename">
+  
+     <context id="CreateShipmentTDRequest">
+        
+        <context id="Shipper">
+          Obsolete as Person is rejected by web service in Shipper.Company, but must rather be Company.
+        </context>
+     </context>
+		 
+</extension>
+
+<extension id="lastname">
+
+     <context id="CreateShipmentTDRequest">
+
+        <context id="Shipper">
+                   Obsolete as Person is rejected by web 
+        service in Shipper.Company, but must rather be Company. </context> 
+        </context>
+
+</extension>
+
+<extension id="accountNumber">
+  
+     <context id="Authentification">
+        Account number. Field is currently obsolete and should be left empty.
+     </context>
+		 
+</extension>
+
+<extension id="type">
+  
+     <context id="Authentification">
+        Should always be zero. 
+     </context>
+		 
+</extension>
+
+<extension id="accountNumberExpress">
+  
+     <context id="ShipmentDetails">
+        
+        <context id="AccountPaidBy">
+        Must be provided if .AccountPaidBy is selected.
+     
+		 </context>
+	   </context>
+</extension>
+
+<extension id="Version">
+  
+     <context overwrite="true" id="CreateShipmentResponse">        
+        Container specifies the web service's actual software version number that served the response.
+	   </context>
+	   
+	   <context overwrite="true" id="GetExportDocResponse">        
+        Container specifies the web service's actual software version number that served the response.
+	   </context>
+
+<context overwrite="true" id="DeleteShipmentResponse">        
+        Container specifies the web service's actual software version number that served the response.
+	   </context>
+
+<context overwrite="true" id="GetLabelResponse">        
+        Container specifies the web service's actual software version number that served the response.
+	   </context>
+
+<context overwrite="true" id="BookPickupResponse">        
+        Container specifies the web service's actual software version number that served the response.
+	   </context>
+	   
+	   <context overwrite="true" id="CancePickupResponse">        
+        Container specifies the web service's actual software version number that served the response.
+	   </context>
+
+<context overwrite="true" id="CreateShipmentDDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="CreateShipmentTDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="GetLabelTDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="GetLabelDDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="DeleteShipmentDDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="DeleteShipmentTDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="BookPickupRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="CancelPickupRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="GetExportDocDDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+<context overwrite="true" id="GetExportDocTDRequest">        
+        Version number specified by following child elements.
+	   </context>
+
+
+
+</extension>
+
+<extension id="StatusCode">
+  
+     <context overwrite="true" id="DeleteShipmentResponse">        
+        <context overwrite="true" id="DeletionState">
+	   <context overwrite="true" id="Status">
+	   Status for particular shipment deletion process.
+	   </context>
+	   </context>
+	   </context>
+<context id="BookPickupResponse">        
+        Status code of the request: A value of zero means, the request was processed without error. A value greater than zero indicates that an error occurred. The detailed mapping and explanation of returned status codes is contained in the list.
+	   </context>
+<context id="GetExportDocResponse">        
+        <context id="ExportDocData">
+		Status code for this particular document generation process.
+	   </context>
+	   </context>
+	   </extension>
+
+<extension id="Status">
+    
+    <context id="GetExportDocResponse">        
+      <context id="ExportDocData">       
+    The operation's success status for this particular document generation process.
+	  </context>
+    </context>
+</extension>
+
+	  <extension id="StatusMessage">
+    
+    <context id="GetExportDocResponse">        
+      <context id="ExportDocData">        
+    Dedicated status and error messages at the level of the particular document generation process.
+	</context>
+      </context>
+	</extension>
+
+
+
+
+
+<extension id="city">       
+      
+      <context id="Address">      
+Field length must be less than or equal to 20.
+</context>
+</extension>
+
+<extension id="Zip">       
+      
+      <context id="Address">      
+Field length must be less than or equal to 10.
+</context>
+</extension>
+
+<extension id="streetName">       
+      
+      <context id="Address">      
+Field length must be less than or equal to 30.
+</context>
+</extension>
+
+<extension id="Number">       
+      
+      <context id="Address">      
+Field length must be less than or equal to 10.
+</context>
+</extension>
+
+<extension id="accountOwner">       
+      
+      <context id="BankData">      
+Field length must be less than or equal to 30.
+</context>
+</extension>
+
+<extension id="accountNumber">       
+      
+      <context id="BankData">      
+Field length must be less than or equal to 15.
+</context>
+</extension>
+
+<extension id="bankCode">       
+      
+      <context id="BankData">      
+Field length must be less than or equal to 15.
+</context>
+</extension>
+
+<extension id="bankName">       
+      
+      <context id="BankData">      
+ Field length must be less than or equal to 30.
+</context>
+</extension>
+
+<extension id="iban">       
+      
+      <context id="BankData">      
+  Field length must be less than or equal to 34.
+</context>
+</extension>
+
+<extension id="note">       
+      
+      <context id="BankData">      
+   Field length must be less than or equal to 70. 
+</context>
+</extension>
+
+<extension id="name1">       
+     
+      <context id="Company">      
+   Field length must be less than or equal to 30. 
+</context>
+</extension>
+
+<extension id="name2">       
+      
+      <context id="Company">      
+   Field length must be less than or equal to 30. 
+</context>
+</extension>
+
+<extension id="phone">       
+      
+      <context id="Communication">      
+    Field length must be less than or equal to 20.
+</context>
+</extension>
+
+<extension id="email">       
+      
+      <context id="Communication">      
+    Field length must be less than or equal to 30.
+</context>
+</extension>
+
+<extension id="mobile">       
+      
+      <context id="Communication">      
+     Field length must be less than or equal to 20.
+</context>
+</extension>
+
+<extension id="contactPerson">       
+      
+      <context id="Communication">      
+      Field length must be less than or equal to 30.
+</context>
+</extension>
+
+<extension id="countryISOCode">       
+      
+      <context id="Origin">      
+      Field length must be less than or equal to 3.
+</context>
+</extension>
+
+<extension id="state">       
+      
+      <context id="Origin">      
+       Field length must be less than or equal to 9.
+</context>
+</extension>
+
+			]]></documentation>
+	</annotation>
+	<import namespace="http://dhl.de/webservice/cisbase"
+		schemaLocation="../../cis_base/1.1/cis_base-1.1.xsd"/>
+	<xs:element name="DeveloperAuthentification">
+		<xs:annotation>
+			<xs:documentation>The developer authentification.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DEVID" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The developer id.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="APPID" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The application id.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CERTID" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The certification id.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<simpleType name="SequenceNumber">
+		<annotation>
+			<documentation>A sequence number defined by the (soap-) client.
+				The sequenceNumber is returned by the webservice within the result
+				of the createShipment operation, so that the client is able to assign
+				the shipment information of the response to the shipment data of the
+				request.</documentation>
+		</annotation>
+		<restriction base="xs:string">
+			<maxLength value="30"/>
+		</restriction>
+	</simpleType>
+	<!-- The response-type of the webservice GetVersion -->
+	<element name="GetVersionResponse">
+		<annotation>
+			<documentation>The version of the webservice and the version of
+				the software build.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="CreateShipmentTDRequest">
+		<annotation>
+			<documentation>The shipmentdata for creating a TD shipment.
+			</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentOrder" type="is:ShipmentOrderTDType" maxOccurs="999">
+					<annotation>
+						<documentation>Shipment order is the highest parent element that contains all data with respect to one shipment order.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="CreateShipmentDDRequest">
+		<annotation>
+			<documentation>The shipmentdata for creating a DD shipment.
+			</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentOrder" type="is:ShipmentOrderDDType" maxOccurs="999">
+					<annotation>
+						<documentation>ShipmentOrder is the highest parent element that contains all data with respect to one shipment order.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<!-- The response-type of the webservice -->
+	<element name="CreateShipmentResponse">
+		<annotation>
+			<documentation>The status of the operation and the shipment
+				identifier (if available).</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Success status after processing the overall request.</documentation>
+					</annotation>
+				</element>
+				<element name="CreationState" type="is:CreationState" minOccurs="0" maxOccurs="999">
+					<annotation>
+						<documentation>The operation's success status for every single ShipmentOrder will be returned by one CreationState element. It is identifiable via SequenceNumber.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="GetLabelTDRequest">
+		<annotation>
+			<documentation>The identifier for the TD shipment for which the
+				label url is requested.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>To request TD shipment labels, ShipmentNumber. AirwayBill is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the web service accepts airwayBill only. Note: you can get labels for more than one shipment by passing multiple ShipmentNumber containers.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="GetLabelDDRequest">
+		<annotation>
+			<documentation>The identifier for the DD shipment for which the
+				label url is requested.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>To request DD shipment labels, ShipmentNumber. ShipmentNumber is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the web service accepts shipmentNumber only. Note: you can get labels for more than one shipment by passing multiple ShipmentNumber containers.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<!-- The response-type of the webservice -->
+	<element name="GetLabelResponse">
+		<annotation>
+			<documentation>The status of the operation and requested urls
+				for getting the label.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Success status after processing the overall request.</documentation>
+					</annotation>
+				</element>
+				<element name="LabelData" type="is:LabelData" minOccurs="0" maxOccurs="999">
+					<annotation>
+						<documentation>For every ShipmentNumber requested, one LabelData node is returned that contains the status of the label retrieval operation and the URL for the label (if available).
+						</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DoManifestTDRequest">
+		<annotation>
+			<documentation>The identifier for the TD shipment which should
+				be manifested.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>The identifier of the shipment. The shipment
+							number is read from ShipmentNumberType->airwayBill
+						</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DoManifestDDRequest">
+		<annotation>
+			<documentation>The identifier for the DD shipment which should
+				be manifested.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>The identifier of the shipment. The shipment
+							number is read from ShipmentNumberType->shipmentNumber
+						</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DoManifestResponse">
+		<annotation>
+			<documentation>The status of the operation</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="Status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Status of the request (value of zero
+							means, the request was processed without error; value greater
+							than zero indicates that an error occurred).</documentation>
+					</annotation>
+				</element>
+				<element name="ManifestState" type="is:ManifestState" minOccurs="0" maxOccurs="999">
+					<annotation>
+						<documentation>The status of the operation for the
+							corresponding shipment.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DeleteShipmentTDRequest">
+		<annotation>
+			<documentation>The identifier for the TD shipment which should
+				be deleted.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>In order to delete previously created TD shipment orders, ShipmentNumber. AirwayBill is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the server accepts only airwayBill. Note: for every shipment order to be deleted, hand over one dedicated ShipmentNumber container. This way you can delete multiple shipments with just one operation invocation.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DeleteShipmentDDRequest">
+		<annotation>
+			<documentation>The identifier for the DD shipment which should
+				be deleted.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>In order to delete previously created DD shipment orders, ShipmentNumber. ShipmentNumber is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the web service accepts shipmentNumber only. Note: you can delete more than one shipment by passing multiple ShipmentNumber containers.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="DeleteShipmentResponse">
+		<annotation>
+			<documentation>The status of the operation.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="Status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Success status after processing the overall request.</documentation>
+					</annotation>
+				</element>
+				<element name="DeletionState" type="is:DeletionState" minOccurs="0" maxOccurs="999">
+					<annotation>
+						<documentation>For every ShipmentNumber requested, one DeletionState node is returned that contains the status of the respective deletion operation.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="GetExportDocTDRequest">
+		<annotation>
+			<documentation>The identifier for the TD shipment for which the export document url is requested.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>To request TD export documents, ShipmentNumber. AirwayBill is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the web service accepts airwayBill only.</documentation>
+					</annotation>
+				</element>
+				<element name="DocType" minOccurs="0">
+					<annotation>
+						<documentation>Type of the data within the GetExportDocResponse. Default: "PDF", allowed values: "PDF" returns the export document as base64 encoded string, "URL" returns an url from which the export document can be downloded</documentation>
+					</annotation>
+					<simpleType>
+						<restriction base="xs:string">
+							<enumeration value="PDF"/>
+							<enumeration value="URL"/>
+						</restriction>
+					</simpleType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="GetExportDocDDRequest">
+		<annotation>
+			<documentation>The identifier for the DD shipment for which the export document url is requested.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType" maxOccurs="999">
+					<annotation>
+						<documentation>To request DD export documents, ShipmentNumber. ShipmentNumber is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the web service accepts shipmentNumber only.</documentation>
+					</annotation>
+				</element>
+				<element name="DocType" minOccurs="0">
+					<annotation>
+						<documentation>Type of document that shall be rendered. Currently only "PDF" is enabled and will return the export document as base64 encoded string.</documentation>
+					</annotation>
+					<simpleType>
+						<restriction base="xs:string">
+							<enumeration value="PDF"/>
+							<enumeration value="URL"/>
+						</restriction>
+					</simpleType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<!-- The response-type of the webservice -->
+	<element name="GetExportDocResponse">
+		<annotation>
+			<documentation>The status of the operation and requested export document.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.</documentation>
+					</annotation>
+				</element>
+				<element name="status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Status of the request (value of zero means, the request was processed without error; value greater than zero indicates that an error occurred).</documentation>
+					</annotation>
+				</element>
+				<element name="ExportDocData" type="is:ExportDocData" minOccurs="0" maxOccurs="999">
+					<annotation>
+						<documentation>Contains the result of the document processing: in case of no errors, a base64 encoded PDF is contained; also, the status of this particular document generation and the passed shipment number are returned.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="GetManifestDDRequest">
+		<annotation>
+			<documentation>The request data for the manifest document</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<choice>
+					<element name="manifestDate" type="xs:string">
+						<annotation>
+							<documentation>Date in format yyyy-mm-dd</documentation>
+						</annotation>
+					</element>
+					<element name="manifestDateRange">
+						<complexType>
+							<sequence>
+								<element name="fromDate" type="xs:string">
+									<annotation>
+										<documentation>Date in format yyyy-mm-dd</documentation>
+									</annotation>
+								</element>
+								<element name="toDate" type="xs:string">
+									<annotation>
+										<documentation>Date in format yyyy-mm-dd</documentation>
+									</annotation>
+								</element>
+							</sequence>
+						</complexType>
+					</element>
+				</choice>
+			</sequence>
+		</complexType>
+	</element>
+	<!-- The response-type of the webservice -->
+	<element name="GetManifestDDResponse">
+		<annotation>
+			<documentation>The status of the operation and requested export document.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.</documentation>
+					</annotation>
+				</element>
+				<element name="status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Status of the request (value of zero means, the request was processed without error; value greater than zero indicates that an error occurred).</documentation>
+					</annotation>
+				</element>
+				<element name="ManifestPDFData" type="xs:string" minOccurs="0">
+					<annotation>
+						<documentation>The Base64 encoded pdf data for receiving the manifest.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="UpdateShipmentDDRequest">
+		<annotation>
+			<documentation>The shipmentdata for creating a DD shipment.
+			</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="cis:ShipmentNumberType">
+					<annotation>
+						<documentation>The ShipmentNumber of the shipment, which sould be updated. ShipmentNumber is required. This parent element inherits from ShipmentNumberType, therefore all following subelements are valid according to schema, however the web service accepts shipmentNumber only.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentOrder" type="is:ShipmentOrderDDType">
+					<annotation>
+						<documentation>ShipmentOrder contains an update of all data of the selected shipment order.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<!-- The response-type of the webservice -->
+	<element name="UpdateShipmentResponse">
+		<annotation>
+			<documentation>The status of the operation and the shipment
+				identifier (if available).</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Success status after processing the overall request.</documentation>
+					</annotation>
+				</element>
+				<element name="CreationState" type="is:CreationState" minOccurs="0">
+					<annotation>
+						<documentation>The operation's success status for the updated ShipmentOrder will be returned by this CreationState element.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="CreationState">
+		<annotation>
+			<documentation>The operation's success status for every single ShipmentOrder will be returned by one CreationState element. It is identifiable via SequenceNumber.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="StatusCode">
+				<annotation>
+					<documentation>Status for this particular ShipmentOrder.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string"/>
+				</simpleType>
+			</element>
+			<element name="StatusMessage" minOccurs="0" maxOccurs="999">
+				<annotation>
+					<documentation>Dedicated status and error messages at the level of the particular ShipmentOrder.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string"/>
+				</simpleType>
+			</element>
+			<element name="SequenceNumber" type="is:SequenceNumber">
+				<annotation>
+					<documentation>Identifier for ShipmentOrder set by client application in CreateShipment request. The defined value is looped through and returned unchanged by the web service within the response of createShipment. The client can therefore assign the status information of the response to the correct ShipmentOrder of the request.</documentation>
+				</annotation>
+			</element>
+			<element name="ShipmentNumber" type="cis:ShipmentNumberType" minOccurs="0">
+				<annotation>
+					<documentation>For successful operations, a shipment number is created and returned. Depending on the invoked product (TD or DD).</documentation>
+				</annotation>
+			</element>
+			<element name="PieceInformation" type="is:PieceInformation" minOccurs="0"
+				maxOccurs="999">
+				<annotation>
+					<documentation>Information about each piece (e.g. the generated licence plate). For every piece, a PieceInformation container holds the license plate number.</documentation>
+				</annotation>
+			</element>
+			<element name="Labelurl" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested as 'URL' via LabelResponseType, this element will be returned. It contains the URL to access the PDF label. This is  default output format if not specified other by client in LabelResponseType.</documentation>
+				</annotation>
+			</element>
+			<element name="ReturnLabelurl" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested as 'URL' via LabelResponseType, this element will be returned. It contains the URL to access the PDF label. This is  default output format if not specified other by client in LabelResponseType.</documentation>
+				</annotation>
+			</element>
+			<element name="ExportLabelurl" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested as 'URL' via LabelResponseType, this element will be returned. It contains the URL to access the PDF label. This is  default output format if not specified other by client in LabelResponseType.</documentation>
+				</annotation>
+			</element>
+			<element name="CODLabelurl" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested as 'URL' via LabelResponseType, this element will be returned. It contains the URL to access the PDF label. This is  default output format if not specified other by client in LabelResponseType.</documentation>
+				</annotation>
+			</element>
+			<element name="XMLLabel" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested as 'XML' via LabelResponseType, this element will be returned and include the label as XML data in a CDATA-stream. Allows client to parse data and render shipping label on ist own.</documentation>
+				</annotation>
+			</element>
+			<element name="PickupConfirmationNumber" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If a pickup was ordered along with the CreateShipment request, the pickup confirmation number is returned.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="Statusinformation">
+		<annotation>
+			<documentation>The status information used in different
+				situations.</documentation>
+		</annotation>
+		<sequence>
+			<element name="StatusCode" type="xs:integer">
+				<annotation>
+					<documentation>Overall status of the entire request: A value of zero means, the request was processed without error. A value greater than zero indicates that an error occurred. The detailed mapping and explanation of returned status codes is contained in the list.</documentation>
+				</annotation>
+			</element>
+			<element name="StatusMessage" type="xs:string">
+				<annotation>
+					<documentation>Explanation of the statuscode and potential errors.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="PieceInformation">
+		<annotation>
+			<documentation>Information about each piece (e.g. the generated licence plate). For every piece, a PieceInformation container holds the license plate number.</documentation>
+		</annotation>
+		<sequence>
+			<element name="PieceNumber" type="cis:ShipmentNumberType" minOccurs="0">
+				<annotation>
+					<documentation>For every piece a piece number is created that is of one of the following types (mostly licensePlate).</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentOrderTDType">
+		<annotation>
+			<documentation>Data for a create shipment operation.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="SequenceNumber" type="is:SequenceNumber">
+				<annotation>
+					<documentation>Free field to to tag multiple shipment orders individually by client. Essential for later mapping of response data returned by webservice upon createShipment operation. Allows client to assign the shipment information of the response to the correct shipment order of the request.</documentation>
+				</annotation>
+			</element>
+			<element name="Shipment">
+				<annotation>
+					<documentation>Is the core element of a TD ShipmentOrder. It has only one sister element Pickup and contains all relevant information of the shipment.
+					</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="ShipmentDetails" type="is:ShipmentDetailsTDType">
+							<annotation>
+								<documentation>Contains the information of the shipment product code, value, terms of trade, weight and size characteristics and services to be used.</documentation>
+							</annotation>
+						</element>
+						<element name="Shipper" type="is:ShipperTDType">
+							<annotation>
+								<documentation>Contains relevant information about consignor.</documentation>
+							</annotation>
+						</element>
+						<element name="Receiver" type="is:ReceiverTDType">
+							<annotation>
+								<documentation>Contains relevant information about Receiver.</documentation>
+							</annotation>
+						</element>
+						<element name="ExportDocument" type="is:ExportDocumentTDType" minOccurs="0">
+							<annotation>
+								<documentation>This section contains information about the exported goods relevant for type, date, and number of invoice, export type, international commodity code, and others. The commercial invoice is included in label PDF.</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="Pickup" minOccurs="0">
+				<annotation>
+					<documentation>Specifies an additional pickup request to the shipment order.</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="PickupDetails" type="is:PickupDetailsType">
+							<annotation>
+								<documentation>Details about the pickup date, time, opening window.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="PickupAddress" type="is:PickupAddressType" minOccurs="0">
+							<annotation>
+								<documentation>Mandatory if pickup is booked along with shipment.</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="LabelResponseType" minOccurs="0">
+				<annotation>
+					<documentation>Dial to determine label ouput  format. It is possible to request an URL for receiving the label as PDF stream, or to request the XML label directly. If not defined by client, web service defaults to 'PDF'.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="URL"/>
+						<enumeration value="XML"/>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentOrderDDType">
+		<annotation>
+			<documentation>Data for the creation of a DD shipment.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="SequenceNumber" type="is:SequenceNumber">
+				<annotation>
+					<documentation>Free field to to tag multiple shipment orders individually by client. Essential for later mapping of response data returned by webservice upon createShipment operation. Allows client to assign the shipment information of the response to the correct shipment order of the request.</documentation>
+				</annotation>
+			</element>
+			<element name="Shipment">
+				<annotation>
+					<documentation>Is the core element of a DD ShipmentOrder. It has only one sister element Pickup and contains all relevant information of the shipment.
+					</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="ShipmentDetails" type="is:ShipmentDetailsDDType">
+							<annotation>
+								<documentation>Contains the information of the shipment product code, weight and size characteristics and services to be used.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="Shipper" type="is:ShipperDDType">
+							<annotation>
+								<documentation>Contains relevant information about consignor.</documentation>
+							</annotation>
+						</element>
+						<element name="Receiver" type="is:ReceiverDDType">
+							<annotation>
+								<documentation>Contains relevant information about Receiver.</documentation>
+							</annotation>
+						</element>
+						<element name="ReturnReceiver" type="is:ReceiverDDType" minOccurs="0">
+							<annotation>
+								<documentation>To be used if a further address shall be specified. Field length must be less than or equal to 30.</documentation>
+							</annotation>
+						</element>
+						<element name="ExportDocument" type="is:ExportDocumentDDType" minOccurs="0">
+							<annotation>
+								<documentation>For international shipments, this section contains information about the exported goods relevant for customs. For BPI shipments: commercial invoice, dispatch note (CP71) and customs declaration (CN23)  are printed into returned PDF label. Data is also transferred as electronic declaration to customs. 
+For EUPs:  the proforma invoice is included in label PDF.
+
+For BPI, ExportDocument can contain one or more positions in child element.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="Identity" type="is:IdentityType" minOccurs="0">
+							<annotation>
+								<documentation>Identity data to be verified with Express Ident shipment. Fields must be filled in when product code is EXI! Note: usually and for other products, ident services are booked via ShipmentServiceGroupIdent! </documentation>
+							</annotation>
+						</element>
+						<element name="FurtherAddresses" type="is:FurtherAddressesDDType"
+							minOccurs="0">
+							<annotation>
+								<documentation>To be used if a further address shall be specified. Field length must be less than or equal to 30.</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="Pickup" minOccurs="0">
+				<annotation>
+					<documentation>Specifies an additional pickup request to the shipment order.</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="PickupDetails" type="is:PickupDetailsType">
+							<annotation>
+								<documentation>Details about the pickup date, time, opening window.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="PickupAddress" type="is:PickupAddressType" minOccurs="0">
+							<annotation>
+								<documentation>Mandatory if pickup is booked along with shipment. </documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="LabelResponseType" minOccurs="0">
+				<annotation>
+					<documentation>Dial to determine label ouput format. Must be either 'URL' or 'XML': it is possible to request an URL for receiving the label as PDF stream, or to request the XML label directly. If not defined by client, web service defaults to 'PDF'.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="URL"/>
+						<enumeration value="XML"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="PRINTONLYIFCODEABLE" minOccurs="0">
+				<annotation>
+					<documentation>If set to true (=1), the label will be only be printable, if the receiver address is valid.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="0"/>
+						<enumeration value="1"/>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipperType">
+		<annotation>
+			<documentation>The data of the shipper.</documentation>
+		</annotation>
+		<sequence>
+			<element name="Company" type="cis:NameType">
+				<annotation>
+					<documentation>Determines whether Shipper is person or company. Even if valid according to schema, choice must always be Company for Shipper.</documentation>
+				</annotation>
+			</element>
+			<element name="Address" type="cis:NativeAddressType">
+				<annotation>
+					<documentation>Contains address data. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="Communication" type="cis:CommunicationType">
+				<annotation>
+					<documentation>Information about communication.</documentation>
+				</annotation>
+			</element>
+			<element name="VAT" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>The VAT ID of the Shipper. Field length must be less than or equal to 20.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipperTDType">
+		<annotation>
+			<documentation>The data of the shipper of a TD shipment.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ShipperType">
+				<sequence>
+					<annotation>
+						<documentation><![CDATA[
+For the TD-Shipper the following data fields from is:Shipper are processed/mandatory/optional:
+----------------------------------------------------------------------------------------------
+Company Name 1   (mandatory): cis:NameType->Company->name1
+Company Name 2   (optional) : cis:NameType->Company->name2
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (mandatory): cis:NativeAddressType->streetNumber
+Add. Address 1   (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		 (mandatory): cis:NativeAddressType->city
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+Phone Number     (mandatory): cis:CommunicationType->phone
+Fax Number       (optional) : cis:CommunicationType->fax
+Email Address    (mandatory): cis:CommunicationType->email
+VAT Number       (optional) : is:ShipperType->VAT
+						]]></documentation>
+					</annotation>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ShipperDDType">
+		<annotation>
+			<documentation>The data of the shipper of a DD shipment.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ShipperType">
+				<sequence>
+					<annotation>
+						<documentation><![CDATA[
+For the DD-Shipper the following data fields from is:Shipper are processed/mandatory/optional:
+----------------------------------------------------------------------------------------------
+Company Name     (mandatory): cis:NameType->Company->name1  
+Company Name2    (optional) : cis:NameType->Company->name2 
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (optional) : cis:NativeAddressType->streetNumber
+Add. Address     (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		     (mandatory): cis:NativeAddressType->city
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+Phone Number     (mandatory): cis:CommunicationType->phone
+Email Address    (mandatory): cis:CommunicationType->email
+Mobile Phone No. (optional) : cis:CommunicationType->mobile
+Fax Number       (optional) : cis:CommunicationType->fax
+VAT Number       (optional) : is:ShipperType->VAT
+						]]></documentation>
+					</annotation>
+					<element name="Remark" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Area for remarks. Only for internal purposes, 
+does not appear on label. Field length must be less than or equal to 60.</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ReceiverType">
+		<annotation>
+			<documentation>The receiver data.</documentation>
+		</annotation>
+		<sequence>
+			<element name="Company" type="cis:NameType">
+				<annotation>
+					<documentation>Receiver is company.
+					</documentation>
+				</annotation>
+			</element>
+			<choice>
+				<element name="Address" type="cis:NativeAddressType">
+					<annotation>
+						<documentation>The address data of the receiver.</documentation>
+					</annotation>
+				</element>
+				<element name="Packstation" type="is:PackstationType">
+					<annotation>
+						<documentation>The address of the receiver is a german Packstation (only valid for DD shipments)</documentation>
+					</annotation>
+				</element>
+				<element name="Postfiliale" type="is:PostfilialeType">
+					<annotation>
+						<documentation>The address of the receiver is a german Postfiliale (only valid for DD shipments)</documentation>
+					</annotation>
+				</element>
+			</choice>
+			<element name="Communication" type="cis:CommunicationType">
+				<annotation>
+					<documentation>Information about communication.</documentation>
+				</annotation>
+			</element>
+			<element name="VAT" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>The VAT ID of the Receiver. Field length must be less than or equal to 20.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ReceiverTDType">
+		<annotation>
+			<documentation>The receiver data of a TD shipment.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ReceiverType">
+				<sequence>
+					<annotation>
+						<documentation><![CDATA[
+For the TD-Receiver the following data fields from is:Receiver are processed/mandatory/optional:
+----------------------------------------------------------------------------------------------
+Company Name 1   (mandatory): cis:NameType->Company->name1
+Company Name 2   (optional) : cis:NameType->Company->name2
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (mandatory): cis:NativeAddressType->streetNumber
+Add. Address 	   (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		     (mandatory): cis:NativeAddressType->city
+County/Province  (optional) : cis:NativeAddressType->Origin->CountryType->district
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+Phone Number     (mandatory): cis:CommunicationType->phone
+Fax Number       (optional) : cis:CommunicationType->fax
+Email Address    (mandatory): cis:CommunicationType->email
+VAT Number       (optional) : is:ReceiverType->VAT
+						]]></documentation>
+					</annotation>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ReceiverDDType">
+		<annotation>
+			<documentation>The receiver data of a DD shipment.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ReceiverType">
+				<sequence>
+					<annotation>
+						<documentation><![CDATA[
+For the DD-Receiver the following data fields from is:Receiver are processed/mandatory/optional:
+----------------------------------------------------------------------------------------------
+Salutation		 (optional) : cis:NameType->Person->salutation
+Company Name 1   (mandatory): cis:NameType->Company->name1
+Company Name 2   (optional) : cis:NameType->Company->name2
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (mandatory): cis:NativeAddressType->streetNumber
+Add. Address     (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		 (mandatory): cis:NativeAddressType->city
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+ISO State or county (optional): cis:NativeAddressType->Origin->CountryType->state
+Phone Number     (mandatory): cis:CommunicationType->phone
+Email Address    (mandatory): cis:CommunicationType->email
+Mobile Phone No. (optional) : cis:CommunicationType->mobile
+VAT Number       (optional) : is:Receiver->VAT
+						]]></documentation>
+					</annotation>
+					<element name="CompanyName3" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Optional company name complement. Field length must be less than or equal to 30.
+							</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="IdentityType">
+		<annotation>
+			<documentation>Identity data (used for ident services).
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="FirstName" type="xs:string">
+				<annotation>
+					<documentation>First name of the person to be verified. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="LastName" type="xs:string">
+				<annotation>
+					<documentation>Last name of the person to be verified. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="Street" type="xs:string">
+				<annotation>
+					<documentation>Name of the street of registered address. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="HouseNumber" type="xs:string">
+				<annotation>
+					<documentation>House number of registered address. Field length must be less than or equal to 10.</documentation>
+				</annotation>
+			</element>
+			<element name="Postcode" type="xs:string">
+				<annotation>
+					<documentation>Postcode of registered address. Field length must be less than or equal to 15.</documentation>
+				</annotation>
+			</element>
+			<element name="City" type="xs:string">
+				<annotation>
+					<documentation>City of registered address. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="DateOfBirth" type="xs:string">
+				<annotation>
+					<documentation>Person's date of birth.
+Format must be yyyy-mm-dd.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="Nationality" type="xs:string">
+				<annotation>
+					<documentation>Person's nationality. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentDetailsType">
+		<annotation>
+			<documentation>Details of a shipment.</documentation>
+		</annotation>
+		<sequence>
+			<element name="ProductCode" type="xs:string">
+				<annotation>
+					<documentation><![CDATA[
+						<context id="CreateShipmentDDRequest">
+							Determines the DHL Paket or domestic DHL Express product to be ordered. Field length must be less than or equal to 6.
+							<values>
+								<value>
+										<name>BPI</name>
+										<description>Weltpaket</description>
+								</value>
+								<value>
+										<name>EPI</name>
+										<description>DHL Europaket</description>
+								</value>
+								<value>
+										<name>EPN</name>
+										<description>DHL Paket</description>
+								</value>
+							<value>
+										<name>EUP</name>
+										<description>DHL Europlus</description>
+								</value>
+							<value>
+										<name>EXI</name>
+										<description>DHL Express Ident â€“ requires Identity and insurance!</description>
+								</value>
+							<value>
+										<name>EXP</name>
+										<description>DHL Domestic Express â€“ requires higher insurance!</description>
+								</value>
+							<value>
+										<name>OFP</name>
+										<description>Officepack â€“ requires higher insurance!</description>
+								</value>
+							<value>
+										<name>RPN</name>
+										<description>Regional Paket AT - requires RegioPacket to be set!</description>
+								</value>
+							<value>
+										<name>TAS</name>
+										<description>DHL Retoure - not offered via Intraship Web Service yet!</description>
+								</value>
+							</values>
+						</context>
+						<context id="CreateShipmentTDRequest">
+							Determines the mostly international DHL Express product to be ordered. Field length must be less than or equal to 6.
+							<values>
+								<value>
+										<name>ECX</name>
+										<description>EXPRESS WORLDWIDE EU</description>
+								</value>
+								<value>
+										<name>TDK</name>
+										<description>STARTDAY EXPRESS 9:00</description>
+								</value>
+							<value>
+										<name>TDT</name>
+										<description>MIDDAY EXPRESS 12:00</description>
+								</value>
+							<value>
+										<name>TDE</name>
+										<description>STARTDAY EXPRESS 9:00</description>
+								</value>
+							<value>
+										<name>TDY</name>
+										<description>MIDDAY EXPRESS 12:00</description>
+								</value>
+							<value>
+										<name>DOX</name>
+										<description>EXPRESS WORLDWIDE (DOC) </description>
+								</value>
+								<value>
+										<name>WPX</name>
+										<description>EXPRESS WORLDWIDE (NON-DOC), dutiable must be â€˜1â€™.</description>
+								</value>		
+					      <value>
+										<name>EUL</name>
+										<description>EXPRESS ENVELOPE (LETTER 300) </description>
+								</value>									
+							<value>
+										<name>LET</name>
+										<description>EXPRESS ENVELOPE (LETTER 300) </description>
+								</value>			
+							<value>
+										<name>DK1</name>
+										<description>US NEXT DAY 10:30 (DOC) </description>
+								</value>			
+							<value>
+										<name>DT1</name>
+										<description>US NEXT DAY 12:00 (DOC) </description>
+								</value>		
+							<value>
+										<name>DE1</name>
+										<description>US NEXT DAY 10:30 (NON-DOC) </description>
+								</value>		
+							<value>
+										<name>DY1</name>
+										<description>US NEXT DAY 12:00 (NON-DOC) </description>
+								</value>		
+							<value>
+										<name>DON</name>
+										<description>US NEXT DAY (DOC) </description>
+								</value>		
+							<value>
+										<name>WPN</name>
+										<description>US NEXT DAY (NON-DOC) </description>
+								</value>		
+							<value>
+										<name>DOM</name>
+										<description>DOMESTIC EXPRESS 12:00</description>
+								</value>		
+							<value>
+										<name>ESI</name>
+										<description>ECONOMY SELECT INTERNATIONAL</description>
+								</value>		
+							<value>
+										<name>GMB</name>
+										<description>GLOBALMAIL BUSINESS</description>
+								</value>		
+							<value>
+										<name>DXM</name>
+										<description>DOMESTIC EXPRESS 9:00</description>
+								</value>		
+							</values>
+						</context>
+					]]></documentation>
+				</annotation>
+			</element>
+			<element name="ShipmentDate">
+				<annotation>
+					<documentation>Date of shipment should be close to current date and must not be in the past. 
+Iso format required: yyyy-mm-dd. Field length must be = 8. </documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="10"/>
+						<maxLength value="10"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="DeclaredValueOfGoods" minOccurs="0">
+				<annotation>
+					<documentation>Declared value Of goods. Field length must be less than or equal to 22.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:float">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="DeclaredValueOfGoodsCurrency" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Declared value of goods currency (mandatory if DeclaredValueOfGoods is defined). Field length must be = 3.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentDetailsTDType">
+		<annotation>
+			<documentation>Details of a TD shipment.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ShipmentDetailsType">
+				<sequence>
+					<annotation>
+						<documentation>extends the ShipmentDetailsType
+						</documentation>
+					</annotation>
+					<element name="Account">
+						<annotation>
+							<documentation>Container element to provide DHL Express Account Number that is needed to invoke Express shipments. 
+							</documentation>
+						</annotation>
+						<complexType>
+							<sequence>
+								<element ref="cis:accountNumberExpress"/>
+							</sequence>
+						</complexType>
+					</element>
+					<element name="Dutiable">
+						<annotation>
+							<documentation>Goods Delivered (mandatory) 0=Non Dutiable
+								/ 1=Dutiable</documentation>
+						</annotation>
+						<simpleType>
+							<restriction base="xs:string">
+								<enumeration value="0"/>
+								<enumeration value="1"/>
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="DescriptionOfContent" type="xs:string">
+						<annotation>
+							<documentation>The description of the content that appears on label.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="AccountPaidBy" minOccurs="0">
+						<annotation>
+							<documentation>Container element to provide DHL Express Account Number of third party that pays the shipment fees (or Import Express Number of consignee).
+							</documentation>
+						</annotation>
+						<complexType>
+							<sequence>
+								<element ref="cis:accountNumberExpress"/>
+							</sequence>
+						</complexType>
+					</element>
+					<element name="ShipmentReference" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Shipment reference can be provided by shipper to appear on label. Field length must be less than or equal to 35.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="TermsOfTrade" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Terms of trade (incoterms) can be provided, e.g. DDP, DDU, CIP, CIF et al. Field length must be = 3.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="ShipmentItem" type="is:ShipmentItemTDType" maxOccurs="999">
+						<annotation>
+							<documentation>For every parcel specified, contains weight in KG, length in CM, width in CM and height in CM. Last PackageType must ne 
+Not every product allows multiple parcels. For using >1 parcels from product code EPN there is an extra service ServiceGroupDHLPaket. Multipack that needs to be set (only for cleared customers).
+
+							</documentation>
+						</annotation>
+					</element>
+					<element name="Service" type="is:ShipmentServiceTD" minOccurs="0"
+						maxOccurs="999">
+						<annotation>
+							<documentation>Use one dedicated Service node for each service to be booked with the shipment product. Add another Service node for booking a further service and so on. Successful booking of a particular service depends on account permissions and product's service combinatorics. I.e. not every service is allowed for every product, or can be combined with all other allowed services. For TD shipments, only Express Saturday and Insurance can be booked by configuring and passing the following containers. </documentation>
+						</annotation>
+					</element>
+					<element name="Notification" type="is:ShipmentNotificationType" minOccurs="0"
+						maxOccurs="999">
+						<annotation>
+							<documentation>Mechanism to send notifications by email after shipment has been manifested.</documentation>
+						</annotation>
+					</element>
+					<element name="NotificationEmailText" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Email text for the notification email.</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ShipmentDetailsDDType">
+		<annotation>
+			<documentation>Details of a DD shipment.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ShipmentDetailsType">
+				<sequence>
+					<annotation>
+						<documentation>extends the ShipmentDetailsType
+						</documentation>
+					</annotation>
+					<element ref="cis:EKP">
+						<annotation>
+							<documentation>EKP (mandatory)</documentation>
+						</annotation>
+					</element>
+					<element name="Attendance">
+						<annotation>
+							<documentation>A DHL customer can have attendances = subIDs added to one account number for better management. Field length must be = 2.
+							</documentation>
+						</annotation>
+						<complexType>
+							<sequence>
+								<element ref="cis:partnerID"/>
+							</sequence>
+						</complexType>
+					</element>
+					<element name="CustomerReference" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>A reference number that the client can assign for better association purposes. Appears on shipment label.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="Description" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>A description text that the client can assign. Does not appear on shipment label.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="DeliveryRemarks" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Delivery remarks. Do not appear on shipment label.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="ReturnShipmentBillingNumber" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>DHL account number (14 digits).</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="14"/>
+								<xs:maxLength value="14"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</element>
+					<element name="ReturnShipmentReference" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>A reference number that the client can assign for better association purposes. Appears on shipment label.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="ShipmentItem" type="is:ShipmentItemDDType" maxOccurs="999">
+						<annotation>
+							<documentation>For every parcel specified, contains weight in KG, length in CM, width in CM and height in CM. Last PackageType must ne 
+Not every product allows multiple parcels. For using >1 parcels for product code EPN there is an extra service ServiceGroupDHLPaket.Multipack that needs to be set (only for cleared customers).
+
+							</documentation>
+						</annotation>
+					</element>
+					<element name="Service" type="is:ShipmentServiceDD" minOccurs="0"
+						maxOccurs="999">
+						<annotation>
+							<documentation>Use one dedicated Service node for each service to be booked with the shipment product. Add another Service node for booking a further service and so on. Successful booking of a particular service depends on account permissions and product's service combinatorics. I.e. not every service is allowed for every product, or can be combined with all other allowed services. The service bundles that contain all DD services are the following.</documentation>
+						</annotation>
+					</element>
+					<element name="Notification" type="is:ShipmentNotificationType" minOccurs="0"
+						maxOccurs="999">
+						<annotation>
+							<documentation>Mechanism to send notifications by email after successful manifesting of shipment.</documentation>
+						</annotation>
+					</element>
+					<element name="NotificationEmailText" type="xs:string" minOccurs="0">
+						<annotation>
+							<documentation>Email text for the notification email.</documentation>
+						</annotation>
+					</element>
+					<element name="BankData" type="cis:BankType" minOccurs="0">
+						<annotation>
+							<documentation>Bank data can be provided here for different purposes. E.g. if COD is booked as service, bank data must be provided by DHL customer (mandatory server logic). The collected money will be transferred to specified bank account.</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ShipmentItemType">
+		<annotation>
+			<documentation>Item/Piece data.</documentation>
+		</annotation>
+		<sequence>
+			<element name="WeightInKG">
+				<annotation>
+					<documentation>The weight of the piece in kg (mandatory). Field length must be less than or equal to 22.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="LengthInCM" minOccurs="0">
+				<annotation>
+					<documentation>The length of the piece in cm. Field length must be less than or equal to 22.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="WidthInCM" minOccurs="0">
+				<annotation>
+					<documentation>The width of the piece in cm. Field length must be less than or equal to 22.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="HeightInCM" minOccurs="0">
+				<annotation>
+					<documentation>The height of the piece in cm. Field length must be less than or equal to 22.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentItemTDType">
+		<annotation>
+			<documentation>Item/Piece data of a TD shipment.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ShipmentItemType">
+				<sequence>
+					<annotation>
+						<documentation>extends the ShipmentItemType
+						</documentation>
+					</annotation>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ShipmentItemDDType">
+		<annotation>
+			<documentation>Item/Piece data of a DD shipment.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="is:ShipmentItemType">
+				<sequence>
+					<annotation>
+						<documentation>extends the ShipmentItemType
+						</documentation>
+					</annotation>
+					<element name="PackageType" type="xs:string">
+						<annotation>
+							<documentation><![CDATA[
+						<context id="CreateShipmentDDRequest">
+							PackageType is always "PK"! It might be varied only for product code EUP. Field length must be less than or equal to 5.
+							<values>
+								<value>
+										<name>CO</name>
+										<description>Palett</description>
+								</value>
+								<value>
+										<name>PK</name>
+										<description>Paket</description>
+								</value>
+				</values>
+						</context>
+					]]></documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ShipmentServiceTD">
+		<annotation>
+			<documentation>TD shipment services.</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<annotation>
+					<documentation>can be</documentation>
+				</annotation>
+				<element name="ServiceGroupDateTimeOption"
+					type="is:TDServiceGroupDateTimeOptionType">
+					<annotation>
+						<documentation>Service bundle that only contains one service. Follwing service must be chosen, if the service bundle is invoked.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="ServiceGroupOther" type="is:TDServiceGroupOtherType">
+					<annotation>
+						<documentation>Service bundle that only contains one service to be booked. Following service must be chosen, if the service bundle is invoked.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="TDServiceGroupDateTimeOptionType">
+		<sequence>
+			<annotation>
+				<documentation>Service Group Date / Time Option.
+				</documentation>
+			</annotation>
+			<element name="ExpressSaturday">
+				<annotation>
+					<documentation>Container element must be set to provide exact shipping date that must be a Saturday.</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="ShippingDate">
+							<annotation>
+								<documentation>If ExpressSaturday is set, shipping date must be passed in format yyyy-mm-dd to provide exact date (Saturday) where delivery shall occur.</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:string">
+									<minLength value="10"/>
+									<maxLength value="10"/>
+								</restriction>
+							</simpleType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="TDServiceGroupOtherType">
+		<annotation>
+			<documentation>Other TD Services.</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="Insurance">
+					<annotation>
+						<documentation>Container element must be set to provide insurance value.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="InsuranceAmount">
+								<annotation>
+									<documentation>If Insurance is set, insurance amount must be passed. Field length must be less than or equal to 22.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:decimal">
+										<minInclusive value="0.0"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="InsuranceCurrency">
+								<annotation>
+									<documentation>If Insurance is set, insurance currency must also be passed. Field length must be = 3.
+									</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:string">
+										<maxLength value="10"/>
+									</restriction>
+								</simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="GoGreen" type="xs:boolean">
+					<annotation>
+						<documentation>GoGreen Service.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentServiceDD">
+		<annotation>
+			<documentation>DD shipment services.</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<annotation>
+					<documentation>can be</documentation>
+				</annotation>
+				<element name="ServiceGroupDateTimeOption"
+					type="is:DDServiceGroupDateTimeOptionType">
+					<annotation>
+						<documentation>Bundles following services for domestic time-definite products offered by DHL Express. One of the services must be chosen, if this service bundle is invoked.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentServiceGroupIdent" type="is:DDShipmentServiceGroupIdentType">
+					<annotation>
+						<documentation>Bundles following ident services.One of the services must be chosen, if this service bundle is invoked.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentServiceGroupPickup"
+					type="is:DDShipmentServiceGroupPickupType">
+					<annotation>
+						<documentation>One of the services must be chosen, if this service bundle is invoked. Bundles following services. </documentation>
+					</annotation>
+				</element>
+				<element name="ServiceGroupBusinessPackInternational"
+					type="is:DDServiceGroupBusinessPackInternationalType">
+					<annotation>
+						<documentation>Service group for Business Pack International (product code BPI). One of the services must be chosen, if this service bundle is invoked. Bundles following services.</documentation>
+					</annotation>
+				</element>
+				<element name="ServiceGroupDHLPaket" type="is:DDServiceGroupDHLPaketType">
+					<annotation>
+						<documentation>Service group for DHL Paket (product code EPN and RPN). One of the services must be chosen, if this service bundle is invoked. Bundles following services.</documentation>
+					</annotation>
+				</element>
+				<element name="ServiceGroupOther" type="is:DDServiceGroupOtherType">
+					<annotation>
+						<documentation>One of the services must be chosen, if this service bundle is invoked. Service group bundles following services.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="DDServiceGroupDHLKurierType">
+		<annotation>
+			<documentation>Service Group for DHL Kurier</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="SameDay">
+					<annotation>
+						<documentation>DHL Kurier Sameday</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="DayOfDelivery">
+								<annotation>
+									<documentation>DHL Kurier DayOfDelivery</documentation>
+								</annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<maxLength value="10"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</element>
+							<element name="Timeframe">
+								<annotation>
+									<documentation>DHL Kurier Deliverytimeframe</documentation>
+									<documentation>
+											<![CDATA[
+                                        Zeitfenster für Zustellung. In Release 2.1 ist folgendes erlaubt:
+                                        18002000: 18-20 Uhr (Default) 20002200: 20-22 Uhr
+										]]>
+										</documentation>
+								</annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="TimeDef">
+					<annotation>
+						<documentation>DHL Kurier Defined Time</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="DayOfDelivery">
+								<annotation>
+									<documentation>DHL Kurier DayOfDelivery</documentation>
+								</annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<maxLength value="10"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</element>
+							<element name="Timeframe">
+								<annotation>
+									<documentation>DHL Kurier Deliverytimeframe</documentation>
+									<documentation>
+										<![CDATA[
+                                        Zeitfenster für Zustellung. In Release 2.1 ist folgendes erlaubt:
+                                        18002000: 18-20 Uhr (Default) 20002200: 20-22 Uhr
+										]]>
+									</documentation>
+								</annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<maxLength value="8"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="ShipmentHandling">
+					<annotation>
+						<documentation>DHL Kurier Shipment Handling</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Type" type="xs:string">
+								<annotation>
+									<documentation>
+										<![CDATA[
+										Typ des Sendungshandlings. 
+										Es sind die folgenden Typen erlaubt:
+										a: Inhalt entnehmen, Box zurückführen 
+										b: Inhalt entnehmen, Kartonage mitnehmen und entsorgen 
+										c: Paket/Box an Kunden übergeben – keine Mitnahme von Kartonage/Box 
+										d: Tüte aus Kühleinheit entnehmen und an Kunden übergeben (nur bei Frozen / Tiefkühlprodukten) 
+										e: Inhalt entnehmen, Box wieder zurückführen + Anbringung Retourenlabel und Verplombung
+										]]>
+									</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Endorsement">
+					<annotation>
+						<documentation>DHL Kurier Endorsement</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Type" type="xs:string">
+								<annotation>
+									<documentation>
+										<![CDATA[
+                                         Typ der Vorausverfügung. Es sind die folgenden Typen erlaubt:
+                                         SOZU: Sofort zurück ZWZU: 2. Zustellversuch
+										]]>
+									</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Perishables" type="xs:boolean">
+					<annotation>
+						<documentation>DHL Kurier Perishables</documentation>
+					</annotation>
+				</element>
+				<element name="IndividualAdvice">
+					<annotation>
+						<documentation>DHL Kurier Individual Advice</documentation>
+					</annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<minLength value="0"/>
+							<maxLength value="250"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="DDServiceGroupDateTimeOptionType">
+		<annotation>
+			<documentation>Service Group Date Time Option. 
+			</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="DeliveryOnTime">
+					<annotation>
+						<documentation>Service to deliver on particular time requires to specify desired time in child node. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="time" type="xs:string">
+								<annotation>
+									<documentation>Desired time of delivery, format is 'hh:mm'(mandatory if DeliveryOnTime is defined). Field length must be = 4.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="DeliveryEarly" type="xs:boolean">
+					<annotation>
+						<documentation>Early delivery.</documentation>
+					</annotation>
+				</element>
+				<element name="Express0900" type="xs:boolean">
+					<annotation>
+						<documentation>Express 09:00</documentation>
+					</annotation>
+				</element>
+				<element name="Express1000" type="xs:boolean">
+					<annotation>
+						<documentation>Express 10:00</documentation>
+					</annotation>
+				</element>
+				<element name="Express1200" type="xs:boolean">
+					<annotation>
+						<documentation>Express 12:00</documentation>
+					</annotation>
+				</element>
+				<element name="DeliveryAfternoon" type="xs:boolean">
+					<annotation>
+						<documentation>Afternoon delivery.</documentation>
+					</annotation>
+				</element>
+				<element name="DeliveryEvening" type="xs:boolean">
+					<annotation>
+						<documentation>Evening delivery.</documentation>
+					</annotation>
+				</element>
+				<element name="ExpressSaturday" type="xs:boolean">
+					<annotation>
+						<documentation>Express Saturday.</documentation>
+					</annotation>
+				</element>
+				<element name="ExpressSunday" type="xs:boolean">
+					<annotation>
+						<documentation>Express Sunday.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="DDShipmentServiceGroupIdentType">
+		<sequence>
+			<annotation>
+				<documentation>Service Group Ident.</documentation>
+			</annotation>
+			<choice>
+				<element name="Ident">
+					<annotation>
+						<documentation>Service to validate identity of recipient. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Name" type="xs:string">
+								<annotation>
+									<documentation>Name (firstname + lastname). Mandatory if service Ident is chosen. Field length must be less than or equal to 55.
+									</documentation>
+								</annotation>
+							</element>
+							<element name="DateOfBirth">
+								<annotation>
+									<documentation>Date of birth in format yyyy-mm-dd. 
+Mandatory if service Ident is chosen. 
+									</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:string">
+										<minLength value="10"/>
+										<maxLength value="10"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="IdentityCardType" type="xs:string">
+								<annotation>
+									<documentation>The type of the identity card (e.g. ID, Passport).
+Mandatory if service Ident is chosen.
+									</documentation>
+								</annotation>
+							</element>
+							<element name="IdentityCardNumber" type="xs:string">
+								<annotation>
+									<documentation>The number of the identity card.
+Mandatory if service Ident is chosen.
+									</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="IdentExtra">
+					<annotation>
+						<documentation>Service to validate identity by means of two documents that can be of either DrivingLicense, IdentityCard, BankCard. The element ShipmentOrder.Shipment.Identity is mandatory, if IdentExtra is used. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Group1" type="is:IdentityData">
+								<annotation>
+									<documentation>The first one of two potential identity documents is selected in Group1. </documentation>
+								</annotation>
+							</element>
+							<element name="Group2" type="is:IdentityData">
+								<annotation>
+									<documentation>The second of two potential identity proofs is selected in Group2. Note: it cannot be the same instrument as the one chosen in Group1.
+Mandatory if service IdentExtra is chosen.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="IdentPremium">
+					<annotation>
+						<documentation>Ident Premium</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Firstname" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The firstname.</documentation>
+								</annotation>
+							</element>
+							<element name="Name" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The surname.</documentation>
+								</annotation>
+							</element>
+							<element name="IdentityCardType" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The type of the identity card: valid values are "01"=(Identitycard/Personalausweis), "02"=Passport.</documentation>
+								</annotation>
+							</element>
+							<element name="IdentityCardNumber" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>The number of the identity card. Field length must be less than or equal to 20.</documentation>
+								</annotation>
+							</element>
+							<element name="MinimumAge" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>Minimum age (16 or 18). Field length must be less than or equal to 22.</documentation>
+								</annotation>
+							</element>
+							<element name="DateOfBirth" minOccurs="0">
+								<annotation>
+									<documentation>Date of birth in format yyyy-mm-dd. Field length must be less than or equal to 35.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:string">
+										<minLength value="10"/>
+										<maxLength value="10"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="StreetAndHouseNumber" type="xs:string">
+								<annotation>
+									<documentation>Streetname as printed on the identity card.</documentation>
+								</annotation>
+							</element>
+							<element name="PostcodeAndCity" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>Postcode and city as printed on the identity card.</documentation>
+								</annotation>
+							</element>
+							<element name="District" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>District of the city.</documentation>
+								</annotation>
+							</element>
+							<element name="WithIDPContract" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>With IDP Contract.</documentation>
+								</annotation>
+							</element>
+							<element name="ContractID" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>Constract ID.</documentation>
+								</annotation>
+							</element>
+							<element name="Nationality" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>iso contrycode (e.g. DE, NL, US)</documentation>
+								</annotation>
+							</element>
+							<element name="FreeText1" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>Freetext 1</documentation>
+								</annotation>
+							</element>
+							<element name="FreeText2" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>Freetext 2</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfNameAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of name is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfFirstNameAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of first name is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfDayOfBirthAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of day of birth is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfMinimumAgeAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of minimum age is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfIdentityCardTypeAllowed" type="xs:boolean"
+								minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the identity card type is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfIdentityCardNumberAllowed" type="xs:boolean"
+								minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the identity card number is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfAddressAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the address is allowed (postcode, city, district, streetname, housenumber)</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfContractAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the contract is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfContractIdAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the IDP contract ID is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfNationalityAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the nationality is allowed</documentation>
+								</annotation>
+							</element>
+							<element name="CorrOfFreetextsAllowed" type="xs:boolean" minOccurs="0">
+								<annotation>
+									<documentation>Flag, if the correction of the freetexts is allowed</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Personally" type="xs:boolean">
+					<annotation>
+						<documentation>Invoke service personal handover.</documentation>
+					</annotation>
+				</element>
+				<element name="ReturnReceipt" type="xs:boolean">
+					<annotation>
+						<documentation>Invoke service return receipt.</documentation>
+					</annotation>
+				</element>
+				<element name="ProofOfDelivery" type="xs:boolean">
+					<annotation>
+						<documentation>Invoke service proof of delivery.</documentation>
+					</annotation>
+				</element>
+				<element name="ContractSubmission">
+					<annotation>
+						<documentation>Invoke service contract submission. Field length = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="TotalPages">
+								<annotation>
+									<documentation>Total number of pages. 
+Checksum for deliverer. Field length must be less than or equal to 22.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:integer">
+										<minInclusive value="0"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="TotalSignatures">
+								<annotation>
+									<documentation>Total number of signatures. 
+Checksum for deliverer. Field length must be less than or equal to 22.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:integer">
+										<minInclusive value="0"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="TotalDocsSender">
+								<annotation>
+									<documentation>Total number of docs to be sent back to sender.
+Checksum for deliverer. Field length must be less than or equal to 22.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:integer">
+										<minInclusive value="0"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="TotalDocsReceiver">
+								<annotation>
+									<documentation>Total number of docs to remain at receiver. 
+Checksum for deliverer. Field length must be less than or equal to 22.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:integer">
+										<minInclusive value="0"/>
+									</restriction>
+								</simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="SMSAviso">
+					<annotation>
+						<documentation>Invoke service SMSAviso to inform customers about date and time of delivery via SMS. Field length must be = 1. </documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="MobilePhoneNumberSender" type="xs:string">
+								<annotation>
+									<documentation>The mobile phone number of the sender. Mandatory if service SMSAviso is chosen. Note: must not contain any 
+special characters! Field length must be less than or equal to 20.
+
+									</documentation>
+								</annotation>
+							</element>
+							<element name="MobilePhoneNumberReceiver" type="xs:string">
+								<annotation>
+									<documentation>The mobile phone number of the receiver. Mandatory if service SMSAviso is chosen. Note: must not contain any 
+special characters! Field length must be less than or equal to 20.
+
+									</documentation>
+								</annotation>
+							</element>
+							<element name="AvisoIdent" type="xs:string">
+								<annotation>
+									<documentation>The self generated aviso ident code that is sent to receiver along with SMS for authentication and shipment association purpose. Field length must be less than or equal to 11.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="CheckMinimumAge">
+					<annotation>
+						<documentation>Service to validate minimum age of recipient. Field max length must be = 2.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="MinimumAge" type="xs:string">
+								<annotation>
+									<documentation>The minimum age.
+Mandatory if service CheckMinimumAge is chosen. Field length must be less than or equal to 2 characters.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="DDShipmentServiceGroupPickupType">
+		<annotation>
+			<documentation>Pickup services.</documentation>
+		</annotation>
+		<sequence>
+			<annotation>
+				<documentation>Service Group Pickup.</documentation>
+			</annotation>
+			<choice>
+				<element name="PickupSaturday" type="xs:boolean">
+					<annotation>
+						<documentation>Pickup on Saturday.</documentation>
+					</annotation>
+				</element>
+				<element name="PickupLate" type="xs:boolean">
+					<annotation>
+						<documentation>Pickup Late.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="DDServiceGroupBusinessPackInternationalType">
+		<annotation>
+			<documentation>Service Group BPI.</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="Economy" type="xs:boolean">
+					<annotation>
+						<documentation>Service Economy.</documentation>
+					</annotation>
+				</element>
+				<element name="Premium" type="xs:boolean">
+					<annotation>
+						<documentation>Premium for fast and safe delivery of international shipments.</documentation>
+					</annotation>
+				</element>
+				<element name="Seapacket" type="xs:boolean">
+					<annotation>
+						<documentation>Seapacket.</documentation>
+					</annotation>
+				</element>
+				<element name="CoilWithoutHelp" type="xs:boolean">
+					<annotation>
+						<documentation>Coil without help.</documentation>
+					</annotation>
+				</element>
+				<element name="Endorsement">
+					<annotation>
+						<documentation>Service endorsement is used to specify handling if recipient not met. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Ident" type="xs:string">
+								<annotation>
+									<documentation>Obsolete field that is currently not in use. </documentation>
+								</annotation>
+							</element>
+							<element name="Days" type="xs:integer">
+								<annotation>
+									<documentation>Specifies number of days that shipment will be held in business days before returned to sender.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="AmountInternational" type="xs:boolean">
+					<annotation>
+						<documentation>Service to utilize higher insurance amount up to 25.000 EUR depending on delivery country.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="DDServiceGroupDHLPaketType">
+		<annotation>
+			<documentation>Service Group DHL Paket.</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="Multipack" type="xs:boolean">
+					<annotation>
+						<documentation>Must be set to create EPN shipments with more than one shipment item. Special customer clearance required.</documentation>
+					</annotation>
+				</element>
+				<element name="RegioPacket" type="xs:boolean">
+					<annotation>
+						<documentation>Service MUST be set with product code RPN regio paket to AT.</documentation>
+					</annotation>
+				</element>
+				<element name="ParticularDelivery" type="xs:boolean">
+					<annotation>
+						<documentation>For EPN shipments with multiple items, this flag determines whether items will be delivered alltogether (=FALSE) or whether items can be delivery partially (=TRUE). Note: if COD is chosen as service, flag must be FALSE. 
+						</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentAdvisory">
+					<annotation>
+						<documentation>Service "SendungsAvise".</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="AdvisoryData" maxOccurs="999">
+								<complexType>
+									<sequence>
+										<element name="ModuleType" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>The module type. Valid values are A1, A2, B1.</documentation>
+											</annotation>
+										</element>
+										<element name="MobilePhoneNumber" type="xs:string"
+											minOccurs="0">
+											<annotation>
+												<documentation>The mobile phone number of the receiver.</documentation>
+											</annotation>
+										</element>
+										<element name="EmailAddress" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>The email address of the receiver.</documentation>
+											</annotation>
+										</element>
+										<element name="Reference" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>Reference.</documentation>
+											</annotation>
+										</element>
+										<element name="Language" type="xs:string" minOccurs="0">
+											<annotation>
+												<documentation>ISO CountryCode of the language. Valid values are "EN", "DE".</documentation>
+											</annotation>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Endorsement">
+					<annotation>
+						<documentation>Service "Vorausverfügung". Only valid for EPN.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="UZN" type="is:EndorsementServiceconfiguration"
+								minOccurs="0">
+								<annotation>
+									<documentation>Option Unzustellbarkeitsnachricht (UZN)</documentation>
+								</annotation>
+							</element>
+							<element name="KeNa" type="is:EndorsementServiceconfiguration"
+								minOccurs="0">
+								<annotation>
+									<documentation>Option Keine Nachbarschaftszustellung (KeNa)</documentation>
+								</annotation>
+							</element>
+							<element name="NSI" type="is:EndorsementServiceconfiguration"
+								minOccurs="0">
+								<annotation>
+									<documentation>Option Nachsendeinformation (NSI)</documentation>
+								</annotation>
+							</element>
+							<element name="TeZu" type="is:EndorsementServiceconfigurationTeZu"
+								minOccurs="0">
+								<annotation>
+									<documentation>Option Terminzustellung (TeZu)</documentation>
+								</annotation>
+							</element>
+							<element name="SoZue" type="is:EndorsementServiceconfiguration"
+								minOccurs="0">
+								<annotation>
+									<documentation>Option Sofort zurück (SoZue)</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="VisualAgeCheck">
+					<annotation>
+						<documentation>Service Alterssichtpüfung</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Age" type="xs:string">
+								<annotation>
+									<documentation>gültige Werte: AP16, AP18</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<!--
+				<element name="DesignatedNeighbour">
+					<annotation>
+						<documentation>Service Wunschnachbar</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Details">
+								<annotation>
+									<documentation>Angaben zum Wunschnachbar</documentation>
+								</annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<minLength value="0"/>
+										<maxLength value="100"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="DesignatedLocation">
+					<annotation>
+						<documentation>Service Wunschort</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="Details">
+								<annotation>
+									<documentation>Angaben zum Wunschort</documentation>
+								</annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<minLength value="0"/>
+										<maxLength value="100"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				-->
+			</choice>
+		</sequence>
+	</complexType>
+	<xs:complexType name="EndorsementServiceconfiguration">
+		<xs:attribute name="active" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates, if the option is on/off</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="0"/>
+					<xs:enumeration value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="EndorsementServiceconfigurationTeZu">
+		<xs:attribute name="active" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates, if the option is on/off</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="0"/>
+					<xs:enumeration value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="tezuDate" use="required">
+			<xs:annotation>
+				<xs:documentation>Date of option Terminzustellung (TeZu) is mandatory, if the option is used: Date in format yyyy-mm-dd</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="10"/>
+					<xs:maxLength value="10"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<complexType name="DDServiceGroupOtherType">
+		<annotation>
+			<documentation>Other DD Services.</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="HigherInsurance">
+					<annotation>
+						<documentation>Insure shipment with higher than standard amount. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="InsuranceAmount">
+								<annotation>
+									<documentation>To book either one of the two insurance options field must contain either "2500" or "25000" exactly.
+Mandatory if HigherInsurance is chosen.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:decimal">
+										<minInclusive value="0.0"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="InsuranceCurrency" type="xs:string">
+								<annotation>
+									<documentation>Currency of insurance.
+Mandatory if HigherInsurance is chosen.
+									</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="COD">
+					<annotation>
+						<documentation>Cash on delivery service. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="CODAmount">
+								<annotation>
+									<documentation>Money amount to be collected.
+Mandatory if COD is chosen. Field length must be less than or equal to 22.</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:decimal">
+										<minInclusive value="0.0"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="CODCurrency" type="xs:string">
+								<annotation>
+									<documentation>Currency of cod amount.
+Mandatory if COD is chosen. Field length must be = 3.
+									</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Unfree">
+					<annotation>
+						<documentation>Service unfree, Receiver pays shipment fees. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="PaymentType">
+								<annotation>
+									<documentation>Mandatory if unfree is chosen. 0= cash / 1= invoice. </documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:string">
+										<enumeration value="0"/>
+										<enumeration value="1"/>
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="CustomerNumber" type="xs:string" minOccurs="0">
+								<annotation>
+									<documentation>Paid by third party, e.g. Receiver. DHL account number mandatory if PaymentType 1 = invoice is selected. Field length must be less than or equal to 10.
+</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="DangerousGoods">
+					<annotation>
+						<documentation>Service to ship hazardous goods. If selected dangerous goods class, packaging type and UN code must be specified. Field length must be = 1.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="DangerousGoodsClass" type="xs:string">
+								<annotation>
+									<documentation>Dangerous goods classification. Field length must be = 1.</documentation>
+								</annotation>
+							</element>
+							<element name="DangerousGoodsPackagingType" type="xs:string">
+								<annotation>
+									<documentation>Dangerous packaging type.</documentation>
+								</annotation>
+							</element>
+							<element name="DangerousGoodsUNCode" type="xs:string">
+								<annotation>
+									<documentation>Dangerous goods UN code.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="Bulkfreight">
+					<annotation>
+						<documentation>Service to ship bulkfreight items. Bulkfreight type can be selected optionally. Field length must be = 1.
+						</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="BulkfreightType" minOccurs="0">
+								<annotation>
+									<documentation>Bulkfreight type. Mandatory if bulkfreight is selected. Field length must be less than or equal to 20.
+									</documentation>
+								</annotation>
+								<simpleType>
+									<restriction base="xs:string">
+										<enumeration value="Lang"/>
+										<enumeration value="L"/>
+										<enumeration value="XL"/>
+										<enumeration value="XXL"/>
+									</restriction>
+								</simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="DirectInjection" type="xs:boolean">
+					<annotation>
+						<documentation>Direct Injection Service.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="Bypass" type="xs:boolean">
+					<annotation>
+						<documentation>Bypass Service.</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="ShipmentNotificationType">
+		<annotation>
+			<documentation>Notification type</documentation>
+		</annotation>
+		<sequence>
+			<element name="RecipientName" type="xs:string">
+				<annotation>
+					<documentation>Name of the email recipient. Mandatory if Notification is set. Field length must be less than or equal to 45.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="RecipientEmailAddress" type="xs:string">
+				<annotation>
+					<documentation>Email address of the recipient. Mandatory if Notification is set. Field length must be less than or equal to 20.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ExportDocumentTDType">
+		<annotation>
+			<documentation>The data of the export document for a TD
+				shipment.</documentation>
+		</annotation>
+		<sequence>
+			<element name="InvoiceType">
+				<annotation>
+					<documentation>Type of invoice. Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="proforma"/>
+						<enumeration value="commercial"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="InvoiceDate">
+				<annotation>
+					<documentation>Invoice date in format yyyy-mm-dd.
+Mandatory if Export Document is provided. Field length must be = 8.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="10"/>
+						<maxLength value="10"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="InvoiceNumber" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>In case invoice has a number, client app can provide it in this field. Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="ExportType">
+				<annotation>
+					<documentation>Type of export. ("P"=permanent / "T"=temporary / "R"=repair and return). Field length must be less than or equal to 40.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="P"/>
+						<enumeration value="T"/>
+						<enumeration value="R"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="SignerTitle" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>The title of the Signer.</documentation>
+				</annotation>
+			</element>
+			<element name="Remark" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Freely editable field to leave a remark.</documentation>
+				</annotation>
+			</element>
+			<element name="CommodityCode" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>For trading internationally, the standardized international commodity codes for shipped goods are specified. Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="ExportReason" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Reason for exporting goods.</documentation>
+				</annotation>
+			</element>
+			<element name="ExportDocPosition" minOccurs="0" maxOccurs="999">
+				<annotation>
+					<documentation>More than one position only possible for international TD shipments. One or more child elements for every position to be defined within the Export Document.
+					</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="Description" type="xs:string">
+							<annotation>
+								<documentation>Description of the single position. Field length must be less than or equal to 40.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="Amount">
+							<annotation>
+								<documentation>Defines the amount of pieces of that respective position. Field length must be less than or equal to 22.</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:integer">
+									<minInclusive value="1"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="ValuePerPiece">
+							<annotation>
+								<documentation>Defines the value of every piece of the position. Field length must be less than or equal to 22.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:decimal">
+									<minInclusive value="0.0"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="NetWeightInKG">
+							<annotation>
+								<documentation>Net weight of the shipment. Field length must be less than or equal to 22.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:decimal">
+									<minInclusive value="0.0"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="GrossWeightInKG">
+							<annotation>
+								<documentation>Gross weight of the shipment. Field length must be less than or equal to 22.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:decimal">
+									<minInclusive value="0.0"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="ISOCountryCodeOfOrigin">
+							<annotation>
+								<documentation>Defines the ISO code of origin country. Field length must be = 2.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:string">
+									<maxLength value="2"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="CommodityCode" type="xs:string" minOccurs="0">
+							<annotation>
+								<documentation>For trading internationally, the standardized international commodity codes for shipped goods are specified. Field length must be less than or equal to 30.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ExportDocumentDDType">
+		<annotation>
+			<documentation>The data of the export document for a DD
+				shipment.</documentation>
+		</annotation>
+		<sequence>
+			<element name="InvoiceType" minOccurs="0">
+				<annotation>
+					<documentation>Invoice type (only mandatory for BPI). Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="proforma"/>
+						<enumeration value="commercial"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="InvoiceDate">
+				<annotation>
+					<documentation>Invoice date in format yyyy-mm-dd.
+Mandatory if Export Document is provided. Field length must be = 8.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="10"/>
+						<maxLength value="10"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="InvoiceNumber" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>In case invoice has a number, client app can provide it in this field. Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="ExportType" minOccurs="0">
+				<annotation>
+					<documentation>Export type ("0"="other", "1"="gift",
+						"2"="sample", "3"="documents", "4"="goods return") (depends on
+						chosen product -> only mandatory for BPI). Field length must be less than or equal to 40.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="0"/>
+						<enumeration value="1"/>
+						<enumeration value="2"/>
+						<enumeration value="3"/>
+						<enumeration value="4"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ExportTypeDescription" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Description mandatory if ExportType is 'other' (= 0). Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="CommodityCode" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>For trading internationally, the standardized international commodity code for shipped good is specified. Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="TermsOfTrade" type="xs:string">
+				<annotation>
+					<documentation>Element provides terms of trades, i.e. incoterms codes like DDU, CIP et al. Field length must be = 3.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="Amount">
+				<annotation>
+					<documentation>Amount of shipment positions. Multiple positions not allowed for EUP and EPI, only BPI allows amount > 1. Field length must be less than or equal to 22.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="1"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Description" type="xs:string">
+				<annotation>
+					<documentation>Description text for the document.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="CountryCodeOrigin" type="xs:string">
+				<annotation>
+					<documentation>Defines the ISO  code of origin country. Field length must be = 2.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="AdditionalFee" minOccurs="0">
+				<annotation>
+					<documentation>Additional custom fees to be payed.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="CustomsValue">
+				<annotation>
+					<documentation>Defines the declared customs value amount of the shipment. Field length must be less than or equal to 11.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="CustomsCurrency" type="xs:string">
+				<annotation>
+					<documentation>Sets the declared customs value currency of the shipment. Field length must be = 3.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="PermitNumber" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>The permit number. Field length must be less than or equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="AttestationNumber" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>The attestation number. Field length must be less than or equal to 30.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="WithElectronicExportNtfctn" type="xs:boolean" minOccurs="0">
+				<annotation>
+					<documentation>Sets an electronic export notification. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="MRNNumber" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>The MRN number. Field length must be equal to 30.</documentation>
+				</annotation>
+			</element>
+			<element name="ExportDocPosition" minOccurs="0" maxOccurs="999">
+				<annotation>
+					<documentation>One or more child elements for every position to be defined within the Export Document. Each one contains description, amount, value, net and gross weight, country code of origin et al. Multiple positions only possible for BPI, but not for EUP and EPI.
+					</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="Description" type="xs:string">
+							<annotation>
+								<documentation>Description of the respective position. Field length must be less than or equal to 40.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="CountryCodeOrigin" type="xs:string">
+							<annotation>
+								<documentation>Defines the ISO code of origin country. 
+								</documentation>
+							</annotation>
+						</element>
+						<element name="CommodityCode" type="xs:string" minOccurs="0">
+							<annotation>
+								<documentation>Standardized international commodity code for respective position is specified. Field length must be less than or equal to 30.
+								</documentation>
+							</annotation>
+						</element>
+						<element name="Amount">
+							<annotation>
+								<documentation>Defines the amount of pieces of that respective position. Minimum amount is 1. Field length must be less than or equal to 22.</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:integer">
+									<minInclusive value="1"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="NetWeightInKG">
+							<annotation>
+								<documentation>Net weight of the shipment. Field length must be less than or equal to 22.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:decimal">
+									<minInclusive value="0.0"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="GrossWeightInKG">
+							<annotation>
+								<documentation>Gross weight of the shipment. Field length must be less than or equal to 22.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:decimal">
+									<minInclusive value="0.0"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="CustomsValue">
+							<annotation>
+								<documentation>Defines the declared customs value amount of respective position. Field length must be less than or equal to 11.
+								</documentation>
+							</annotation>
+							<simpleType>
+								<restriction base="xs:decimal">
+									<minInclusive value="0.0"/>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="CustomsCurrency" type="xs:string">
+							<annotation>
+								<documentation>Sets the declared customs value currency of respective position.
+								</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="FurtherAddressesDDType">
+		<annotation>
+			<documentation><![CDATA[Further address information
+The following data fields from the cis_base-types are processed/mandatory/optional:
+-------------------------------------------------------------------------------------------------------
+Salutation		 (optional) : cis:NameType->Person->salutation
+Company Name 1   (mandatory): cis:NameType->Company->name1
+Company Name 2   (optional) : cis:NameType->Company->name2
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (mandatory): cis:NativeAddressType->streetNumber
+Add. Address     (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		 (mandatory): cis:NativeAddressType->city
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+Phone Number     (mandatory): cis:CommunicationType->phone
+Email Address    (mandatory): cis:CommunicationType->email						
+			]]></documentation>
+		</annotation>
+		<sequence>
+			<element name="DeliveryAdress" minOccurs="0">
+				<annotation>
+					<documentation>Mandatory if further address is to be specified.</documentation>
+				</annotation>
+				<complexType>
+					<sequence>
+						<element name="Company" type="cis:NameType">
+							<annotation>
+								<documentation>Determines whether further address is one of the following types.</documentation>
+							</annotation>
+						</element>
+						<element name="Name3" type="xs:string" minOccurs="0">
+							<annotation>
+								<documentation>Extra data for name extension.</documentation>
+							</annotation>
+						</element>
+						<element name="Address" type="cis:NativeAddressType">
+							<annotation>
+								<documentation>Contains address data.</documentation>
+							</annotation>
+						</element>
+						<element name="Communication" type="cis:CommunicationType">
+							<annotation>
+								<documentation>Info about communication.</documentation>
+							</annotation>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="LabelData">
+		<annotation>
+			<documentation>The status of the getLabel operation and the url
+				for requesting the label (if available).</documentation>
+		</annotation>
+		<sequence>
+			<element name="ShipmentNumber" type="cis:ShipmentNumberType">
+				<annotation>
+					<documentation>For successful and unsuccessful operations, the requested ShipmentNumber of the label to be retrieved is returned. This is no matter if it the operation could be performed or not. Depending on the invoked product (TD or DD) </documentation>
+				</annotation>
+			</element>
+			<element name="Status" type="is:Statusinformation">
+				<annotation>
+					<documentation>Success status of processing retrieval of particular shipment label.</documentation>
+				</annotation>
+			</element>
+			<element name="Labelurl" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested to be 'URL' in initial ShipmentOrder of the CreateShipment call, Labelurl will be returned and include the label as URL pointing to a PDF label.
+Note that the output format (URL or XML) is determined by the initial ShipmentOrder and cannot be set in GetLabel request.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="XMLLabel" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>If label output format was requested to be 'XML' in initial ShipmentOrder of the CreateShipment call, XMLLabel will be returned and include the label as XML data in a CDATA-stream.  
+Note that the output format (URL vs XML) is determined by the initial ShipmentOrder call and cannot be set in GetLabel request.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ExportDocData">
+		<annotation>
+			<documentation>The status of the getLabel operation and the url for requesting the label (if available)</documentation>
+		</annotation>
+		<sequence>
+			<element name="ShipmentNumber" type="cis:ShipmentNumberType">
+				<annotation>
+					<documentation>ShipmentNumber</documentation>
+				</annotation>
+			</element>
+			<element name="Status" type="is:Statusinformation">
+				<annotation>
+					<documentation>Status of the request (value of zero means, the request was processed without error; value greater than zero indicates that an error occurred).</documentation>
+				</annotation>
+			</element>
+			<choice>
+				<element name="ExportDocPDFData" type="xs:string" minOccurs="0">
+					<annotation>
+						<documentation>Export doc as base64 encoded pdf data</documentation>
+					</annotation>
+				</element>
+				<element name="ExportDocURL" type="xs:string" minOccurs="0">
+					<annotation>
+						<documentation>URL for downloading the Export doc as pdf</documentation>
+					</annotation>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<complexType name="ManifestState">
+		<annotation>
+			<documentation>The status of a doManifest operation.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="ShipmentNumber" type="cis:ShipmentNumberType">
+				<annotation>
+					<documentation>ShipmentNumber</documentation>
+				</annotation>
+			</element>
+			<element name="Status" type="is:Statusinformation">
+				<annotation>
+					<documentation>Status of the request (value of zero means,
+						the request was processed without error; value greater than zero
+						indicates that an error occurred).</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="DeletionState">
+		<annotation>
+			<documentation>The status of a deleteShipment operation.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="ShipmentNumber" type="cis:ShipmentNumberType">
+				<annotation>
+					<documentation>For successful and unsuccessful operations, the requested ShipmentNumber to be deleted is returned. This is no matter if the operation could be performed or not. Depending on the invoked product (TD or DD).</documentation>
+				</annotation>
+			</element>
+			<element name="Status" type="is:Statusinformation">
+				<annotation>
+					<documentation>Success status of processing the deletion of particular shipment.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<element name="BookPickupRequest">
+		<annotation>
+			<documentation>The data for a pickup order.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="BookingInformation" type="is:PickupBookingInformationType">
+					<annotation>
+						<documentation>Contains information in further leaf elements about product, DHL account, pickup date and time, pickup location, amount of pieces, pallets, and shipments, moreover weight and volume weight, size. 
+						</documentation>
+					</annotation>
+				</element>
+				<element name="PickupAddress" type="is:PickupAddressType">
+					<annotation>
+						<documentation>The pickup address.</documentation>
+					</annotation>
+				</element>
+				<element name="ContactOrderer" type="is:PickupOrdererType" minOccurs="0">
+					<annotation>
+						<documentation>The address and contact information of the
+							orderer.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="BookPickupResponse">
+		<annotation>
+			<documentation>The data for a pickup order.</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="Status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Success status after processing the request.</documentation>
+					</annotation>
+				</element>
+				<element name="ConfirmationNumber" type="xs:string" minOccurs="0">
+					<annotation>
+						<documentation>The confirmation number of the successfully created pickup order. It can later be used for cancelling a pickup order. Confirmation number is not available for each pickup type.</documentation>
+					</annotation>
+				</element>
+				<element name="ShipmentNumber" type="xs:string" minOccurs="0">
+					<annotation>
+						<documentation>If available, a shipment number is returned.
+						</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="PickupDetailsType">
+		<annotation>
+			<documentation>The details of a pickup order.</documentation>
+		</annotation>
+		<sequence>
+			<element name="PickupDate">
+				<annotation>
+					<documentation>Pickup date in format yyyy-mm-dd.
+Mandatory if pickup is booked along with shipment order.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="10"/>
+						<maxLength value="10"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ReadyByTime">
+				<annotation>
+					<documentation>Earliest time for pickup. 
+Format is hh:mm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="5"/>
+						<maxLength value="5"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ClosingTime">
+				<annotation>
+					<documentation>Lates time for pickup. 
+Format is hh:mm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="5"/>
+						<maxLength value="5"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Remark" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Remarks to be considered when pickup is done.</documentation>
+				</annotation>
+			</element>
+			<element name="PickupLocation" type="xs:string">
+				<annotation>
+					<documentation>Area to further detail pickup location beyond address.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="PickupAddressType">
+		<annotation>
+			<documentation><![CDATA[
+The pickup address. In the PickupType the following data fields are processed/mandatory/optional:
+----------------------------------------------------------------------------------------------
+Company Name 1   (mandatory): cis:NameType->Company->name1
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (mandatory): cis:NativeAddressType->streetNumber
+Add. Address 	 (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		 (mandatory): cis:NativeAddressType->city
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+Phone Number     (mandatory): cis:CommunicationType->phone
+Email Address    (mandatory): cis:CommunicationType->email
+			]]></documentation>
+		</annotation>
+		<sequence>
+			<element name="Company" type="cis:NameType">
+				<annotation>
+					<documentation>Determines whether pickup address is one of the following types.</documentation>
+				</annotation>
+			</element>
+			<element name="Address" type="cis:NativeAddressType">
+				<annotation>
+					<documentation>Data fields for pickup address.</documentation>
+				</annotation>
+			</element>
+			<element name="Communication" type="cis:CommunicationType">
+				<annotation>
+					<documentation>Info about communication.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="PickupOrdererType">
+		<annotation>
+			<documentation><![CDATA[
+Information about the pickup orderer. In the PickupOrdererType the following data fields are processed/mandatory/optional:
+----------------------------------------------------------------------------------------------
+Salutation		 (optional) : cis:NameType->Person->salutation
+Company Name 1   (mandatory): cis:NameType->Company->name1
+Company Name 2   (optional) : cis:NameType->Company->name2
+Contact Name     (mandatory): cis:CommunicationType->contactPerson
+Street Name      (mandatory): cis:NativeAddressType->streetName
+Street Number    (mandatory): cis:NativeAddressType->streetNumber
+Add. Address     (optional) : cis:NativeAddressType->careOfName
+Postcode         (mandatory): cis:NativeAddressType->zip
+City Name		 (mandatory): cis:NativeAddressType->city
+ISO Country Code (mandatory): cis:NativeAddressType->Origin->CountryType->countryISOType 
+Phone Number     (mandatory): cis:CommunicationType->phone
+Email Address    (mandatory): cis:CommunicationType->email		
+				]]></documentation>
+		</annotation>
+		<sequence>
+			<element name="Company" type="cis:NameType">
+				<annotation>
+					<documentation>Determines whether orderer contact address is of the following type.</documentation>
+				</annotation>
+			</element>
+			<element name="Name3" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Optional name appendix.</documentation>
+				</annotation>
+			</element>
+			<element name="Address" type="cis:NativeAddressType">
+				<annotation>
+					<documentation>Data fields for orderer's address.</documentation>
+				</annotation>
+			</element>
+			<element name="Communication" type="cis:CommunicationType">
+				<annotation>
+					<documentation>Info about communication.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="PickupBookingInformationType">
+		<annotation>
+			<documentation>The data of the pickup order.</documentation>
+		</annotation>
+		<sequence>
+			<element name="ProductID">
+				<annotation>
+					<documentation>Information about the shipment to be picked up. ("TDN" = time-definite national / "TDI" = time-definite international / "DDN" = day-definite national / "DDI" = day-definite international). </documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<enumeration value="TDI"/>
+						<enumeration value="TDN"/>
+						<enumeration value="DDI"/>
+						<enumeration value="DDN"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Account" type="xs:string">
+				<annotation>
+					<documentation>Depending on whether a DD pickup or TD pickup is invoked, this field contains either the 10-digit EKP number (DD pickups) or the 9-digit accountNumberExpress (TD pickups).</documentation>
+				</annotation>
+			</element>
+			<element name="Attendance" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Field has the partner id. I.e. the last 2 digit number extract from the 14 digit DHL Account Number. E.g. if DHL Account Number is "5000000008 72 01" then Attendance is 01. Field length must be = 2. </documentation>
+				</annotation>
+			</element>
+			<element name="PickupDate">
+				<annotation>
+					<documentation>Pickup date in format yyyy-mm-dd.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="10"/>
+						<maxLength value="10"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ReadyByTime">
+				<annotation>
+					<documentation>Earliest time  for pickup. 
+Format is hh:mm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="5"/>
+						<maxLength value="5"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ClosingTime">
+				<annotation>
+					<documentation>Lates time for pickup. 
+Format is hh:mm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:string">
+						<minLength value="5"/>
+						<maxLength value="5"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Remark" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Remarks to be considered when pickup is done.
+Mandatory if 'TDI' is selected.</documentation>
+				</annotation>
+			</element>
+			<element name="PickupLocation" type="xs:string" minOccurs="0">
+				<annotation>
+					<documentation>Area to further detail pickup location beyond address. Mandatory for TDN and TDI, optional for DDN and DDI.</documentation>
+				</annotation>
+			</element>
+			<element name="AmountOfPieces" minOccurs="0">
+				<annotation>
+					<documentation>Number of pieces to be picked up.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="AmountOfPallets" minOccurs="0">
+				<annotation>
+					<documentation>Number of pallets to be picked up.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="WeightInKG" minOccurs="0">
+				<annotation>
+					<documentation>The weight of all shipment's pieces in kg. Field length must be less than or equal to 22.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="CountOfShipments" minOccurs="0">
+				<annotation>
+					<documentation>Number of shipments to be picked up.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:integer">
+						<minInclusive value="0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="TotalVolumeWeight" minOccurs="0">
+				<annotation>
+					<documentation>The total volumetric weight of all pieces in kg. 
+Calculated by piece =
+length x width x height in centimetres / 5000. Field length must be less than or equal to 22.
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="MaxLengthInCM" minOccurs="0">
+				<annotation>
+					<documentation>The maximum length in cm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="MaxWidthInCM" minOccurs="0">
+				<annotation>
+					<documentation>The maximum width in cm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="MaxHeightInCM" minOccurs="0">
+				<annotation>
+					<documentation>The maximum height in cm.</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="xs:decimal">
+						<minInclusive value="0.0"/>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+	<element name="CancelPickupRequest">
+		<annotation>
+			<documentation>The data for cancelling a pickup order.
+			</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation
+							for which the requesting client is developed.</documentation>
+					</annotation>
+				</element>
+				<element name="BookingConfirmationNumber" type="xs:string">
+					<annotation>
+						<documentation>The confirmation number of the pickup order which should be cancelled. Use value from pickup response attribute 'ConfirmationNumber' to cancel respective pickup order.
+Note: only one pickup can be deleted at a time.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="CancelPickupResponse">
+		<annotation>
+			<documentation>The status of the cancel pickup operation.
+			</documentation>
+		</annotation>
+		<complexType>
+			<sequence>
+				<element ref="cis:Version">
+					<annotation>
+						<documentation>The version of the webservice implementation.
+						</documentation>
+					</annotation>
+				</element>
+				<element name="Status" type="is:Statusinformation">
+					<annotation>
+						<documentation>Success status after processing the request.</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="IdentityData">
+		<annotation>
+			<documentation>Identity data (used e.g. for ident
+				services)</documentation>
+		</annotation>
+		<sequence>
+			<choice>
+				<element name="DrivingLicense">
+					<annotation>
+						<documentation>If driving license shall be used for verifying identity.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="LicenseNumber" type="xs:string">
+								<annotation>
+									<documentation>ID number of the driving license. 
+Mandatory if DrivingLicense is chosen as identity instrument.</documentation>
+								</annotation>
+							</element>
+							<element name="Authority" type="xs:string">
+								<annotation>
+									<documentation>Name of certifying authority of the driving license. 
+Mandatory if DrivingLicense is chosen as identity instrument.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="IdentityCard">
+					<annotation>
+						<documentation>If identity card shall be used for verifying identity.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="CardNumber" type="xs:string">
+								<annotation>
+									<documentation>Number of the identity card.
+Mandatory if IdentityCard is chosen as identity instrument. Field length must be less than or equal to 20.</documentation>
+								</annotation>
+							</element>
+							<element name="CardAuthority" type="xs:string">
+								<annotation>
+									<documentation>Name of certifying card authority. 
+Mandatory if IdentityCard is chosen as identity instrument. Field length must be less than or equal to 30.</documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="BankCard">
+					<annotation>
+						<documentation>If a bank card shall be used for verifying identity.</documentation>
+					</annotation>
+					<complexType>
+						<sequence>
+							<element name="CardType" type="xs:string">
+								<annotation>
+									<documentation>Type of bank card. 
+Mandatory if BankCard is chosen as identity instrument.</documentation>
+								</annotation>
+							</element>
+							<element name="CardNumber" type="xs:string">
+								<annotation>
+									<documentation>Number of bank card. 
+Mandatory if BankCard is chosen as identity instrument.</documentation>
+								</annotation>
+							</element>
+							<element name="BankName" type="xs:string">
+								<annotation>
+									<documentation>Name of bank. 
+Mandatory if BankCard is chosen as identity instrument.</documentation>
+								</annotation>
+							</element>
+							<element name="BankCode" type="xs:string">
+								<annotation>
+									<documentation>Bank code. 
+Mandatory if BankCard is chosen as identity instrument. </documentation>
+								</annotation>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</choice>
+		</sequence>
+	</complexType>
+	<xs:complexType name="PackstationType">
+		<xs:annotation>
+			<xs:documentation>Type of Packstation (Receiver is in Germany)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>includes</xs:documentation>
+			</xs:annotation>
+			<xs:element name="PackstationNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Number of the packstation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Post Nummer of the receiver</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Zip">
+				<xs:annotation>
+					<xs:documentation>Postcode</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="5"/>
+						<xs:maxLength value="5"/>
+						<xs:pattern value="[0-9]{5}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="City">
+				<xs:annotation>
+					<xs:documentation>City name.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PostfilialeType">
+		<xs:annotation>
+			<xs:documentation>Type of Postfiliale (Receiver is in Germany)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>includes</xs:documentation>
+			</xs:annotation>
+			<xs:element name="PostfilialNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Number of the postfiliale</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Post Nummer of the receiver</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Zip">
+				<xs:annotation>
+					<xs:documentation>Postcode</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="5"/>
+						<xs:maxLength value="5"/>
+						<xs:pattern value="[0-9]{5}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="City">
+				<xs:annotation>
+					<xs:documentation>City name.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</schema>
