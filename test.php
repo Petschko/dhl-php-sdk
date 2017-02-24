@@ -52,6 +52,9 @@ $service = new DHL_Service();
 
 // Required just Credentials also accept Test-Modus and Version
 $dhl = new DHL_BusinessShipment($credentials, /*Optional*/$testModus, /*Optional*/$version);
+// You can add your own API-File (if you want to use a remote one or your own) - else you don't need this
+//$dhl->setCustomAPIURL('http://myserver.com/myAPIFile.wsdl');
+
 // Don't forget to assign the created objects to the DHL_BusinessShipment!
 $dhl->setSequenceNumber('1'); // Just needed for ajax or such stuff can dynamic an other value
 $dhl->setSender($sender);

@@ -5,7 +5,7 @@
  * Date: 26.01.2017
  * Time: 15:37
  * Update: -
- * Version: 0.0.1
+ * Version: 1.0.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -212,6 +212,13 @@ class DHL_BusinessShipment extends DHL_Version {
 	private $labelResponseType = null;
 
 	/**
+	 * Custom-WSDL-File URL
+	 *
+	 * @var null|string $customAPIURL - Custom-API URL to use internal let this value null
+	 */
+	private $customAPIURL = null;
+
+	/**
 	 * DHL_BusinessShipment constructor.
 	 *
 	 * @param DHL_Credentials $credentials - DHL-Credentials-Object
@@ -287,6 +294,10 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * @return string - Business-API-URL
 	 */
 	protected function getAPIUrl() {
+		// Use own API-URL if set
+		if($this->getCustomAPIURL() !== null)
+			return $this->getCustomAPIURL();
+
 		// todo check if up to date & if file exists
 		return self::getWSDLDirURL() . $this->getVersion() . '/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
 	}
@@ -535,6 +546,20 @@ class DHL_BusinessShipment extends DHL_Version {
 	 */
 	public function setLabelResponseType($labelResponseType) {
 		$this->labelResponseType = $labelResponseType;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getCustomAPIURL() {
+		return $this->customAPIURL;
+	}
+
+	/**
+	 * @param null|string $customAPIURL
+	 */
+	public function setCustomAPIURL($customAPIURL) {
+		$this->customAPIURL = $customAPIURL;
 	}
 
 	/**

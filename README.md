@@ -207,6 +207,12 @@ Finally you can add all together. You have to create the `DHL_BusinessShipment` 
 	*/
 	$dhl = new DHL_BusinessShipment($credentials);
 ````
+
+If you want to use a specific WSDL-File (or remote), you can set it: _(Else you don't need this part)_
+````php
+	$dhl->setCustomAPIURL('http://myserver.com/myAPIFile.wsdl');
+````
+
 Here you can add the previous created classes:
 ````php
 	// Add all Required (For a CREATE-Shipment-Request) Classes
