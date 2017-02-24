@@ -274,6 +274,7 @@ class DHL_BusinessShipment extends DHL_Version {
 		unset($this->receiverEmail);
 		unset($this->printOnlyIfReceiverIsValid);
 		unset($this->labelResponseType);
+		unset($this->customAPIURL);
 	}
 
 	/**
