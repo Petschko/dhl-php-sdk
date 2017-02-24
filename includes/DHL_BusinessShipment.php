@@ -5,7 +5,7 @@
  * Date: 26.01.2017
  * Time: 15:37
  * Update: -
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -248,9 +248,6 @@ class DHL_BusinessShipment extends DHL_Version {
 
 		// Set DHL_Shipment-Class
 		$this->setShipmentDetails(new DHL_ShipmentDetails($credentials->getEpk(10) . '0101'));
-
-		// Create Soap-Client
-		$this->buildSoapClient();
 	}
 
 	/**
@@ -308,7 +305,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 */
 	private function getSoapClient() {
 		if($this->soapClient === null)
-			$this->setSoapClient($this->buildSoapClient());
+			$this->buildSoapClient();
 
 		return $this->soapClient;
 	}
@@ -319,7 +316,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * @return null|string - Last XML-Request or null if none
 	 */
 	public function getLastXML() {
-		if($this->getSoapClient() === null)
+		if($this->soapClient === null)
 			return null;
 
 		return $this->getSoapClient()->__getLastRequest();
