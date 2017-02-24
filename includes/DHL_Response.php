@@ -288,6 +288,23 @@ class DHL_Response extends DHL_Version {
 	 * @param Object $response - DHL-Response
 	 */
 	private function loadResponse_v2($response) {
+		// Set Status-Values first
+		if(! isset($response->CreationState->LabelData->Status->statusCode)) {
+			// Set fault Status-Code
+			$this->setStatusCode((int) $response->Status->statusCode);
+			$this->setStatusText($response->Status->statusText);
+			$this->setStatusMessage($response->Status->statusMessage);
+
+			return;
+		}
+		$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
+		$this->setStatusText($response->CreationState->LabelData->Status->statusText);
+		$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
+
+		// Change Status-Code if a weak-validation error occurs
+		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
+			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
+
 		// Set Shipment-Number if exists
 		if(isset($response->CreationState->LabelData->shipmentNumber))
 			$this->setShipmentNumber((string) $response->CreationState->LabelData->shipmentNumber);
@@ -307,13 +324,6 @@ class DHL_Response extends DHL_Version {
 
 		// Set all other System values
 		$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
-		$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
-		$this->setStatusText($response->CreationState->LabelData->Status->statusText);
-		$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
-
-		// Change Status-Code if a weak-validation error occurs
-		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
-			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
 	}
 
 	/**
