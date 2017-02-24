@@ -10,6 +10,7 @@ $version = '2.2';
 $credentials = new DHL_Credentials($testModus);
 
 if(! $testModus) {
+	// IMPORTANT: Please note that Username & Password are case sensitive!!!
 	$credentials->setUser('Your-DHL-Account');	// Don't needed if initialed with true - Test-Modus
 	$credentials->setSignature('Your-DHL-Account-Password'); // Don't needed if initialed with true - Test-Modus
 	$credentials->setEpk('EPK-Account-Number');	// Don't needed if initialed with true - Test-Modus

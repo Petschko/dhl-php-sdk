@@ -42,7 +42,7 @@ I can't find a Documentation for Version 1 anymore, so its hard to implement the
 	// Just create the Credentials-Object
 	$credentials = new DHL_Credentials();
 	
-	// Setup these Infos:
+	// Setup these Infos: (ALL Infos are Case-Sensitive!)
 	$credentials->setUser('Your-DHL-Account'); // DHL-Account (Same as if you Login with then to create Manual-Labels)
 	$credentials->setSignature('Your-DHL-Account-Password'); // DHL-Account-Password
 	$credentials->setEpk('EPK-Account-Number'); // Number of your Account (Provide at least the first 10 digits)
