@@ -121,10 +121,12 @@ class DHL_Credentials {
 	}
 
 	/**
-	 * @param string $user
+	 * Sets the User in lower case
+	 *
+	 * @param string $user - Username
 	 */
 	public function setUser($user) {
-		$this->user = $user;
+		$this->user = mb_strtolower($user);
 	}
 
 	/**
