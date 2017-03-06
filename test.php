@@ -5,12 +5,12 @@ require_once('includes' . DIRECTORY_SEPARATOR . 'DHL_BusinessShipment.php');
 
 $testModus = true;
 $version = '2.2';
+$reference = '1'; // You can use anything here (max 35 chars)
 
 // Set this to true then you can skip set the "User", "Signature" and "EPK" (Just for test-Modus) else false or empty
 $credentials = new DHL_Credentials($testModus);
 
 if(! $testModus) {
-	// IMPORTANT: Please note that Username & Password are case sensitive!!!
 	$credentials->setUser('Your-DHL-Account');	// Don't needed if initialed with true - Test-Modus
 	$credentials->setSignature('Your-DHL-Account-Password'); // Don't needed if initialed with true - Test-Modus
 	$credentials->setEpk('EPK-Account-Number');	// Don't needed if initialed with true - Test-Modus
@@ -23,7 +23,8 @@ $credentials->setApiPassword('');		// Test-Modus: Your DHL-Dev-Account Password 
 // Set Shipment Details
 $shipmentDetails = new DHL_ShipmentDetails($credentials->getEpk(10) . '0101'); // Create a Shipment-Details with the first 10 digits of your EPK-Number and 0101 (?)
 $shipmentDetails->setShipmentDate('2017-01-30'); // Optional: Need to be in the future and NOT on a sunday | null or drop it, to use today
-//$shipmentDetails->setReturnAccountNumber(return EPK 14 len); // Needed if you want to print a return label
+//$shipmentDetails->setReturnAccountNumber($credentials->getEpk(10) . '0701'); // Needed if you want to print a return label
+//$shipmentDetails->setReturnReference($reference); // Only needed if you want to print a return label
 
 // Set Sender
 $sender = new DHL_Sender();
@@ -56,7 +57,7 @@ $dhl = new DHL_BusinessShipment($credentials, /*Optional*/$testModus, /*Optional
 //$dhl->setCustomAPIURL('http://myserver.com/myAPIFile.wsdl');
 
 // Don't forget to assign the created objects to the DHL_BusinessShipment!
-$dhl->setSequenceNumber('1'); // Just needed for ajax or such stuff can dynamic an other value
+$dhl->setSequenceNumber($reference); // Just needed for ajax or such stuff can dynamic an other value
 $dhl->setSender($sender);
 $dhl->setReceiver($receiver);
 //$dhl->setReturnReceiver($returnReceiver); // Needed if you want print a return label

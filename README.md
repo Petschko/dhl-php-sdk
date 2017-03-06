@@ -106,6 +106,11 @@ You can setup details for that, if you need. If you don't set them, it use the d
 	*/
 	$shipmentDetails->setProduct((string) DHL_ShipmentDetails::{ProductType}); // Default: PRODUCT_TYPE_NATIONAL_PACKAGE
 	
+	// Example:
+	$shipmentDetails->setProduct((string) DHL_ShipmentDetails::PRODUCT_TYPE_INTERNATIONAL_PACKAGE);
+	// or (the same)
+	$shipmentDetails->setProduct((string) 'V53WPAK');
+	
 	// -- Date
 	// You can set a Shipment-Date you have to provide it in this Format: YYYY-MM-DD
 	// -> The Date MUST be Today or in the future AND NOT a Sunday
@@ -115,12 +120,12 @@ You can setup details for that, if you need. If you don't set them, it use the d
 	
 	// -- Return Account-Number (EPK)
 	// Provide your Return-Account-Number here. If not needed don't set it!
-	// I'm unsure if you just need the first 10 Digits of your Return-Account and then 0101 or 14 Digits - you have to try out >.< - You can tell me then =)
-	$shipmentDetails->setReturnAccountNumber((string) $returnAccountNumber); // Default: null -> Disabled
+	// Its usually the same Account-Number like your DHL-Account, just set the end to 0701
+	$shipmentDetails->setReturnAccountNumber((string) $credentials->getEpk(10) . 0701); // Default: null -> Disabled
 	
 	// -- References
 	$shipmentDetails->setCustomerReference((string) 'freetext 35 len'); // Default: null -> Disabled
-	// Only used if return receiver is used
+	// Only used if return receiver is used (ONLY if you want to print a return label)
 	$shipmentDetails->setReturnReference((string) 'freetext 35 len'); // Default: null -> Disabled
 	
 	// Sizes/Weight
