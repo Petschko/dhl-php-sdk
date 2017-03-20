@@ -63,7 +63,7 @@ $dhl->setReceiver($receiver);
 //$dhl->setReturnReceiver($returnReceiver); // Needed if you want print a return label
 $dhl->setService($service);
 $dhl->setShipmentDetails($shipmentDetails);
-$dhl->setReceiverEmail('receiver@mail.com'); // Needed if you want inform the receiver via mail
+//$dhl->setReceiverEmail('receiver@mail.com'); // Needed if you want inform the receiver via mail
 $dhl->setLabelResponseType(DHL_BusinessShipment::RESPONSE_TYPE_URL);
 
 $response = $dhl->createShipment(); // Creates the request
@@ -76,6 +76,10 @@ $response = $dhl->createShipment(); // Creates the request
 //$dhlReGetLabel = new DHL_BusinessShipment($credentials, $testModus, $version);
 //$dhlReGetLabel->setLabelResponseType(DHL_BusinessShipment::RESPONSE_TYPE_B64); // Optional: Set the Label-Response-Type
 //$reGetLabelResponse = $dhlReGetLabel->getShipmentLabel('shipmentNumber'); // ReGet Label
+
+// To do a Manifest-Request you can use the doManifest method - you have to provide a Shipment-Number
+//$manifestDHL = new DHL_BusinessShipment($credentials, $testModus, $version);
+//$manifestResponse = $manifestDHL->doManifest('shipmentNumber');
 
 // Get the result (just use var_dump to show all results)
 if($response !== false)

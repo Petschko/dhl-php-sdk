@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: -
- * Version: 1.0.1
+ * Update: 20.03.2017
+ * Version: 1.1.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -614,7 +614,84 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
-	 * Creates the Shipment-Order Request
+	 * Creates the doManifest-Request via SOAP
+	 *
+	 * @param Object|array $data - Manifest-Data
+	 * @return Object - DHL-Response
+	 */
+	private function sendDoManifestRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				return $this->getSoapClient()->DoManifestTD($data); // todo verify if correct
+			case 2:
+			default:
+				return $this->getSoapClient()->doManifest($data);
+		}
+	}
+
+	/**
+	 * Creates the doManifest-Request
+	 *
+	 * @param string $shipmentNumber - Shipment-Number for Manifest
+	 * @return bool|DHL_Response - false on error or DHL-Response Object
+	 */
+	public function doManifest($shipmentNumber) {
+		switch($this->getMayor()) {
+			case 1:
+				$data = $this->createDoManifestClass_v1($shipmentNumber);
+				break;
+			case 2:
+			default:
+				$data = $this->createDoManifestClass_v2($shipmentNumber);
+		}
+
+		try {
+			$response = $this->sendDoManifestRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new DHL_Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Creates the Data-Object for Manifest
+	 *
+	 * @param string $shipmentNumber - Shipment-Number for the Manifest
+	 * @return StdClass - Data-Object
+	 */
+	private function createDoManifestClass_v1($shipmentNumber) {
+		$data = new StdClass;
+
+		//todo
+
+		return $data;
+	}
+
+	/**
+	 * Creates the Data-Object for Manifest
+	 *
+	 * @param string $shipmentNumber - Shipment-Number for the Manifest
+	 * @return StdClass - Data-Object
+	 */
+	private function createDoManifestClass_v2($shipmentNumber) {
+		$data = new StdClass;
+
+		$data->Version = $this->getVersionClass();
+		$data->shipmentNumber = $shipmentNumber;
+
+		return $data;
+	}
+
+	/**
+	 * Creates the Shipment-Order Request via SOAP
 	 *
 	 * @param Object|array $data - Shipment-Data
 	 * @return Object - DHL-Response
@@ -731,7 +808,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
-	 * Creates the Shipment-Order-Delete Request
+	 * Creates the Shipment-Order-Delete Request via SOAP
 	 *
 	 * @param Object|array $data - Delete-Data
 	 * @return Object - DHL-Response
@@ -808,7 +885,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
-	 * Requests a Label again
+	 * Requests a Label again via SOAP
 	 *
 	 * @param Object $data - Label-Data
 	 * @return Object - DHL-Response

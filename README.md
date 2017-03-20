@@ -333,7 +333,36 @@ Same like deleting, re-get a Label is not this hard. You can simply re-get a lab
 	$response = $dhl->getShipmentLabel((string) 'shipmentNumber');
 ````
 
-If the request failed, you get `false` as usual else a `DHL_Response` Object. 
+If the request failed, you get `false` as usual else a `DHL_Response` Object.
+
+### DoManifest
+
+_Please note, that you need the `DHL_Credentials` Object with Valid Login-Information for that._
+
+You also need the Shipment-Number for the Manifest _(If you need it, you will know how to use this)_.
+
+I personally don't know for what is this for, but it works!
+
+#### Classes used
+
+- `DHL_Credentials` **(Req)** - Login Information
+- `DHL_BusinessShipment` **(Req)** - Manages all Actions + Information
+	- `DHL_Version` (Parent)
+- `DHL_Response` **(Req|Auto)** - Response Information
+	- `DHL_Version` (Parent)
+
+#### How to create
+
+It works like deleting a Shipment:
+````php
+	// Create a DHL_BusinessShipment Object with your credentials
+	$dhl = new DHL_BusinessShipment($credentials);
+	
+	// Do the Manifest-Request
+	$dhl->doManifest((string) 'shipment_number');
+````
+
+If the request failed, you get `false` else a `DHL_Response` Object.
 
 ### DHL_Response Object
 
