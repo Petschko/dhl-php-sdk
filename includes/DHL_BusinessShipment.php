@@ -5,7 +5,7 @@
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 20.03.2017
- * Version: 1.1.0
+ * Version: 1.2.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -25,6 +25,8 @@ require_once('DHL_Credentials.php');
 require_once('DHL_ExportDocument.php');
 require_once('DHL_IdentCheck.php');
 require_once('DHL_Receiver.php');
+	require_once('DHL_Filial.php');
+	require_once('DHL_PackStation.php');
 require_once('DHL_Response.php');
 require_once('DHL_ReturnReceiver.php');
 require_once('DHL_Sender.php');
@@ -146,7 +148,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	/**
 	 * Contains the Receiver-Object
 	 *
-	 * @var DHL_Receiver $receiver - Receiver Object
+	 * @var DHL_Receiver|DHL_PackStation|DHL_Filial $receiver - Receiver Object
 	 */
 	private $receiver;
 
