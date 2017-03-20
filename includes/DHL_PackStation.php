@@ -96,23 +96,32 @@ class DHL_PackStation extends DHL_Receiver {
 	 */
 	public function getClass_v2() {
 		$class = new StdClass;
+		$class->name1 = $this->getName();
 
-		if($this->getPostNumber() !== null)
-			$class->postNumber = $this->getPostNumber();
-		$class->packstationNumber = $this->getPackStationNumber();
-		$class->zip = $this->getZip();
-		$class->city = $this->getLocation();
+		$class->Communication = new StdClass;
+		if($this->getPhone() !== null)
+			$class->Communication->phone = $this->getPhone();
+		if($this->getEmail() !== null)
+			$class->Communication->email = $this->getEmail();
+		if($this->getContactPerson() !== null)
+			$class->Communication->contactPerson = $this->getContactPerson();
+
+		$class->Packstation = new StdClass;
+		$class->Packstation->postNumber = $this->getPostNumber();
+		$class->Packstation->packstationNumber = $this->getPackStationNumber();
+		$class->Packstation->zip = $this->getZip();
+		$class->Packstation->city = $this->getLocation();
 
 		if($this->getCountryISOCode() !== null) {
-			$class->Origin = new StdClass;
+			$class->Packstation->Origin = new StdClass;
 
 			if($this->getCountry() !== null)
-				$class->Origin->country = $this->getCountry();
+				$class->Packstation->Origin->country = $this->getCountry();
 
-			$class->Origin->countryISOCode = $this->getCountryISOCode();
+			$class->Packstation->Origin->countryISOCode = $this->getCountryISOCode();
 
 			if($this->getState() !== null)
-				$class->Origin->state = $this->getState();
+				$class->Packstation->Origin->state = $this->getState();
 		}
 
 		return $class;
