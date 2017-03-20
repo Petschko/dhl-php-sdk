@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 17.03.2017
  * Time: 12:09
- * Update: -
- * Version: 1.0.0
+ * Update: 20.03.2017
+ * Version: 1.0.1
  *
  * Notes: Contains the DHL_PackStation class
  */
@@ -17,13 +17,12 @@ class DHL_PackStation {
 	/**
 	 * Contains the Post-Number
 	 *
-	 * Note: Optional
 	 * Min-Len: 1
 	 * Max-Len: 10
 	 *
-	 * @var string|null $postNumber - Post-Number
+	 * @var string $postNumber - Post-Number
 	 */
-	private $postNumber = null;
+	private $postNumber = '';
 
 	/**
 	 * Contains the Pack-Station-Number
@@ -102,14 +101,14 @@ class DHL_PackStation {
 	}
 
 	/**
-	 * @return null|string
+	 * @return string
 	 */
 	public function getPostNumber() {
 		return $this->postNumber;
 	}
 
 	/**
-	 * @param null|string $postNumber
+	 * @param string $postNumber
 	 */
 	public function setPostNumber($postNumber) {
 		$this->postNumber = $postNumber;
