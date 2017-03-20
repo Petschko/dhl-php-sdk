@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 28.01.2017
  * Time: 19:17
- * Update: -
- * Version: 0.0.1
+ * Update: 20.03.2017
+ * Version: 1.0.0
  *
  * Notes: Contains the DHL_Receiver class
  */
@@ -14,6 +14,19 @@
  * Class DHL_Receiver
  */
 class DHL_Receiver extends DHL_SendPerson {
+	/**
+	 * DHL_Receiver constructor.
+	 */
+	public function __construct() {
+		parent::__construct();
+	}
+
+	/**
+	 * Clears Memory
+	 */
+	public function __destruct() {
+		parent::__destruct();
+	}
 
 	/**
 	 * Returns a Class for the DHL-SendPerson
