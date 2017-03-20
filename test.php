@@ -59,7 +59,7 @@ $dhl = new DHL_BusinessShipment($credentials, /*Optional*/$testModus, /*Optional
 // Don't forget to assign the created objects to the DHL_BusinessShipment!
 $dhl->setSequenceNumber($reference); // Just needed for ajax or such stuff can dynamic an other value
 $dhl->setSender($sender);
-$dhl->setReceiver($receiver);
+$dhl->setReceiver($receiver); // You can set these Object-Types here: DHL_Filial, DHL_Receiver & DHL_PackStation
 //$dhl->setReturnReceiver($returnReceiver); // Needed if you want print a return label
 $dhl->setService($service);
 $dhl->setShipmentDetails($shipmentDetails);

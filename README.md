@@ -63,9 +63,6 @@ _Please note, that you need the `DHL_Credentials` Object with Valid Login-Inform
 - `DHL_Sender` **(Req)** - Sender Details
 	- `DHL_SendPerson` (Parent)
 		- `DHL_Address` (Parent)
-- `DHL_Receiver` **(Req)** - Receiver Details
-	- `DHL_SendPerson` (Parent)
-		- `DHL_Address` (Parent)
 - `DHL_ReturnReceiver` (Optional) - Return Receiver Details
 	- `DHL_SendPerson` (Parent)
 		- `DHL_Address` (Parent)
@@ -76,6 +73,19 @@ _Please note, that you need the `DHL_Credentials` Object with Valid Login-Inform
 	- `DHL_Version` (Parent)
 - `DHL_Response` **(Req|Auto)** - Response Information
 	- `DHL_Version` (Parent)
+
+One of them:
+- `DHL_Receiver` **(Req)** - Receiver Details
+	- `DHL_SendPerson` (Parent)
+		- `DHL_Address` (Parent)
+- `DHL_Filial` (Optional) - Receiver-Details (Post-Filial)
+	- `DHL_Receiver` **(Req|Parent)** - Receiver Details
+		- `DHL_SendPerson` (Parent)
+			- `DHL_Address` (Parent)
+- `DHL_PackStation` (Optional) - Receiver-Details (Pack-Station)
+	- `DHL_Receiver` **(Req|Parent)** - Receiver Details
+		- `DHL_SendPerson` (Parent)
+			- `DHL_Address` (Parent)
 
 #### How to create
 
@@ -186,6 +196,9 @@ You can also add more Information, but they are **Optional**:
 ````
 
 This was the sender Object, you can set all the same Information with the `DHL_Receiver` + `DHL_ReturnReceiver` Class.
+
+**Note**: You can also use `DHL_PackStation` or `DHL_Filial` instead of `DHL_Receiver`.
+Please note, that they need some extra information.
 
 You don't need to create the `DHL_ReturnReceiver` Object if you don't want a return Label.
 
