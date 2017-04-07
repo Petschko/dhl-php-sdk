@@ -4,10 +4,10 @@
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: -
- * Version: 0.0.1
+ * Update: 07.04.2017
+ * Version: 1.0.0
  *
- * Notes: -
+ * Notes: Contains the DHL-Response Class
  */
 
 /**
@@ -289,7 +289,8 @@ class DHL_Response extends DHL_Version {
 	 */
 	private function loadResponse_v2($response) {
 		// Set Status-Values first
-		if(! isset($response->CreationState->LabelData->Status->statusCode)) {
+		if(! isset($response->CreationState->LabelData->Status->statusCode) &&
+			! isset($response->LabelData->Status->statusCode)) {
 			// Set fault Status-Code
 			$this->setStatusCode((int) $response->Status->statusCode);
 			$this->setStatusText($response->Status->statusText);
@@ -297,9 +298,16 @@ class DHL_Response extends DHL_Version {
 
 			return;
 		}
-		$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
-		$this->setStatusText($response->CreationState->LabelData->Status->statusText);
-		$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
+
+		if(isset($response->CreationState->LabelData->Status->statusCode)) {
+			$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
+			$this->setStatusText($response->CreationState->LabelData->Status->statusText);
+			$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
+		} else {
+			$this->setStatusCode((int) $response->LabelData->Status->statusCode);
+			$this->setStatusText($response->LabelData->Status->statusText);
+			$this->setStatusMessage($response->LabelData->Status->statusMessage);
+		}
 
 		// Change Status-Code if a weak-validation error occurs
 		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
@@ -308,22 +316,35 @@ class DHL_Response extends DHL_Version {
 		// Set Shipment-Number if exists
 		if(isset($response->CreationState->LabelData->shipmentNumber))
 			$this->setShipmentNumber((string) $response->CreationState->LabelData->shipmentNumber);
+		else if(isset($response->LabelData->shipmentNumber))
+			$this->setShipmentNumber($response->LabelData->shipmentNumber);
 
 		// Set Label if exists
 		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
 			if(isset($response->CreationState->LabelData->labelData))
 				$this->setLabel($response->CreationState->LabelData->labelData);
-		} else if(isset($response->CreationState->LabelData->labelUrl))
-			$this->setLabel($response->CreationState->LabelData->labelUrl);
+			else if(isset($response->LabelData->labelData))
+				$this->setLabel($response->LabelData->labelData);
+		} else {
+			if(isset($response->CreationState->LabelData->labelUrl))
+				$this->setLabel($response->CreationState->LabelData->labelUrl);
+			else if(isset($response->LabelData->labelUrl))
+				$this->setLabel($response->LabelData->labelUrl);
+		}
 
 		// Set Return Label if exists
 		if(isset($response->CreationState->LabelData->returnLabelUrl))
 			$this->setReturnLabel($response->CreationState->LabelData->returnLabelUrl);
 		else if(isset($response->CreationState->LabelData->returnLabelData))
 			$this->setReturnLabel($response->CreationState->LabelData->returnLabelData);
+		else if(isset($response->LabelData->returnLabelUrl))
+			$this->setReturnLabel($response->LabelData->returnLabelUrl);
+		else if(isset($response->LabelData->returnLabelData))
+			$this->setReturnLabel($response->LabelData->returnLabelData);
 
 		// Set all other System values
-		$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
+		if(isset($response->CreationState->sequenceNumber))
+			$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
 	}
 
 	/**
