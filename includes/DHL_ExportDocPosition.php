@@ -89,7 +89,7 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @param string $description
+	 * @param string|null $description
 	 */
 	protected function setDescription($description) {
 		$this->description = $description;
@@ -103,7 +103,7 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @param string $countryCodeOrigin
+	 * @param string|null $countryCodeOrigin
 	 */
 	protected function setCountryCodeOrigin($countryCodeOrigin) {
 		$this->countryCodeOrigin = $countryCodeOrigin;
@@ -117,7 +117,7 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @param float|int|string $customsTariffNumber
+	 * @param float|int|string|null $customsTariffNumber
 	 */
 	protected function setCustomsTariffNumber($customsTariffNumber) {
 		$this->customsTariffNumber = $customsTariffNumber;
@@ -131,7 +131,7 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @param int $amount
+	 * @param int|null $amount
 	 */
 	protected function setAmount($amount) {
 		$this->amount = $amount;
@@ -145,7 +145,7 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @param float $netWeightInKG
+	 * @param float|null $netWeightInKG
 	 */
 	protected function setNetWeightInKG($netWeightInKG) {
 		$this->netWeightInKG = $netWeightInKG;
@@ -159,7 +159,7 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @param float $customsValue
+	 * @param float|null $customsValue
 	 */
 	protected function setCustomsValue($customsValue) {
 		$this->customsValue = $customsValue;
