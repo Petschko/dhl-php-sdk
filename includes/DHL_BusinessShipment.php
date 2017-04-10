@@ -970,4 +970,83 @@ class DHL_BusinessShipment extends DHL_Version {
 
 		return $data;
 	}
+
+	/**
+	 * Requests the Export-Document again via SOAP
+	 *
+	 * @param Object $data - Export-Doc-Data
+	 * @return Object - DHL-Response
+	 */
+	private function sendGetExportDocRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				return $this->getSoapClient()->getExportDocDD($data);
+			case 2:
+			default:
+				return $this->getSoapClient()->getExportDoc($data);
+		}
+	}
+
+	/**
+	 * Requests a Export-Document again
+	 *
+	 * @param string $shipmentNumber - Shipment-Number of the Export-Document
+	 * @return bool|DHL_Response - Response or false on error
+	 */
+	public function getExportDoc($shipmentNumber) {
+		switch($this->getMayor()) {
+			case 1:
+				$data = $this->getExportDocClass_v1($shipmentNumber);
+				break;
+			case 2:
+			default:
+				$data = $this->getExportDocClass_v2($shipmentNumber);
+		}
+
+		try {
+			$response = $this->sendGetExportDocRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new DHL_Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Creates Data-Object for Export-Document-Request
+	 *
+	 * @param string $shipmentNumber - Number of the Shipment
+	 * @return StdClass - Data-Object
+	 */
+	private function getExportDocClass_v1($shipmentNumber) {
+		$data = new StdClass;
+
+		// todo
+
+		return $data;
+	}
+
+	/**
+	 * Creates Data-Object for Export-Document-Request
+	 *
+	 * @param string $shipmentNumber - Number of the Shipment
+	 * @return StdClass - Data-Object
+	 */
+	private function getExportDocClass_v2($shipmentNumber) {
+		$data = new StdClass;
+
+		$data->Version = $this->getVersionClass();
+		$data->shipmentNumber = $shipmentNumber;
+		if($this->getLabelResponseType() !== null)
+			$data->exportDocResponseType = $this->getLabelResponseType();
+
+		return $data;
+	}
 }
