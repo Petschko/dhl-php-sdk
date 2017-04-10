@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 20.03.2017
- * Version: 1.2.0
+ * Update: 10.04.2017
+ * Version: 1.3.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
