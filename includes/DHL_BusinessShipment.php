@@ -796,8 +796,13 @@ class DHL_BusinessShipment extends DHL_Version {
 			$data->ShipmentOrder->Shipment->ReturnReceiver = $this->getReturnReceiver()->getClass_v2();
 
 		// Export-Document
-		if($this->getExportDocument() !== null)
-			$data->ShipmentOrder->Shipment->ExportDocument = $this->getExportDocument()->getExportDocumentClass_v2();
+		if($this->getExportDocument() !== null) {
+			try {
+				$data->ShipmentOrder->Shipment->ExportDocument = $this->getExportDocument()->getExportDocumentClass_v2();
+			} catch(Exception $e) {
+				$this->addError($e->getMessage());
+			}
+		}
 
 		// Other Settings
 		if($this->getPrintOnlyIfReceiverIsValid() !== null) {
