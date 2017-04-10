@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 10.04.2017
  * Time: 12:48
- * Update: -
- * Version: 0.0.1
+ * Update: 10.04.2017
+ * Version: 0.0.2
  *
  * Notes: Contains the DHL_ExportDocPosition class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -70,6 +70,31 @@ class DHL_ExportDocPosition {
 	private $customsValue = null;
 
 	/**
+	 * DHL_ExportDocPosition constructor.
+	 *
+	 * @param string $description - Description of the unit / position
+	 * @param string $countryCodeOrigin - Origin Country-ISO-Code
+	 * @param float|int|string $customsTariffNumber - Customs tariff number of the unit / position
+	 * @param int $amount - Quantity of the unit / position
+	 * @param int|float $netWeightInKG - Net weight of the unit / position
+	 * @param int|float $customsValue - Customs value amount of the unit / position
+	 */
+	public function __construct($description, $countryCodeOrigin, $customsTariffNumber, $amount, $netWeightInKG, $customsValue) {
+		if(! $description || ! $countryCodeOrigin || ! $customsTariffNumber || ! $amount || ! $netWeightInKG || ! $customsValue) {
+			error_log('PHP-DHL-API: ' . __CLASS__ . '->' . __FUNCTION__ .
+				': All values must be filled out! (Not null, Not false, Not 0, Not "", Not empty) - Ignore this function for this call now');
+			return;
+		}
+
+		$this->setDescription($description);
+		$this->setCountryCodeOrigin($countryCodeOrigin);
+		$this->setCustomsTariffNumber($customsTariffNumber);
+		$this->setAmount($amount);
+		$this->setNetWeightInKG((float) $netWeightInKG);
+		$this->setCustomsValue((float) $customsValue);
+	}
+
+	/**
 	 * Clears Memory
 	 */
 	public function __destruct() {
@@ -91,7 +116,7 @@ class DHL_ExportDocPosition {
 	/**
 	 * @param string|null $description
 	 */
-	protected function setDescription($description) {
+	private function setDescription($description) {
 		$this->description = $description;
 	}
 
@@ -105,7 +130,7 @@ class DHL_ExportDocPosition {
 	/**
 	 * @param string|null $countryCodeOrigin
 	 */
-	protected function setCountryCodeOrigin($countryCodeOrigin) {
+	private function setCountryCodeOrigin($countryCodeOrigin) {
 		$this->countryCodeOrigin = $countryCodeOrigin;
 	}
 
@@ -119,7 +144,7 @@ class DHL_ExportDocPosition {
 	/**
 	 * @param float|int|string|null $customsTariffNumber
 	 */
-	protected function setCustomsTariffNumber($customsTariffNumber) {
+	private function setCustomsTariffNumber($customsTariffNumber) {
 		$this->customsTariffNumber = $customsTariffNumber;
 	}
 
@@ -133,7 +158,7 @@ class DHL_ExportDocPosition {
 	/**
 	 * @param int|null $amount
 	 */
-	protected function setAmount($amount) {
+	private function setAmount($amount) {
 		$this->amount = $amount;
 	}
 
@@ -147,7 +172,7 @@ class DHL_ExportDocPosition {
 	/**
 	 * @param float|null $netWeightInKG
 	 */
-	protected function setNetWeightInKG($netWeightInKG) {
+	private function setNetWeightInKG($netWeightInKG) {
 		$this->netWeightInKG = $netWeightInKG;
 	}
 
@@ -161,7 +186,7 @@ class DHL_ExportDocPosition {
 	/**
 	 * @param float|null $customsValue
 	 */
-	protected function setCustomsValue($customsValue) {
+	private function setCustomsValue($customsValue) {
 		$this->customsValue = $customsValue;
 	}
 
@@ -181,7 +206,7 @@ class DHL_ExportDocPosition {
 	 *
 	 * @return StdClass - DHL-ExportDocPosition-Class
 	 */
-	protected function getExportDocPositionClass_v2() {
+	public function getExportDocPositionClass_v2() {
 		$class = new StdClass;
 
 		$class->description = $this->getDescription();

@@ -5,7 +5,7 @@
  * Date: 26.01.2017
  * Time: 21:05
  * Update: 10.04.2017
- * Version: 0.0.2
+ * Version: 0.0.3
  *
  * Notes: Contains the DHL_ExportDocument Class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -14,7 +14,7 @@
 /**
  * Class DHL_ExportDocument
  */
-class DHL_ExportDocument extends DHL_ExportDocPosition {
+class DHL_ExportDocument {
 	// Constants for Export-Type
 	const EXPORT_TYPE_OTHER = 'OTHER';
 	const EXPORT_TYPE_PRESENT = 'PRESENT';
@@ -140,10 +140,18 @@ class DHL_ExportDocument extends DHL_ExportDocPosition {
 	private $withElectronicExportNotification = null;
 
 	/**
+	 * Contains the DHL_ExportDocPosition-Class
+	 *
+	 * Note: Optional
+	 *
+	 * @var DHL_ExportDocPosition|null $exportDocPosition - DHL_ExportDocPosition-Class or null if not needed
+	 */
+	private $exportDocPosition = null;
+
+	/**
 	 * Clears Memory
 	 */
 	public function __destruct() {
-		parent::__destruct();
 		unset($this->invoiceNumber);
 		unset($this->exportType);
 		unset($this->exportTypeDescription);
@@ -153,6 +161,7 @@ class DHL_ExportDocument extends DHL_ExportDocPosition {
 		unset($this->permitNumber);
 		unset($this->attestationNumber);
 		unset($this->withElectronicExportNotification);
+		unset($this->exportDocPosition);
 	}
 
 	/**
@@ -282,48 +291,17 @@ class DHL_ExportDocument extends DHL_ExportDocPosition {
 	}
 
 	/**
-	 * Removes all Values from ExportDocPosition-Class
+	 * @return DHL_ExportDocPosition|null
 	 */
-	public function removeExportDocPosition() {
-		$this->setDescription(null);
-		$this->setCountryCodeOrigin(null);
-		$this->setCustomsTariffNumber(null);
-		$this->setAmount(null);
-		$this->setNetWeightInKG(null);
-		$this->setCustomsValue(null);
+	public function getExportDocPosition() {
+		return $this->exportDocPosition;
 	}
 
 	/**
-	 * Set values for ExportDocPosition-Class (Ensure that all are set)
-	 *
-	 * @param string $description - Description of the unit / position
-	 * @param string $countryISOCode - Origin Country-ISO-Code
-	 * // todo/fixme: is this just an int or float?
-	 * @param int|float|string $customsTariffNumber - Customs tariff number of the unit / position
-	 * @param int $amount - Quantity of the unit / position
-	 * @param int|float $netWeightInKG - Net weight of the unit / position
-	 * @param int|float $customsValue - Customs value amount of the unit / position
+	 * @param DHL_ExportDocPosition|null $exportDocPosition
 	 */
-	public function setExportDocPosition(
-		$description,
-		$countryISOCode,
-		$customsTariffNumber,
-		$amount,
-		$netWeightInKG,
-		$customsValue
-	) {
-		if(! $description || ! $countryISOCode || ! $customsTariffNumber || ! $amount || ! $netWeightInKG || ! $customsValue) {
-			error_log('PHP-DHL-API: ' . __CLASS__ . '->' . __FUNCTION__ .
-				': All values must be filled out! (Not null, Not false, Not 0, Not "", Not empty) - Ignore this function for this call now');
-			return;
-		}
-
-		$this->setDescription($description);
-		$this->setCountryCodeOrigin($countryISOCode);
-		$this->setCustomsTariffNumber($customsTariffNumber);
-		$this->setAmount($amount);
-		$this->setNetWeightInKG((float) $netWeightInKG);
-		$this->setCustomsValue((float) $customsValue);
+	public function setExportDocPosition($exportDocPosition) {
+		$this->exportDocPosition = $exportDocPosition;
 	}
 
 	/**
@@ -377,8 +355,10 @@ class DHL_ExportDocument extends DHL_ExportDocPosition {
 		}
 
 		// Check if parent-class is being used
-		if($this->getDescription() !== null) // Check only 1 value bec cannot set separately
-			$class->ExportDocPosition = $this->getExportDocPositionClass_v2();
+		if($this->getExportDocPosition() !== null) {
+			if($this->getExportDocPosition()->getCustomsTariffNumber() !== null)// Check only 1 value bec cannot set separately
+				$class->ExportDocPosition = $this->getExportDocPosition()->getExportDocPositionClass_v2();
+		}
 
 		return $class;
 	}
