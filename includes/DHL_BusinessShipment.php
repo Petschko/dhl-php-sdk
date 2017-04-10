@@ -22,6 +22,7 @@ require_once('DHL_SendPerson.php');
 // Now all other classes
 require_once('DHL_BankData.php');
 require_once('DHL_Credentials.php');
+require_once('DHL_ExportDocPosition.php');
 require_once('DHL_ExportDocument.php');
 require_once('DHL_IdentCheck.php');
 require_once('DHL_Receiver.php');
