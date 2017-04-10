@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 07.04.2017
- * Version: 1.0.0
+ * Update: 10.04.2017
+ * Version: 1.1.0
  *
  * Notes: Contains the DHL-Response Class
  */
@@ -43,7 +43,7 @@ class DHL_Response extends DHL_Version {
 	private $piece_number = null;
 
 	/**
-	 * Label URL/Base64-Data
+	 * Label URL/Base64-Data - Can also have the return label in one
 	 *
 	 * @var null|string $label - Label URL or Base64-Data
 	 */
@@ -55,6 +55,13 @@ class DHL_Response extends DHL_Version {
 	 * @var null|string $returnLabel - Return Label URL/Base64-Data or null if not requested
 	 */
 	private $returnLabel = null;
+
+	/**
+	 * Export-Document-Label-URL/Base64-Data
+	 *
+	 * @var null|string $exportDoc - Export-Document Label URL/Base64-Data or null if not requested
+	 */
+	private $exportDoc = null;
 
 	/**
 	 * Label-Response-Type (Base64 or URL)
@@ -124,6 +131,7 @@ class DHL_Response extends DHL_Version {
 		unset($this->piece_number);
 		unset($this->label);
 		unset($this->returnLabel);
+		unset($this->exportDoc);
 		unset($this->labelType);
 		unset($this->sequenceNumber);
 		unset($this->statusCode);
@@ -185,6 +193,20 @@ class DHL_Response extends DHL_Version {
 	 */
 	private function setReturnLabel($returnLabel) {
 		$this->returnLabel = $returnLabel;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getExportDoc() {
+		return $this->exportDoc;
+	}
+
+	/**
+	 * @param null|string $exportDoc
+	 */
+	private function setExportDoc($exportDoc) {
+		$this->exportDoc = $exportDoc;
 	}
 
 	/**
@@ -289,8 +311,11 @@ class DHL_Response extends DHL_Version {
 	 */
 	private function loadResponse_v2($response) {
 		// Set Status-Values first
-		if(! isset($response->CreationState->LabelData->Status->statusCode) &&
-			! isset($response->LabelData->Status->statusCode)) {
+		if(
+			! isset($response->CreationState->LabelData->Status->statusCode) &&
+			! isset($response->LabelData->Status->statusCode) &&
+			! isset($response->ExportDocData->Status->statusCode)
+		) {
 			// Set fault Status-Code
 			$this->setStatusCode((int) $response->Status->statusCode);
 			$this->setStatusText($response->Status->statusText);
@@ -303,10 +328,14 @@ class DHL_Response extends DHL_Version {
 			$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
 			$this->setStatusText($response->CreationState->LabelData->Status->statusText);
 			$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
-		} else {
+		} else if(isset($response->LabelData->Status->statusCode)) {
 			$this->setStatusCode((int) $response->LabelData->Status->statusCode);
 			$this->setStatusText($response->LabelData->Status->statusText);
 			$this->setStatusMessage($response->LabelData->Status->statusMessage);
+		} else {
+			$this->setStatusCode((int) $response->ExportDocData->Status->statusCode);
+			$this->setStatusText($response->ExportDocData->Status->statusText);
+			$this->setStatusMessage($response->ExportDocData->Status->statusMessage);
 		}
 
 		// Change Status-Code if a weak-validation error occurs
@@ -318,6 +347,8 @@ class DHL_Response extends DHL_Version {
 			$this->setShipmentNumber((string) $response->CreationState->LabelData->shipmentNumber);
 		else if(isset($response->LabelData->shipmentNumber))
 			$this->setShipmentNumber($response->LabelData->shipmentNumber);
+		else if(isset($response->ExportDocData->shipmentNumber))
+			$this->setShipmentNumber($response->ExportDocData->shipmentNumber);
 
 		// Set Label if exists
 		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
@@ -333,14 +364,30 @@ class DHL_Response extends DHL_Version {
 		}
 
 		// Set Return Label if exists
-		if(isset($response->CreationState->LabelData->returnLabelUrl))
-			$this->setReturnLabel($response->CreationState->LabelData->returnLabelUrl);
-		else if(isset($response->CreationState->LabelData->returnLabelData))
-			$this->setReturnLabel($response->CreationState->LabelData->returnLabelData);
-		else if(isset($response->LabelData->returnLabelUrl))
-			$this->setReturnLabel($response->LabelData->returnLabelUrl);
-		else if(isset($response->LabelData->returnLabelData))
-			$this->setReturnLabel($response->LabelData->returnLabelData);
+		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+			if(isset($response->CreationState->LabelData->returnLabelData))
+				$this->setReturnLabel($response->CreationState->LabelData->returnLabelData);
+			else if(isset($response->LabelData->returnLabelData))
+				$this->setReturnLabel($response->LabelData->returnLabelData);
+		} else {
+			if(isset($response->CreationState->LabelData->returnLabelUrl))
+				$this->setReturnLabel($response->CreationState->LabelData->returnLabelUrl);
+			else if(isset($response->LabelData->returnLabelUrl))
+				$this->setReturnLabel($response->LabelData->returnLabelUrl);
+		}
+
+		// Set Export Label if exists
+		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+			if(isset($response->CreationState->LabelData->exportLabelData))
+				$this->setExportDoc($response->CreationState->LabelData->exportLabelData);
+			else if(isset($response->ExportDocData->exportDocData))
+				$this->setExportDoc($response->ExportDocData->exportDocData);
+		} else {
+			if(isset($response->CreationState->LabelData->exportLabelUrl))
+				$this->setExportDoc($response->CreationState->LabelData->exportLabelUrl);
+			else if(isset($response->ExportDocData->exportDocURL))
+				$this->setExportDoc($response->ExportDocData->exportDocURL);
+		}
 
 		// Set all other System values
 		if(isset($response->CreationState->sequenceNumber))
