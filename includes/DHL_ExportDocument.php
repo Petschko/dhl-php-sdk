@@ -155,6 +155,132 @@ class DHL_ExportDocument extends DHL_ExportDocPosition {
 		unset($this->withElectronicExportNotification);
 	}
 
+	/**
+	 * @return float|int|null|string
+	 */
+	public function getInvoiceNumber() {
+		return $this->invoiceNumber;
+	}
+
+	/**
+	 * @param float|int|null|string $invoiceNumber
+	 */
+	public function setInvoiceNumber($invoiceNumber) {
+		$this->invoiceNumber = $invoiceNumber;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getExportType() {
+		return $this->exportType;
+	}
+
+	/**
+	 * @param string $exportType
+	 */
+	public function setExportType($exportType) {
+		$this->exportType = $exportType;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getExportTypeDescription() {
+		return $this->exportTypeDescription;
+	}
+
+	/**
+	 * @param null|string $exportTypeDescription
+	 */
+	public function setExportTypeDescription($exportTypeDescription) {
+		$this->exportTypeDescription = $exportTypeDescription;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getTermsOfTrade() {
+		return $this->termsOfTrade;
+	}
+
+	/**
+	 * @param null|string $termsOfTrade
+	 */
+	public function setTermsOfTrade($termsOfTrade) {
+		$this->termsOfTrade = $termsOfTrade;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPlaceOfCommittal() {
+		return $this->placeOfCommittal;
+	}
+
+	/**
+	 * @param string $placeOfCommittal
+	 */
+	public function setPlaceOfCommittal($placeOfCommittal) {
+		$this->placeOfCommittal = $placeOfCommittal;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getAdditionalFee() {
+		return $this->additionalFee;
+	}
+
+	/**
+	 * @param float $additionalFee
+	 */
+	public function setAdditionalFee($additionalFee) {
+		$this->additionalFee = $additionalFee;
+	}
+
+	/**
+	 * @return float|int|null|string
+	 */
+	public function getPermitNumber() {
+		return $this->permitNumber;
+	}
+
+	/**
+	 * @param float|int|null|string $permitNumber
+	 */
+	public function setPermitNumber($permitNumber) {
+		$this->permitNumber = $permitNumber;
+	}
+
+	/**
+	 * @return float|int|null|string
+	 */
+	public function getAttestationNumber() {
+		return $this->attestationNumber;
+	}
+
+	/**
+	 * @param float|int|null|string $attestationNumber
+	 */
+	public function setAttestationNumber($attestationNumber) {
+		$this->attestationNumber = $attestationNumber;
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	public function getWithElectronicExportNotification() {
+		return $this->withElectronicExportNotification;
+	}
+
+	/**
+	 * @param bool|null $withElectronicExportNotification
+	 */
+	public function setWithElectronicExportNotification($withElectronicExportNotification) {
+		$this->withElectronicExportNotification = $withElectronicExportNotification;
+	}
+
 	public function setExportDocPosition() {
 		// todo ALL parent setter & as param (parent setter protected)
 	}

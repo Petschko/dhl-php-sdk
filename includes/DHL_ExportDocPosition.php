@@ -23,9 +23,9 @@ class DHL_ExportDocPosition {
 	 * Min-Len: -
 	 * Max-Len: 256
 	 *
-	 * @var string $description - Description of the unit / position
+	 * @var string|null $description - Description of the unit / position
 	 */
-	private $description;
+	private $description = null;
 
 	/**
 	 * Origin Country-ISO-Code
@@ -33,9 +33,9 @@ class DHL_ExportDocPosition {
 	 * Min-Len: 2
 	 * Max-Len: 2
 	 *
-	 * @var string $countryCodeOrigin - Origin Country-ISO-Code
+	 * @var string|null $countryCodeOrigin - Origin Country-ISO-Code
 	 */
-	private $countryCodeOrigin;
+	private $countryCodeOrigin = null;
 
 	/**
 	 * Customs tariff number of the unit / position
@@ -44,30 +44,30 @@ class DHL_ExportDocPosition {
 	 * Max-Len: 10
 	 *
 	 * // todo/fixme: is this just an int or float?
-	 * @var int|float|string $customsTariffNumber - Customs tariff number of the unit / position
+	 * @var int|float|string|null $customsTariffNumber - Customs tariff number of the unit / position
 	 */
-	private $customsTariffNumber;
+	private $customsTariffNumber = null;
 
 	/**
 	 * Quantity of the unit / position
 	 *
-	 * @var int $amount - Quantity of the unit / position
+	 * @var int|null $amount - Quantity of the unit / position
 	 */
-	private $amount;
+	private $amount = null;
 
 	/**
 	 * Net weight of the unit / position
 	 *
-	 * @var float $netWeightInKG - Net weight of the unit / position
+	 * @var float|null $netWeightInKG - Net weight of the unit / position
 	 */
-	private $netWeightInKG;
+	private $netWeightInKG = null;
 
 	/**
 	 * Customs value amount of the unit / position
 	 *
-	 * @var float $customsValue - Customs value amount of the unit / position
+	 * @var float|null $customsValue - Customs value amount of the unit / position
 	 */
-	private $customsValue;
+	private $customsValue = null;
 
 	/**
 	 * Clears Memory
@@ -79,6 +79,90 @@ class DHL_ExportDocPosition {
 		unset($this->amount);
 		unset($this->netWeightInKG);
 		unset($this->customsValue);
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getDescription() {
+		return $this->description;
+	}
+
+	/**
+	 * @param string $description
+	 */
+	protected function setDescription($description) {
+		$this->description = $description;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getCountryCodeOrigin() {
+		return $this->countryCodeOrigin;
+	}
+
+	/**
+	 * @param string $countryCodeOrigin
+	 */
+	protected function setCountryCodeOrigin($countryCodeOrigin) {
+		$this->countryCodeOrigin = $countryCodeOrigin;
+	}
+
+	/**
+	 * @return float|int|string|null
+	 */
+	public function getCustomsTariffNumber() {
+		return $this->customsTariffNumber;
+	}
+
+	/**
+	 * @param float|int|string $customsTariffNumber
+	 */
+	protected function setCustomsTariffNumber($customsTariffNumber) {
+		$this->customsTariffNumber = $customsTariffNumber;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getAmount() {
+		return $this->amount;
+	}
+
+	/**
+	 * @param int $amount
+	 */
+	protected function setAmount($amount) {
+		$this->amount = $amount;
+	}
+
+	/**
+	 * @return float|null
+	 */
+	public function getNetWeightInKG() {
+		return $this->netWeightInKG;
+	}
+
+	/**
+	 * @param float $netWeightInKG
+	 */
+	protected function setNetWeightInKG($netWeightInKG) {
+		$this->netWeightInKG = $netWeightInKG;
+	}
+
+	/**
+	 * @return float|null
+	 */
+	public function getCustomsValue() {
+		return $this->customsValue;
+	}
+
+	/**
+	 * @param float $customsValue
+	 */
+	protected function setCustomsValue($customsValue) {
+		$this->customsValue = $customsValue;
 	}
 
 	/**
