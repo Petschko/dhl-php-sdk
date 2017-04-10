@@ -177,12 +177,19 @@ class DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @return StdClass
+	 * Returns a Class for ExportDocPosition
+	 *
+	 * @return StdClass - DHL-ExportDocPosition-Class
 	 */
 	protected function getExportDocPositionClass_v2() {
 		$class = new StdClass;
 
-		// todo implement
+		$class->description = $this->getDescription();
+		$class->countryCodeOrigin = $this->getCountryCodeOrigin();
+		$class->customsTariffNumber = $this->getCustomsTariffNumber();
+		$class->amount = $this->getAmount();
+		$class->netWeightInKG = $this->getNetWeightInKG();
+		$class->customsValue = $this->getCustomsValue();
 
 		return $class;
 	}
