@@ -338,12 +338,47 @@ class DHL_ExportDocument extends DHL_ExportDocPosition {
 	}
 
 	/**
-	 * @return StdClass
+	 * Returns a Class for Export-Document
+	 *
+	 * @return StdClass - DHL-ExportDocument-Class
+	 * @throws Exception - Invalid Data-Exception
 	 */
 	public function getExportDocumentClass_v2() {
 		$class = new StdClass;
 
-		// todo implement
+		// Standard-Export-Stuff
+		if($this->getInvoiceNumber() !== null)
+			$class->invoiceNumber = $this->getInvoiceNumber();
+
+		$class->exportType = $this->getExportType();
+
+		if($this->getExportTypeDescription() !== null)
+			$class->exportTypeDescription = $this->getExportTypeDescription();
+		else if($this->getExportType() === self::EXPORT_TYPE_OTHER)
+			throw new Exception('ExportTypeDescription must filled out if Export-Type is OTHER! - ' .
+				'Export-Class will not generated now');
+
+		if($this->getTermsOfTrade() !== null)
+			$class->termsOfTrade = $this->getTermsOfTrade();
+
+		$class->placeOfCommital = $this->getPlaceOfCommittal();
+		$class->additionalFee = $this->getAdditionalFee();
+
+		if($this->getPermitNumber() !== null)
+			$class->permitNumber = $this->getPermitNumber();
+
+		if($this->getAttestationNumber() !== null)
+			$class->attestationNumber = $this->getAttestationNumber();
+
+		// Add rest (Elements)
+		if($this->getWithElectronicExportNotification() !== null) {
+			$class->WithElectronicExportNtfctn = new StdClass;
+			$class->WithElectronicExportNtfctn->active = (int) $this->getWithElectronicExportNotification();
+		}
+
+		// Check if parent-class is being used
+		if($this->getDescription() !== null) // Check only 1 value bec cannot set separately
+			$class->ExportDocPosition = $this->getExportDocPositionClass_v2();
 
 		return $class;
 	}
