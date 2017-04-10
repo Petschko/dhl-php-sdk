@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 20:14
- * Update: -
- * Version: 0.0.1
+ * Update: 10.04.2017
+ * Version: 0.0.2
  *
  * Notes: Contains DHL_BankData Class
  */
@@ -15,62 +15,76 @@
  */
 class DHL_BankData {
 	/**
+	 * Name of the Account-Owner
+	 *
 	 * Min-Len: -
 	 * Max-Len: 80
 	 *
-	 * @var string $accountOwnerName
+	 * @var string $accountOwnerName - Account-Owner Name
 	 */
 	private $accountOwnerName;
 
 	/**
+	 * Name of the Bank
+	 *
 	 * Min-Len: -
 	 * Max-Len: 80
 	 *
-	 * @var string $bankName
+	 * @var string $bankName - Name of the Bank
 	 */
 	private $bankName;
 
 	/**
+	 * IBAN of the Account
+	 *
 	 * Min-Len: -
 	 * Max-Len: 34
 	 *
-	 * @var string $iban
+	 * @var string $iban - IBAN of the Account
 	 */
 	private $iban;
 
 	/**
+	 * Purpose of bank information
+	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null
+	 * @var string|null $note1 - Purpose of bank information or null for none
 	 */
 	private $note1 = null;
 
 	/**
+	 * Purpose of more bank information
+	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null
+	 * @var string|null $note2 - Purpose of more bank information or null for none
 	 */
 	private $note2 = null;
 
 	/**
+	 * Bank-Information-Code (BankCCL) of bank account.
+	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 11
 	 *
-	 * @var string|null
+	 * @var string|null $bic - Bank-Information-Code (BankCCL) of bank account or null for none
 	 */
 	private $bic = null;
 
 	/**
+	 * Account reference to customer profile
+	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null
+	 * @var string|null $accountReference - Account reference to customer profile
 	 */
 	private $accountReference = null;
 
