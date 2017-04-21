@@ -412,7 +412,7 @@ That's all so far
 
 # Contact
 
-- You can E-Mail me if you have Questions or whatever (No Bug-Reporting please!): peter-91@hotmail.de
+- You can E-Mail me if you have Questions or whatever (No Bug-Reporting please!): peter@petschko.org
 - You can Report Bugs here in the "[Issue](https://github.com/Petschko/dhl-php-sdk/issues)"-Section of the Project.
 	- Of course you can also ask stuff there feel free for that!
 	- If you want to write in German, you can do it, but please think of the other ppl who can't speak German. So better use english, if its a topic that can interesting for other ppl too =)

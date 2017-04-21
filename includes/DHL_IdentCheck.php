@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: Peter Dragicevic [peter-91@hotmail.de]
+ * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:06
