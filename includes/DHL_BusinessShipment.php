@@ -1049,4 +1049,52 @@ class DHL_BusinessShipment extends DHL_Version {
 
 		return $data;
 	}
+
+	/**
+	 * Validates a Shipment
+	 *
+	 * @return bool|DHL_Response - Response or false on error
+	 */
+	public function validateShipment() {
+		switch($this->getMayor()) {
+			case 1:
+				$data = null;
+				break;
+			case 2:
+			default:
+				$data = $this->createShipmentClass_v2();
+		}
+
+		try {
+			$response = $this->sendValidateShipmentRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new DHL_Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Requests the Validation of a Shipment via SOAP
+	 *
+	 * @param Object|array $data - Shipment-Data
+	 * @return Object - DHL-Response
+	 * @throws Exception - Method doesn't exists for Version
+	 */
+	private function sendValidateShipmentRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				throw new Exception(__FUNCTION__ . ': Method doesn\'t exists for Version 1!');
+			case 2:
+			default:
+				return $this->getSoapClient()->validateShipment($data);
+		}
+	}
 }

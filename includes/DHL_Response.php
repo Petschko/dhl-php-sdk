@@ -314,7 +314,8 @@ class DHL_Response extends DHL_Version {
 		if(
 			! isset($response->CreationState->LabelData->Status->statusCode) &&
 			! isset($response->LabelData->Status->statusCode) &&
-			! isset($response->ExportDocData->Status->statusCode)
+			! isset($response->ExportDocData->Status->statusCode) &&
+			! isset($response->ValidationState->Status->statusCode)
 		) {
 			// Set fault Status-Code
 			$this->setStatusCode((int) $response->Status->statusCode);
@@ -332,10 +333,19 @@ class DHL_Response extends DHL_Version {
 			$this->setStatusCode((int) $response->LabelData->Status->statusCode);
 			$this->setStatusText($response->LabelData->Status->statusText);
 			$this->setStatusMessage($response->LabelData->Status->statusMessage);
-		} else {
+		} else if(isset($response->ExportDocData->Status->statusCode)) {
+			// Export-Doc
 			$this->setStatusCode((int) $response->ExportDocData->Status->statusCode);
 			$this->setStatusText($response->ExportDocData->Status->statusText);
 			$this->setStatusMessage($response->ExportDocData->Status->statusMessage);
+		} else {
+			// Validate Shipment
+			$this->setStatusCode((int) $response->ValidationState->Status->statusCode);
+			$this->setStatusText($response->Status->statusText);
+			if(is_array($response->Status->statusMessage))
+				$this->setStatusMessage(implode(';', $response->Status->statusMessage));
+			else
+				$this->setStatusMessage($response->Status->statusMessage);
 		}
 
 		// Change Status-Code if a weak-validation error occurs
@@ -392,6 +402,9 @@ class DHL_Response extends DHL_Version {
 		// Set all other System values
 		if(isset($response->CreationState->sequenceNumber))
 			$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
+		else if(isset($response->ValidationState->sequenceNumber))
+			$this->setSequenceNumber((string) $response->ValidationState->sequenceNumber);
+		var_dump($response);
 	}
 
 	/**
