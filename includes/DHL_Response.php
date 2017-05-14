@@ -404,7 +404,6 @@ class DHL_Response extends DHL_Version {
 			$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
 		else if(isset($response->ValidationState->sequenceNumber))
 			$this->setSequenceNumber((string) $response->ValidationState->sequenceNumber);
-		var_dump($response);
 	}
 
 	/**
