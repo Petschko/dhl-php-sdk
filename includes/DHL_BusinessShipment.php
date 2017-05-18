@@ -937,7 +937,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response);
+			return new DHL_Response($this->getVersion(), $response, $this->getLabelResponseType());
 	}
 
 	/**
