@@ -33,6 +33,7 @@ require_once('DHL_ReturnReceiver.php');
 require_once('DHL_Sender.php');
 require_once('DHL_Service.php');
 require_once('DHL_ShipmentDetails.php');
+require_once('DHL_Products.php');
 
 
 /**
