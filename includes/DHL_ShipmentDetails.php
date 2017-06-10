@@ -4,8 +4,8 @@
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 13:07
- * Update: -
- * Version: 0.0.1
+ * Update: 10.06.2017
+ * Version: 0.0.2
  *
  * Notes: Details for a Shipment (Like size/Weight etc)
  */
@@ -28,8 +28,10 @@ class DHL_ShipmentDetails {
 	 * Product-Types
 	 */
 	const PRODUCT_TYPE_NATIONAL_PACKAGE = 'V01PAK';
+	const PRODUCT_TYPE_NATIONAL_PACKAGE_PRIO = 'V01PRIO';
 	const PRODUCT_TYPE_INTERNATIONAL_PACKAGE = 'V53WPAK';
 	const PRODUCT_TYPE_EUROPA_PACKAGE = 'V54EPAK';
+	const PRODUCT_TYPE_PACKED_CONNECT = 'V55PAK';
 	const PRODUCT_TYPE_SAME_DAY_PACKAGE = 'V06PAK';
 	const PRODUCT_TYPE_SAME_DAY_MESSENGER = 'V06TG';
 	const PRODUCT_TYPE_WISH_TIME_MESSENGER = 'V06WZ';
