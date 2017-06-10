@@ -10,9 +10,9 @@
  */
 
 /**
- * Class DHL_Products
+ * Class DHL_ProductInfo
  */
-class DHL_Products {
+class DHL_ProductInfo {
 	public static $services = array(
 		'preferredNeighbourEnabled' => 'Wunschnachbar',
 		'preferredLocationEnabled' => 'Wunschort',

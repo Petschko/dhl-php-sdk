@@ -25,6 +25,8 @@ require_once('DHL_Credentials.php');
 require_once('DHL_ExportDocPosition.php');
 require_once('DHL_ExportDocument.php');
 require_once('DHL_IdentCheck.php');
+require_once('DHL_Product.php');
+require_once('DHL_ProductInfo.php');
 require_once('DHL_Receiver.php');
 	require_once('DHL_Filial.php');
 	require_once('DHL_PackStation.php');
@@ -33,7 +35,6 @@ require_once('DHL_ReturnReceiver.php');
 require_once('DHL_Sender.php');
 require_once('DHL_Service.php');
 require_once('DHL_ShipmentDetails.php');
-require_once('DHL_Products.php');
 
 
 /**
