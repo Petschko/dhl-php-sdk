@@ -47,12 +47,15 @@ class DHL_ShipmentDetails {
 	private $product = self::PRODUCT_TYPE_NATIONAL_PACKAGE;
 
 	/**
-	 * Contains the Account-Number (10 Digits) plus 0101 | todo: figure out for what 0101 is
-	 *
+	 * Contains the
+	 * EPK Account Number         (10 Digits) Example 123457890
+	 * concat Product Type Number (2 Digits)  Example 01 for V01PAK or 53 for V53WPAK or 07 for Retoure Online
+	 * concat Process Type Number (2 Digits)  Example 01 for default or 02 for block pricing/flat fee
+	 *                                         = 1234578900101  
 	 * Min-Len: 14
 	 * Max-Len: 14
 	 *
-	 * @var string $accountNumber - Account-Number plus 0101
+	 * @var string $accountNumber - Account-Number plus Product Type Number plus Process Type Number
 	 */
 	private $accountNumber;
 
