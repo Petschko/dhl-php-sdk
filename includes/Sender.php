@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,13 +10,15 @@
  * Update: -
  * Version: 0.0.1
  *
- * Notes: Contains the DHL_Sender Class
+ * Notes: Contains the Sender Class
  */
 
+use stdClass;
+
 /**
- * Class DHL_Sender
+ * Class Sender
  */
-class DHL_Sender extends DHL_SendPerson {
+class Sender extends SendPerson {
 	/**
 	 * Returns a Class for the DHL-SendPerson
 	 *

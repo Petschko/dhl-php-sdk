@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,15 +10,17 @@
  * Update: 20.03.2017
  * Version: 1.0.0
  *
- * Notes: Contains the DHL_Receiver class
+ * Notes: Contains the Receiver class
  */
 
+use stdClass;
+
 /**
- * Class DHL_Receiver
+ * Class Receiver
  */
-class DHL_Receiver extends DHL_SendPerson {
+class Receiver extends SendPerson {
 	/**
-	 * DHL_Receiver constructor.
+	 * Receiver constructor.
 	 */
 	public function __construct() {
 		parent::__construct();

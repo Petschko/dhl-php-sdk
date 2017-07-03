@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -10,10 +13,12 @@
  * Notes: Details for a Shipment (Like size/Weight etc)
  */
 
+use stdClass;
+
 /**
- * Class DHL_ShipmentDetails
+ * Class ShipmentDetails
  */
-class DHL_ShipmentDetails {
+class ShipmentDetails {
 	/**
 	 * DHL-Package-Type "Palette"
 	 */
@@ -51,7 +56,7 @@ class DHL_ShipmentDetails {
 	 * EPK Account Number         (10 Digits) Example 123457890
 	 * concat Product Type Number (2 Digits)  Example 01 for V01PAK or 53 for V53WPAK or 07 for Retoure Online
 	 * concat Process Type Number (2 Digits)  Example 01 for default or 02 for block pricing/flat fee
-	 *                                         = 1234578900101  
+	 *                                         = 1234578900101
 	 * Min-Len: 14
 	 * Max-Len: 14
 	 *
@@ -147,7 +152,7 @@ class DHL_ShipmentDetails {
 	private $packageType = self::PACKAGE;
 
 	/**
-	 * DHL_ShipmentDetails constructor.
+	 * ShipmentDetails constructor.
 	 *
 	 * @param string $accountNumber - Account-Number
 	 */

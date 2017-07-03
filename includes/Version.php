@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -10,10 +13,12 @@
  * Notes: Contains all Version-Specific Functions
  */
 
+use stdClass;
+
 /**
- * Class DHL_Version
+ * Class Version
  */
-abstract class DHL_Version {
+abstract class Version {
 	/**
 	 * Current-Version
 	 *
@@ -36,7 +41,7 @@ abstract class DHL_Version {
 	private $minor;
 
 	/**
-	 * DHL_Version constructor.
+	 * Version constructor.
 	 *
 	 * @param string $version
 	 */

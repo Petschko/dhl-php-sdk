@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -11,9 +14,9 @@
  */
 
 /**
- * Class DHL_Response
+ * Class Response
  */
-class DHL_Response extends DHL_Version {
+class Response extends Version {
 	/**
 	 * Contains Status-Code-Values
 	 */
@@ -99,7 +102,7 @@ class DHL_Response extends DHL_Version {
 	private $statusMessage = null;
 
 	/**
-	 * DHL_Response constructor.
+	 * Response constructor.
 	 *
 	 * @param string $version - Current DHL-Version
 	 * @param null|Object $response - DHL-Response
@@ -293,7 +296,7 @@ class DHL_Response extends DHL_Version {
 			$this->setPieceNumber((string) $response->CreationState->PieceInformation->PieceNumber->licensePlate);
 
 		// Set Label if exists
-		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
 			if(isset($response->CreationState->Labeldata)) // todo: is valid???
 				$this->setLabel($response->CreationState->Labeldata);
 		} else if(isset($response->CreationState->Labelurl))
@@ -361,7 +364,7 @@ class DHL_Response extends DHL_Version {
 			$this->setShipmentNumber($response->ExportDocData->shipmentNumber);
 
 		// Set Label if exists
-		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
 			if(isset($response->CreationState->LabelData->labelData))
 				$this->setLabel($response->CreationState->LabelData->labelData);
 			else if(isset($response->LabelData->labelData))
@@ -374,7 +377,7 @@ class DHL_Response extends DHL_Version {
 		}
 
 		// Set Return Label if exists
-		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
 			if(isset($response->CreationState->LabelData->returnLabelData))
 				$this->setReturnLabel($response->CreationState->LabelData->returnLabelData);
 			else if(isset($response->LabelData->returnLabelData))
@@ -387,7 +390,7 @@ class DHL_Response extends DHL_Version {
 		}
 
 		// Set Export Label if exists
-		if($this->getLabelType() === DHL_BusinessShipment::RESPONSE_TYPE_B64) {
+		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
 			if(isset($response->CreationState->LabelData->exportLabelData))
 				$this->setExportDoc($response->CreationState->LabelData->exportLabelData);
 			else if(isset($response->ExportDocData->exportDocData))

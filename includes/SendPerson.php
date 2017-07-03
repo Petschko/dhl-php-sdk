@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,13 +10,15 @@
  * Update: -
  * Version: 0.0.1
  *
- * Notes: Contains DHL_SendPerson Class
+ * Notes: Contains SendPerson Class
  */
 
+use stdClass;
+
 /**
- * Class DHL_SendPerson
+ * Class SendPerson
  */
-abstract class DHL_SendPerson extends DHL_Address {
+abstract class SendPerson extends Address {
 	/**
 	 * Name of the SendPerson (Can be a Company-Name too!)
 	 *
@@ -80,7 +85,7 @@ abstract class DHL_SendPerson extends DHL_Address {
 	private $contactPerson = null;
 
 	/**
-	 * DHL_SendPerson constructor.
+	 * SendPerson constructor.
 	 */
 	public function __construct() {
 		parent::__construct();

@@ -1,4 +1,6 @@
 <?php
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -10,10 +12,12 @@
  * Notes: Contains all stuff for Ident-Check
  */
 
+use stdClass;
+
 /**
- * Class DHL_IdentCheck
+ * Class IdentCheck
  */
-class DHL_IdentCheck {
+class IdentCheck {
 	/**
 	 * Contains the Last-Name of the Person
 	 *
@@ -45,7 +49,7 @@ class DHL_IdentCheck {
 	private $minimumAge;
 
 	/**
-	 * DHL_IdentCheck constructor.
+	 * IdentCheck constructor.
 	 *
 	 * @param string $lastName - Last-Name
 	 * @param string $firstName - First-Name

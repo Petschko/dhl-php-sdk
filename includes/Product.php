@@ -1,17 +1,20 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
  * Date: 10.06.2017
  * Time: 19:34
  *
- * Notes: Contains DHL_Product-Class
+ * Notes: Contains Product-Class
  */
 
 /**
- * Class DHL_Product
+ * Class Product
  */
-class DHL_Product {
+class Product {
 	/**
 	 * Contains the Product-Type
 	 *
@@ -90,7 +93,7 @@ class DHL_Product {
 	private $services = array();
 
 	/**
-	 * DHL_Product constructor.
+	 * Product constructor.
 	 *
 	 * @param string $type - Product-Type
 	 */

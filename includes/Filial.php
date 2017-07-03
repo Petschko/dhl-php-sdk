@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,13 +10,15 @@
  * Update: -
  * Version: 0.0.1
  *
- * Notes: Contains the DHL_Filial Class
+ * Notes: Contains the Filial Class
  */
 
+use stdClass;
+
 /**
- * Class DHL_Filial
+ * Class Filial
  */
-class DHL_Filial extends DHL_Receiver {
+class Filial extends Receiver {
 	/**
 	 * Contains the Post-Number
 	 *
@@ -35,7 +40,7 @@ class DHL_Filial extends DHL_Receiver {
 	private $filialNumber = '';
 
 	/**
-	 * DHL_PackStation constructor.
+	 * PackStation constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
