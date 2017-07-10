@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -10,37 +13,15 @@
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
 
-// Set correct encoding
-mb_internal_encoding('UTF-8');
-
-// Get required classes
-// Abstract classes first
-require_once('DHL_Version.php');
-require_once('DHL_Address.php');
-require_once('DHL_SendPerson.php');
-
-// Now all other classes
-require_once('DHL_BankData.php');
-require_once('DHL_Credentials.php');
-require_once('DHL_ExportDocPosition.php');
-require_once('DHL_ExportDocument.php');
-require_once('DHL_IdentCheck.php');
-require_once('DHL_Product.php');
-require_once('DHL_ProductInfo.php');
-require_once('DHL_Receiver.php');
-	require_once('DHL_Filial.php');
-	require_once('DHL_PackStation.php');
-require_once('DHL_Response.php');
-require_once('DHL_ReturnReceiver.php');
-require_once('DHL_Sender.php');
-require_once('DHL_Service.php');
-require_once('DHL_ShipmentDetails.php');
-
+use Exception;
+use SoapClient;
+use SoapHeader;
+use stdClass;
 
 /**
- * Class DHL_BusinessShipment
+ * Class BusinessShipment
  */
-class DHL_BusinessShipment extends DHL_Version {
+class BusinessShipment extends Version {
 	/**
 	 * DHL Origin WSDL-Lib-URL
 	 */
@@ -108,18 +89,18 @@ class DHL_BusinessShipment extends DHL_Version {
 
 	// Object-Fields
 	/**
-	 * Contains the DHL_Credentials Object
+	 * Contains the Credentials Object
 	 *
 	 * Notes: Is required every time! Used to login
 	 *
-	 * @var DHL_Credentials $credentials - DHL_Credentials Object
+	 * @var Credentials $credentials - Credentials Object
 	 */
 	private $credentials;
 
 	/**
 	 * Contains the Shipment Details
 	 *
-	 * @var DHL_ShipmentDetails $shipmentDetails - Shipment Details Object
+	 * @var ShipmentDetails $shipmentDetails - Shipment Details Object
 	 */
 	private $shipmentDetails;
 
@@ -128,7 +109,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var DHL_Service|null $service - Service Object
+	 * @var Service|null $service - Service Object
 	 */
 	private $service = null;
 
@@ -137,21 +118,21 @@ class DHL_BusinessShipment extends DHL_Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var DHL_BankData|null $bank - Bank-Object
+	 * @var BankData|null $bank - Bank-Object
 	 */
 	private $bank = null;
 
 	/**
 	 * Contains the Sender-Object
 	 *
-	 * @var DHL_Sender $sender - Sender Object
+	 * @var Sender $sender - Sender Object
 	 */
 	private $sender;
 
 	/**
 	 * Contains the Receiver-Object
 	 *
-	 * @var DHL_Receiver|DHL_PackStation|DHL_Filial $receiver - Receiver Object
+	 * @var Receiver|PackStation|Filial $receiver - Receiver Object
 	 */
 	private $receiver;
 
@@ -160,7 +141,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var DHL_ReturnReceiver|null $returnReceiver - Return Receiver Object
+	 * @var ReturnReceiver|null $returnReceiver - Return Receiver Object
 	 */
 	private $returnReceiver = null;
 
@@ -169,7 +150,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var DHL_ExportDocument|null $exportDocument - Export-Document-Settings Object
+	 * @var ExportDocument|null $exportDocument - Export-Document-Settings Object
 	 */
 	private $exportDocument = null;
 
@@ -224,9 +205,9 @@ class DHL_BusinessShipment extends DHL_Version {
 	private $customAPIURL = null;
 
 	/**
-	 * DHL_BusinessShipment constructor.
+	 * BusinessShipment constructor.
 	 *
-	 * @param DHL_Credentials $credentials - DHL-Credentials-Object
+	 * @param Credentials $credentials - DHL-Credentials-Object
 	 * @param bool $testModus - Uses the Sandbox-Modus or Live (True uses test-Modus)
 	 * @param null|string $version - Version to use or null for the newest
 	 */
@@ -242,7 +223,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 		// Set Credentials
 		if($this->isTest()) {
-			$c = new DHL_Credentials(true);
+			$c = new Credentials(true);
 			$c->setApiUser($credentials->getApiUser());
 			$c->setApiPassword($credentials->getApiPassword());
 
@@ -251,8 +232,8 @@ class DHL_BusinessShipment extends DHL_Version {
 
 		$this->setCredentials($credentials);
 
-		// Set DHL_Shipment-Class
-		$this->setShipmentDetails(new DHL_ShipmentDetails($credentials->getEpk(10) . '0101'));
+		// Set Shipment-Class
+		$this->setShipmentDetails(new ShipmentDetails($credentials->getEpk(10) . '0101'));
 	}
 
 	/**
@@ -384,112 +365,112 @@ class DHL_BusinessShipment extends DHL_Version {
 	}
 
 	/**
-	 * @return DHL_Credentials
+	 * @return Credentials
 	 */
 	private function getCredentials() {
 		return $this->credentials;
 	}
 
 	/**
-	 * @param DHL_Credentials $credentials
+	 * @param Credentials $credentials
 	 */
 	public function setCredentials($credentials) {
 		$this->credentials = $credentials;
 	}
 
 	/**
-	 * @return DHL_ShipmentDetails
+	 * @return ShipmentDetails
 	 */
 	public function getShipmentDetails() {
 		return $this->shipmentDetails;
 	}
 
 	/**
-	 * @param DHL_ShipmentDetails $shipmentDetails
+	 * @param ShipmentDetails $shipmentDetails
 	 */
 	public function setShipmentDetails($shipmentDetails) {
 		$this->shipmentDetails = $shipmentDetails;
 	}
 
 	/**
-	 * @return DHL_Service|null
+	 * @return Service|null
 	 */
 	public function getService() {
 		return $this->service;
 	}
 
 	/**
-	 * @param DHL_Service|null $service
+	 * @param Service|null $service
 	 */
 	public function setService($service) {
 		$this->service = $service;
 	}
 
 	/**
-	 * @return DHL_BankData|null
+	 * @return BankData|null
 	 */
 	public function getBank() {
 		return $this->bank;
 	}
 
 	/**
-	 * @param DHL_BankData|null $bank
+	 * @param BankData|null $bank
 	 */
 	public function setBank($bank) {
 		$this->bank = $bank;
 	}
 
 	/**
-	 * @return DHL_Sender
+	 * @return Sender
 	 */
 	public function getSender() {
 		return $this->sender;
 	}
 
 	/**
-	 * @param DHL_Sender $sender
+	 * @param Sender $sender
 	 */
 	public function setSender($sender) {
 		$this->sender = $sender;
 	}
 
 	/**
-	 * @return DHL_Receiver
+	 * @return Receiver
 	 */
 	public function getReceiver() {
 		return $this->receiver;
 	}
 
 	/**
-	 * @param DHL_Receiver $receiver
+	 * @param Receiver $receiver
 	 */
 	public function setReceiver($receiver) {
 		$this->receiver = $receiver;
 	}
 
 	/**
-	 * @return DHL_ReturnReceiver|null
+	 * @return ReturnReceiver|null
 	 */
 	public function getReturnReceiver() {
 		return $this->returnReceiver;
 	}
 
 	/**
-	 * @param DHL_ReturnReceiver|null $returnReceiver
+	 * @param ReturnReceiver|null $returnReceiver
 	 */
 	public function setReturnReceiver($returnReceiver) {
 		$this->returnReceiver = $returnReceiver;
 	}
 
 	/**
-	 * @return DHL_ExportDocument|null
+	 * @return ExportDocument|null
 	 */
 	public function getExportDocument() {
 		return $this->exportDocument;
 	}
 
 	/**
-	 * @param DHL_ExportDocument|null $exportDocument
+	 * @param ExportDocument|null $exportDocument
 	 */
 	public function setExportDocument($exportDocument) {
 		$this->exportDocument = $exportDocument;
@@ -638,7 +619,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * Creates the doManifest-Request
 	 *
 	 * @param string $shipmentNumber - Shipment-Number for Manifest
-	 * @return bool|DHL_Response - false on error or DHL-Response Object
+	 * @return bool|Response - false on error or DHL-Response Object
 	 */
 	public function doManifest($shipmentNumber) {
 		switch($this->getMayor()) {
@@ -663,7 +644,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response);
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**
@@ -714,7 +695,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	/**
 	 * Creates the Shipment-Request
 	 *
-	 * @return bool|DHL_Response - false on error or DHL-Response Object
+	 * @return bool|Response - false on error or DHL-Response Object
 	 */
 	public function createShipment() {
 		switch($this->getMayor()) {
@@ -742,7 +723,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response, $this->getLabelResponseType());
+			return new Response($this->getVersion(), $response, $this->getLabelResponseType());
 	}
 
 	/**
@@ -837,7 +818,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * Deletes a Shipment
 	 *
 	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
-	 * @return bool|DHL_Response - Response
+	 * @return bool|Response - Response
 	 */
 	public function deleteShipment($shipmentNumber) {
 		switch($this->getMayor()) {
@@ -862,7 +843,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response);
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**
@@ -914,7 +895,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * Requests a Shipment-Label again
 	 *
 	 * @param string $shipmentNumber - Shipment-Number of the Label
-	 * @return bool|DHL_Response - Response or false on error
+	 * @return bool|Response - Response or false on error
 	 */
 	public function getShipmentLabel($shipmentNumber) {
 		switch($this->getMayor()) {
@@ -939,7 +920,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response, $this->getLabelResponseType());
+			return new Response($this->getVersion(), $response, $this->getLabelResponseType());
 	}
 
 	/**
@@ -993,7 +974,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	 * Requests a Export-Document again
 	 *
 	 * @param string $shipmentNumber - Shipment-Number of the Export-Document
-	 * @return bool|DHL_Response - Response or false on error
+	 * @return bool|Response - Response or false on error
 	 */
 	public function getExportDoc($shipmentNumber) {
 		switch($this->getMayor()) {
@@ -1018,7 +999,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response);
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**
@@ -1055,7 +1036,7 @@ class DHL_BusinessShipment extends DHL_Version {
 	/**
 	 * Validates a Shipment
 	 *
-	 * @return bool|DHL_Response - Response or false on error
+	 * @return bool|Response - Response or false on error
 	 */
 	public function validateShipment() {
 		switch($this->getMayor()) {
@@ -1080,7 +1061,7 @@ class DHL_BusinessShipment extends DHL_Version {
 
 			return false;
 		} else
-			return new DHL_Response($this->getVersion(), $response);
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**

@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,19 +10,21 @@
  * Update: -
  * Version: 0.0.1
  *
- * Notes: Contains the DHL_Service Class
+ * Notes: Contains the Service Class
  */
 
+use stdClass;
+
 /**
- * Class DHL_Service
+ * Class Service
  */
-class DHL_Service {
+class Service {
 	/**
 	 * Contains if the Shipment should delivered on a specific Day
 	 *
 	 * Note: Optional
 	 * Available for:
-	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
+	 *  ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
 	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 *
 	 * @var bool|null $dayOfDeliveryEnabled - Is this enabled | null uses default
@@ -434,12 +439,12 @@ class DHL_Service {
 	 *
 	 * Note: Optional|Required if $indentCheckEnabled
 	 *
-	 * @var DHL_IdentCheck|null $identCheckObj - Ident-Check Object
+	 * @var IdentCheck|null $identCheckObj - Ident-Check Object
 	 */
 	private $identCheckObj = null;
 
 	/**
-	 * DHL_Service constructor.
+	 * Service constructor.
 	 */
 	public function __construct() {
 		// VOID
@@ -1008,14 +1013,14 @@ class DHL_Service {
 	}
 
 	/**
-	 * @return DHL_IdentCheck|null
+	 * @return IdentCheck|null
 	 */
 	public function getIdentCheckObj() {
 		return $this->identCheckObj;
 	}
 
 	/**
-	 * @param DHL_IdentCheck|null $identCheckObj
+	 * @param IdentCheck|null $identCheckObj
 	 */
 	public function setIdentCheckObj($identCheckObj) {
 		$this->identCheckObj = $identCheckObj;
@@ -1044,8 +1049,8 @@ class DHL_Service {
 		if($this->getDayOfDeliveryEnabled() !== null && in_array(
 			$productType,
 			array(
-				DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
-				DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+				ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
+				ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 			))) {
 			$class->DayOfDelivery = new StdClass;
 			$class->DayOfDelivery->active = (int) $this->getDayOfDeliveryEnabled();
@@ -1054,8 +1059,8 @@ class DHL_Service {
 		if($this->getDeliveryTimeframeEnabled() !== null && in_array(
 				$productType,
 				array(
-					DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
-					DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
+					ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 				))) {
 			$class->DeliveryTimeframe = new StdClass;
 			$class->DeliveryTimeframe->active = (int) $this->getDeliveryTimeframeEnabled();
@@ -1064,8 +1069,8 @@ class DHL_Service {
 		if($this->getPreferredTimeEnabled() !== null && in_array(
 				$productType,
 				array(
-					DHL_ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE,
-					DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
+					ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE,
+					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
 				))) {
 			$class->PreferredTime = new StdClass;
 			$class->PreferredTime->active = (int) $this->getPreferredTimeEnabled();
@@ -1074,8 +1079,8 @@ class DHL_Service {
 		if($this->getIndividualSenderRequiredmentsEnabled() !== null && in_array(
 				$productType,
 				array(
-					DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
-					DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
+					ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 				))) {
 			$class->IndividualSenderRequirement = new StdClass;
 			$class->IndividualSenderRequirement->active = (int) $this->getIndividualSenderRequiredmentsEnabled();
@@ -1088,7 +1093,7 @@ class DHL_Service {
 		if($this->getReturnImmediatlyIfShipmentFailed() !== null && in_array(
 				$productType,
 				array(
-					DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
+					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
 				))) {
 			$class->ReturnImmediately = new StdClass;
 			$class->ReturnImmediately->active = (int) $this->getReturnImmediatlyIfShipmentFailed();
@@ -1100,8 +1105,8 @@ class DHL_Service {
 		if($this->getShipmentHandlingEnabled() !== null && in_array(
 				$productType,
 				array(
-					DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
-					DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
+					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
+					ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 				))) {
 			$class->ShipmentHandling = new StdClass;
 			$class->ShipmentHandling->active = (int) $this->getShipmentHandlingEnabled();

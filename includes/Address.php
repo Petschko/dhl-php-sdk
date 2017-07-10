@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -11,9 +14,9 @@
  */
 
 /**
- * Class DHL_Address
+ * Class Address
  */
-abstract class DHL_Address {
+abstract class Address {
 	/**
 	 * Contains the Street Name (without number)
 	 *
@@ -110,7 +113,7 @@ abstract class DHL_Address {
 	private $state = null;
 
 	/**
-	 * DHL_Address constructor.
+	 * Address constructor.
 	 */
 	public function __construct() {
 		// VOID

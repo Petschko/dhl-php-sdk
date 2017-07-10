@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,16 +10,18 @@
  * Update: 10.04.2017
  * Version: 0.0.2
  *
- * Notes: Contains the DHL_ExportDocPosition class
+ * Notes: Contains the ExportDocPosition class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
  */
 
+use stdClass;
+
 /**
- * Class DHL_ExportDocPosition
+ * Class ExportDocPosition
  *
  * Note: If min 1 value is filled out, all other values are required (else none is required)
  */
-class DHL_ExportDocPosition {
+class ExportDocPosition {
 	/**
 	 * Description of the unit / position
 	 *
@@ -70,7 +75,7 @@ class DHL_ExportDocPosition {
 	private $customsValue = null;
 
 	/**
-	 * DHL_ExportDocPosition constructor.
+	 * ExportDocPosition constructor.
 	 *
 	 * @param string $description - Description of the unit / position
 	 * @param string $countryCodeOrigin - Origin Country-ISO-Code

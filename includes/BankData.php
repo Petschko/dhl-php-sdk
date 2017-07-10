@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,13 +10,15 @@
  * Update: 10.04.2017
  * Version: 0.0.2
  *
- * Notes: Contains DHL_BankData Class
+ * Notes: Contains BankData Class
  */
 
+use stdClass;
+
 /**
- * Class DHL_BankData
+ * Class BankData
  */
-class DHL_BankData {
+class BankData {
 	/**
 	 * Name of the Account-Owner
 	 *
@@ -89,7 +94,7 @@ class DHL_BankData {
 	private $accountReference = null;
 
 	/**
-	 * DHL_BankData constructor.
+	 * BankData constructor.
 	 */
 	public function __construct() {
 		// VOID

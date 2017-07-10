@@ -1,0 +1,18 @@
+{
+    "name": "petschko/dhl-php-sdk",
+    "description": "DHL SDK",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Dragicevic",
+            "email": "peter@petschko.org"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Petschko\\DHL\\": "includes/"
+        }
+    }
+}

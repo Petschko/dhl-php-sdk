@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,13 +10,13 @@
  * Update: -
  * Version: 0.0.1
  *
- * Notes: Contains the DHL_Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
+ * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
  */
 
 /**
- * Class DHL_Credentials
+ * Class Credentials
  */
-class DHL_Credentials {
+class Credentials {
 	/**
 	 * DHL Business-API Test-User
 	 */
@@ -88,7 +91,7 @@ class DHL_Credentials {
 	private $api_password = '';
 
 	/**
-	 * DHL_Credentials constructor.
+	 * Credentials constructor.
 	 *
 	 * If Test-Modus is true it will set Test-User, Test-Signature, Test-EPK for you!
 	 *

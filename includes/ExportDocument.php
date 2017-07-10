@@ -1,4 +1,7 @@
 <?php
+
+namespace Petschko\DHL;
+
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
  * Authors-Website: http://petschko.org/
@@ -7,14 +10,17 @@
  * Update: 10.04.2017
  * Version: 0.0.3
  *
- * Notes: Contains the DHL_ExportDocument Class
+ * Notes: Contains the ExportDocument Class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
  */
 
+use Exception;
+use stdClass;
+
 /**
- * Class DHL_ExportDocument
+ * Class ExportDocument
  */
-class DHL_ExportDocument {
+class ExportDocument {
 	// Constants for Export-Type
 	const EXPORT_TYPE_OTHER = 'OTHER';
 	const EXPORT_TYPE_PRESENT = 'PRESENT';
@@ -53,7 +59,7 @@ class DHL_ExportDocument {
 	 * DOCUMENT
 	 * RETURN_OF_GOODS
 	 *
-	 * @var string $exportType - Export-Type (Can assigned with DHL_ExportDocument::EXPORT_TYPE_{TYPE} or as value)
+	 * @var string $exportType - Export-Type (Can assigned with ExportDocument::EXPORT_TYPE_{TYPE} or as value)
 	 */
 	private $exportType;
 
@@ -81,7 +87,7 @@ class DHL_ExportDocument {
 	 * DDU - DDU - Delivery Duty Paid
 	 * DDX - Delivery duty paid (excl. Duties, taxes and VAT)
 	 *
-	 * @var string|null $termsOfTrade - Terms of trades (Can assigned with DHL_ExportDocument::TERMS_OF_TRADE_{TYPE})
+	 * @var string|null $termsOfTrade - Terms of trades (Can assigned with ExportDocument::TERMS_OF_TRADE_{TYPE})
 	 * 									or null for none
 	 */
 	private $termsOfTrade = null;
@@ -140,11 +146,11 @@ class DHL_ExportDocument {
 	private $withElectronicExportNotification = null;
 
 	/**
-	 * Contains the DHL_ExportDocPosition-Class
+	 * Contains the ExportDocPosition-Class
 	 *
 	 * Note: Optional
 	 *
-	 * @var DHL_ExportDocPosition|null $exportDocPosition - DHL_ExportDocPosition-Class or null if not needed
+	 * @var ExportDocPosition|null $exportDocPosition - ExportDocPosition-Class or null if not needed
 	 */
 	private $exportDocPosition = null;
 
@@ -291,14 +297,14 @@ class DHL_ExportDocument {
 	}
 
 	/**
-	 * @return DHL_ExportDocPosition|null
+	 * @return ExportDocPosition|null
 	 */
 	public function getExportDocPosition() {
 		return $this->exportDocPosition;
 	}
 
 	/**
-	 * @param DHL_ExportDocPosition|null $exportDocPosition
+	 * @param ExportDocPosition|null $exportDocPosition
 	 */
 	public function setExportDocPosition($exportDocPosition) {
 		$this->exportDocPosition = $exportDocPosition;
