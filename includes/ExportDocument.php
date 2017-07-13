@@ -146,11 +146,11 @@ class ExportDocument {
 	private $withElectronicExportNotification = null;
 
 	/**
-	 * Contains the ExportDocPosition-Class
+	 * Contains the ExportDocPosition-Class(es)
 	 *
 	 * Note: Optional
 	 *
-	 * @var ExportDocPosition|null $exportDocPosition - ExportDocPosition-Class or null if not needed
+	 * @var ExportDocPosition|array|null $exportDocPosition - ExportDocPosition-Class or an array with ExportDocPosition-Objects or null if not needed
 	 */
 	private $exportDocPosition = null;
 
@@ -297,17 +297,37 @@ class ExportDocument {
 	}
 
 	/**
-	 * @return ExportDocPosition|null
+	 * @return ExportDocPosition|array|null
 	 */
 	public function getExportDocPosition() {
 		return $this->exportDocPosition;
 	}
 
 	/**
-	 * @param ExportDocPosition|null $exportDocPosition
+	 * @param ExportDocPosition|array|null $exportDocPosition
 	 */
 	public function setExportDocPosition($exportDocPosition) {
 		$this->exportDocPosition = $exportDocPosition;
+	}
+
+	/**
+	 * Adds an ExportDocPosition-Object to the current Object
+	 *
+	 * If the ExportDocPosition was null before, then it will add the entry normal (backwards compatibility)
+	 * If the ExportDocPosition was an array before, it just add it to the array
+	 * If the ExportDocPosition was just 1 entry before, it will converted to an array with both entries
+	 *
+	 * @param ExportDocPosition $exportDocPosition - Object to add
+	 */
+	public function addExportDocPosition($exportDocPosition) {
+		if($this->getExportDocPosition() === null)
+			$this->setExportDocPosition($exportDocPosition);
+		else if(is_array($this->getExportDocPosition()))
+			$this->exportDocPosition[] = $exportDocPosition;
+		else {
+			// Convert the first existing entry to an array
+			$this->setExportDocPosition(array($this->getExportDocPosition(), $exportDocPosition));
+		}
 	}
 
 	/**
@@ -360,10 +380,15 @@ class ExportDocument {
 			$class->WithElectronicExportNtfctn->active = (int) $this->getWithElectronicExportNotification();
 		}
 
-		// Check if parent-class is being used
+		// Check if child-class is being used
 		if($this->getExportDocPosition() !== null) {
-			if($this->getExportDocPosition()->getCustomsTariffNumber() !== null)// Check only 1 value bec cannot set separately
+			// Handle non-arrays... (Backward compatibility)
+			if(! is_array($this->getExportDocPosition()))
 				$class->ExportDocPosition = $this->getExportDocPosition()->getExportDocPositionClass_v2();
+			else {
+				foreach($this->getExportDocPosition() as $key => &$exportDoc)
+					$class->ExportDocPosition[$key] = $exportDoc->getExportDocPositionClass_v2();
+			}
 		}
 
 		return $class;

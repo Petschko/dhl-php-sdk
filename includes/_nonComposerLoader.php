@@ -22,6 +22,7 @@ require_once('SendPerson.php');
 
 // Now all other classes
 require_once('BankData.php');
+require_once('BusinessShipment.php');
 require_once('Credentials.php');
 require_once('ExportDocPosition.php');
 require_once('ExportDocument.php');
@@ -36,6 +37,3 @@ require_once('ReturnReceiver.php');
 require_once('Sender.php');
 require_once('Service.php');
 require_once('ShipmentDetails.php');
-
-// Now the Base-Class
-require_once('BusinessShipment.php');
