@@ -261,18 +261,6 @@ class BusinessShipment extends Version {
 	}
 
 	/**
-	 * Get the full Server-URL to the WSDL-Directory or as Fallback value the URL to the DHL-Lib
-	 *
-	 * @return string - Server URL Pointing to the /includes/lib/ (WSDL-Dir)
-	 */
-	private static function getWSDLDirURL() {
-		$path = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' .
-			trim(str_replace(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '', str_replace('\\', '/', __DIR__)), '/') . '/lib/';
-
-		return (parse_url($path) === false) ? self::DHL_WSDL_LIB_URL : $path;
-	}
-
-	/**
 	 * Get the Business-API-URL for this Version
 	 *
 	 * @return string - Business-API-URL
@@ -282,8 +270,7 @@ class BusinessShipment extends Version {
 		if($this->getCustomAPIURL() !== null)
 			return $this->getCustomAPIURL();
 
-		// todo check if up to date & if file exists
-		return self::getWSDLDirURL() . $this->getVersion() . '/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
+		return self::DHL_WSDL_LIB_URL . $this->getVersion() . '/geschaeftskundenversand-api-' . $this->getVersion() . '.wsdl';
 	}
 
 	/**
