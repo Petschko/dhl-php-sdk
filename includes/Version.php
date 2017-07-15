@@ -7,8 +7,6 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:04
- * Update: -
- * Version: 0.0.1
  *
  * Notes: Contains all Version-Specific Functions
  */
@@ -43,7 +41,7 @@ abstract class Version {
 	/**
 	 * Version constructor.
 	 *
-	 * @param string $version
+	 * @param string $version - Version of the DHL-API, you want to use
 	 */
 	protected function __construct($version) {
 		$this->setVersion($version);
@@ -59,7 +57,9 @@ abstract class Version {
 	}
 
 	/**
-	 * @return string
+	 * Getter for Current-Version
+	 *
+	 * @return string - Current-Version
 	 */
 	public function getVersion() {
 		return $this->version;
@@ -81,28 +81,36 @@ abstract class Version {
 	}
 
 	/**
-	 * @return int
+	 * Getter for Mayor-Version-Number
+	 *
+	 * @return int - Mayor-Version-Number
 	 */
 	public function getMayor() {
 		return $this->mayor;
 	}
 
 	/**
-	 * @param int $mayor
+	 * Setter for Mayor-Version-Number
+	 *
+	 * @param int $mayor - Mayor-Version-Number
 	 */
 	private function setMayor($mayor) {
 		$this->mayor = $mayor;
 	}
 
 	/**
-	 * @return int
+	 * Getter for Minor-Version-Number
+	 *
+	 * @return int - Minor-Version-Number
 	 */
 	public function getMinor() {
 		return $this->minor;
 	}
 
 	/**
-	 * @param int $minor
+	 * Setter for Minor-Version-Number
+	 *
+	 * @param int $minor - Minor-Version-Number
 	 */
 	private function setMinor($minor) {
 		$this->minor = $minor;
@@ -121,11 +129,4 @@ abstract class Version {
 
 		return $class;
 	}
-
-	/**
-	 * Gets the API-URL by Version
-	 *
-	 * @return string - API-Url
-	 */
-	protected abstract function getAPIUrl();
 }

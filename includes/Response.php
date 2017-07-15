@@ -7,10 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 10.04.2017
- * Version: 1.1.0
  *
- * Notes: Contains the DHL-Response Class
+ * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
 
 /**
@@ -18,7 +16,16 @@ namespace Petschko\DHL;
  */
 class Response extends Version {
 	/**
-	 * Contains Status-Code-Values
+	 * Contains Status-Code-Values:
+	 *
+	 * - Response::DHL_ERROR_NOT_SET -> Status-Code was not set
+	 * - Response::DHL_ERROR_NO_ERROR -> No Error occurred
+	 * - Response::DHL_ERROR_WEAK_WARNING -> A week warning has occurred
+	 * - Response::DHL_ERROR_SERVICE_TMP_NOT_AVAILABLE -> DHL-API Service is not available
+	 * - Response::DHL_ERROR_GENERAL -> General Error
+	 * - Response::DHL_ERROR_AUTH_FAILED -> Authentication has failed
+	 * - Response::DHL_ERROR_HARD_VAL_ERROR -> A hard-validation Error has occurred
+	 * - Response::DHL_ERROR_UNKNOWN_SHIPMENT_NUMBER -> Given Shipment-Number is unknown
 	 */
 	const DHL_ERROR_NOT_SET = -1;
 	const DHL_ERROR_NO_ERROR = 0;
@@ -48,42 +55,51 @@ class Response extends Version {
 	/**
 	 * Label URL/Base64-Data - Can also have the return label in one
 	 *
-	 * @var null|string $label - Label URL or Base64-Data
+	 * @var null|string $label - Label-URL or Base64-Label-Data
 	 */
 	private $label = null;
 
 	/**
 	 * Return Label URL/Base64-Data
 	 *
-	 * @var null|string $returnLabel - Return Label URL/Base64-Data or null if not requested
+	 * @var null|string $returnLabel - Return Label-URL/Base64-Label-Data or null if not requested
 	 */
 	private $returnLabel = null;
 
 	/**
 	 * Export-Document-Label-URL/Base64-Data
 	 *
-	 * @var null|string $exportDoc - Export-Document Label URL/Base64-Data or null if not requested
+	 * @var null|string $exportDoc - Export-Document Label-URL/Base64-Label-Data or null if not requested
 	 */
 	private $exportDoc = null;
 
 	/**
 	 * Label-Response-Type (Base64 or URL)
 	 *
-	 * @var null|string $labelType - Label-Response-Type
+	 * @var null|string $labelType - Label-Response-Type (Base64 or URL)
 	 */
 	private $labelType;
 
 	/**
-	 * Sequence-Number
+	 * Sequence-Number (Useful for AJAX-Requests)
 	 *
-	 * @var string|null $sequenceNumber - Sequence-Number of the Request (Useful for AJAX-Requests)
+	 * @var string|null $sequenceNumber - Sequence-Number of the Request
 	 */
 	private $sequenceNumber = null;
 
 	/**
 	 * Contains the Status-Code
 	 *
-	 * @var int $statusCode - Status-Code see DHL_ERROR_* Constance's
+	 * - Response::DHL_ERROR_NOT_SET (-1) -> Status-Code was not set
+	 * - Response::DHL_ERROR_NO_ERROR (0) -> No Error occurred
+	 * - Response::DHL_ERROR_WEAK_WARNING (1) -> A week warning has occurred
+	 * - Response::DHL_ERROR_SERVICE_TMP_NOT_AVAILABLE (500) -> DHL-API Service is not available
+	 * - Response::DHL_ERROR_GENERAL (1000)-> General Error
+	 * - Response::DHL_ERROR_AUTH_FAILED (1001) -> Authentication has failed
+	 * - Response::DHL_ERROR_HARD_VAL_ERROR (1101) -> A hard-validation Error has occurred
+	 * - Response::DHL_ERROR_UNKNOWN_SHIPMENT_NUMBER (2000) -> Given Shipment-Number is unknown
+	 *
+	 * @var int $statusCode - Status-Code
 	 */
 	private $statusCode = self::DHL_ERROR_NOT_SET;
 
@@ -104,9 +120,11 @@ class Response extends Version {
 	/**
 	 * Response constructor.
 	 *
+	 * Loads the correct Version and loads the Response if not null into this Object
+	 *
 	 * @param string $version - Current DHL-Version
-	 * @param null|Object $response - DHL-Response
-	 * @param null|string $labelType - Label-Response-Type
+	 * @param null|Object $response - DHL-Response or null for none
+	 * @param null|string $labelType - Label-Response-Type (Base64 or URL) or null for default (URL)
 	 */
 	public function __construct($version, $response = null, $labelType = null) {
 		parent::__construct($version);
@@ -143,140 +161,202 @@ class Response extends Version {
 	}
 
 	/**
-	 * @return null|string
+	 * Getter for Shipment-Number
+	 *
+	 * @return null|string - Shipment-Number or null if not set
 	 */
 	public function getShipmentNumber() {
 		return $this->shipment_number;
 	}
 
 	/**
-	 * @param null|string $shipment_number
+	 * Setter for Shipment-Number
+	 *
+	 * @param null|string $shipment_number - Shipment-Number or null for not set
 	 */
 	private function setShipmentNumber($shipment_number) {
 		$this->shipment_number = $shipment_number;
 	}
 
 	/**
-	 * @return null|string
+	 * TODO DOCUMENT ME
+	 *
+	 * Getter for piece_number
+	 *
+	 * @return null|string - null if not set else piece_number (just used in API-Version 1)
 	 */
 	public function getPieceNumber() {
 		return $this->piece_number;
 	}
 
 	/**
-	 * @param null|string $piece_number
+	 * TODO DOCUMENT ME
+	 *
+	 * Setter for piece_number
+	 *
+	 * @param null|string $piece_number - null for not set else piece_number (just used in API-Version 1)
 	 */
 	private function setPieceNumber($piece_number) {
 		$this->piece_number = $piece_number;
 	}
 
 	/**
-	 * @return null|string
+	 * Getter for Label
+	 *
+	 * @return null|string - Label URL/Base64-Data (Can also contain the return label) or null if not set
 	 */
 	public function getLabel() {
 		return $this->label;
 	}
 
 	/**
-	 * @param null|string $label
+	 * Setter for Label
+	 *
+	 * @param null|string $label - Label URL/Base64-Data (Can also contain the return label) or null for not set
 	 */
 	private function setLabel($label) {
 		$this->label = $label;
 	}
 
 	/**
-	 * @return null|string
+	 * Getter for ReturnLabel
+	 *
+	 * @return null|string - Return Label-URL/Base64-Label-Data or null if not requested/set
 	 */
 	public function getReturnLabel() {
 		return $this->returnLabel;
 	}
 
 	/**
-	 * @param null|string $returnLabel
+	 * Setter for ReturnLabel
+	 *
+	 * @param null|string $returnLabel - Return Label-URL/Base64-Label-Data or null for not requested/set
 	 */
 	private function setReturnLabel($returnLabel) {
 		$this->returnLabel = $returnLabel;
 	}
 
 	/**
-	 * @return null|string
+	 * Getter for Export-Document
+	 *
+	 * @return null|string - Export-Document Label-URL/Base64-Label-Data or null if not requested/set
 	 */
 	public function getExportDoc() {
 		return $this->exportDoc;
 	}
 
 	/**
-	 * @param null|string $exportDoc
+	 * Setter for Export-Document
+	 *
+	 * @param null|string $exportDoc - Export-Document Label-URL/Base64-Label-Data or null for not requested/set
 	 */
 	private function setExportDoc($exportDoc) {
 		$this->exportDoc = $exportDoc;
 	}
 
 	/**
-	 * @return null|string
+	 * Getter for Label-Response-Type
+	 *
+	 * @return null|string - Label-Response-Type (Base64 or URL) or null for default (URL)
 	 */
 	private function getLabelType() {
 		return $this->labelType;
 	}
 
 	/**
-	 * @param null|string $labelType
+	 * Setter for Label-Response-Type
+	 *
+	 * @param null|string $labelType - Label-Response-Type (Base64 or URL) or null for default (URL)
 	 */
 	private function setLabelType($labelType) {
 		$this->labelType = $labelType;
 	}
 
 	/**
-	 * @return string|null
+	 * Getter for Sequence-Number
+	 *
+	 * @return string|null - Sequence-Number of the Request or null if not set
 	 */
 	public function getSequenceNumber() {
 		return $this->sequenceNumber;
 	}
 
 	/**
-	 * @param string|null $sequenceNumber
+	 * Setter for Sequence-Number
+	 *
+	 * @param string|null $sequenceNumber - Sequence-Number of the Request or null for not set
 	 */
 	private function setSequenceNumber($sequenceNumber) {
 		$this->sequenceNumber = $sequenceNumber;
 	}
 
 	/**
-	 * @return int
+	 * Getter for Status-Code
+	 *
+	 * - Response::DHL_ERROR_NOT_SET (-1) -> Status-Code was not set
+	 * - Response::DHL_ERROR_NO_ERROR (0) -> No Error occurred
+	 * - Response::DHL_ERROR_WEAK_WARNING (1) -> A week warning has occurred
+	 * - Response::DHL_ERROR_SERVICE_TMP_NOT_AVAILABLE (500) -> DHL-API Service is not available
+	 * - Response::DHL_ERROR_GENERAL (1000)-> General Error
+	 * - Response::DHL_ERROR_AUTH_FAILED (1001) -> Authentication has failed
+	 * - Response::DHL_ERROR_HARD_VAL_ERROR (1101) -> A hard-validation Error has occurred
+	 * - Response::DHL_ERROR_UNKNOWN_SHIPMENT_NUMBER (2000) -> Given Shipment-Number is unknown
+	 *
+	 * @return int - Status-Code
 	 */
 	public function getStatusCode() {
 		return $this->statusCode;
 	}
 
 	/**
-	 * @param int $statusCode
+	 * Setter for Status-Code
+	 *
+	 * - Response::DHL_ERROR_NOT_SET (-1) -> Status-Code was not set
+	 * - Response::DHL_ERROR_NO_ERROR (0) -> No Error occurred
+	 * - Response::DHL_ERROR_WEAK_WARNING (1) -> A week warning has occurred
+	 * - Response::DHL_ERROR_SERVICE_TMP_NOT_AVAILABLE (500) -> DHL-API Service is not available
+	 * - Response::DHL_ERROR_GENERAL (1000)-> General Error
+	 * - Response::DHL_ERROR_AUTH_FAILED (1001) -> Authentication has failed
+	 * - Response::DHL_ERROR_HARD_VAL_ERROR (1101) -> A hard-validation Error has occurred
+	 * - Response::DHL_ERROR_UNKNOWN_SHIPMENT_NUMBER (2000) -> Given Shipment-Number is unknown
+	 *
+	 * @param int $statusCode - Status-Code
 	 */
 	private function setStatusCode($statusCode) {
 		$this->statusCode = $statusCode;
 	}
 
 	/**
-	 * @return string|null
+	 * Getter for Status-Text
+	 *
+	 * @return string|null - Status-Text or null if not set
 	 */
 	public function getStatusText() {
 		return $this->statusText;
 	}
 
 	/**
-	 * @param string|null $statusText
+	 * Setter for Status-Text
+	 *
+	 * @param string|null $statusText - Status-Text or null for not set
 	 */
 	private function setStatusText($statusText) {
 		$this->statusText = $statusText;
 	}
 
 	/**
-	 * @return string|null
+	 * Getter for Status-Message
+	 *
+	 * @return string|null - Status-Message or null if not set
 	 */
 	public function getStatusMessage() {
 		return $this->statusMessage;
 	}
 
 	/**
-	 * @param string|null $statusMessage
+	 * Setter for Status-Message
+	 *
+	 * @param string|null $statusMessage - Status-Message or null for not set
 	 */
 	private function setStatusMessage($statusMessage) {
 		$this->statusMessage = $statusMessage;
@@ -407,17 +487,5 @@ class Response extends Version {
 			$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
 		else if(isset($response->ValidationState->sequenceNumber))
 			$this->setSequenceNumber((string) $response->ValidationState->sequenceNumber);
-	}
-
-	/**
-	 * Returns null
-	 *
-	 * This function is not used here!
-	 *
-	 * @return null
-	 */
-	protected final function getAPIUrl() {
-		// VOID - unused here
-		return null;
 	}
 }
