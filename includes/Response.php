@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 18.11.2016
  * Time: 16:00
  * Update: 10.04.2017
- * Version: 1.1.0
+ * Version: 1.1.0.1
  *
  * Notes: Contains the DHL-Response Class
  */
@@ -95,9 +95,9 @@ class Response extends Version {
 	private $statusText = null;
 
 	/**
-	 * Contains the Status-Message (Mostly more detailed, but longer)
+	 * Contains the Status-Message (Mostly more detailed, but longer) - Array if multiple Messages
 	 *
-	 * @var string|null $statusMessage - Status-Message
+	 * @var string|array|null $statusMessage - Status-Message
 	 */
 	private $statusMessage = null;
 
@@ -269,14 +269,14 @@ class Response extends Version {
 	}
 
 	/**
-	 * @return string|null
+	 * @return string|array|null
 	 */
 	public function getStatusMessage() {
 		return $this->statusMessage;
 	}
 
 	/**
-	 * @param string|null $statusMessage
+	 * @param string|array|null $statusMessage
 	 */
 	private function setStatusMessage($statusMessage) {
 		$this->statusMessage = $statusMessage;
