@@ -14,5 +14,9 @@
         "psr-4": {
             "Petschko\\DHL\\": "includes/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "vlucas/phpdotenv": "^2.4"
     }
 }
