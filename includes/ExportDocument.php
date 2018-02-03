@@ -386,7 +386,8 @@ class ExportDocument {
 			if(! is_array($this->getExportDocPosition()))
 				$class->ExportDocPosition = $this->getExportDocPosition()->getExportDocPositionClass_v2();
 			else {
-				foreach($this->getExportDocPosition() as $key => &$exportDoc)
+				$pos = $this->getExportDocPosition();
+				foreach($pos as $key => &$exportDoc)
 					$class->ExportDocPosition[$key] = $exportDoc->getExportDocPositionClass_v2();
 			}
 		}
