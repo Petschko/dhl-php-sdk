@@ -9,9 +9,7 @@
             "email": "peter@petschko.org"
         }
     ],
-    "require": {
-        "petschko/dhl-php-sdk": "0.2.0"
-    },
+    "require": {},
     "autoload": {
         "psr-4": {
             "Petschko\\DHL\\": "includes/"
