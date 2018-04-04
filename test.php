@@ -25,7 +25,7 @@ if(! $testModus) {
 }
 
 // Set your API-Login
-$credentials->setApiUser('');			// Test-Modus: Your DHL-Dev-Account | Production: Your Applications-ID
+$credentials->setApiUser('');			// Test-Modus: Your DHL-Dev-Account (Developer-ID NOT E-Mail!!) | Production: Your Applications-ID
 $credentials->setApiPassword('');		// Test-Modus: Your DHL-Dev-Account Password | Production: Your Applications-Token
 
 // Set Shipment Details
