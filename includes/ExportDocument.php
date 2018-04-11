@@ -41,8 +41,7 @@ class ExportDocument {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * // todo/fixme: is this just an int or float?
-	 * @var int|float|string|null $invoiceNumber - Invoice-Number or null for none
+	 * @var string|null $invoiceNumber - Invoice-Number or null for none
 	 */
 	private $invoiceNumber = null;
 

@@ -48,8 +48,7 @@ class ExportDocPosition {
 	 * Min-Len: -
 	 * Max-Len: 10
 	 *
-	 * // todo/fixme: is this just an int or float?
-	 * @var int|float|string|null $customsTariffNumber - Customs tariff number of the unit / position
+	 * @var string|null $customsTariffNumber - Customs tariff number of the unit / position (HS-code)
 	 */
 	private $customsTariffNumber = null;
 
@@ -79,13 +78,13 @@ class ExportDocPosition {
 	 *
 	 * @param string $description - Description of the unit / position
 	 * @param string $countryCodeOrigin - Origin Country-ISO-Code
-	 * @param float|int|string $customsTariffNumber - Customs tariff number of the unit / position
+	 * @param string|null $customsTariffNumber - Customs tariff number of the unit / position (HS-code)
 	 * @param int $amount - Quantity of the unit / position
 	 * @param int|float $netWeightInKG - Net weight of the unit / position
 	 * @param int|float $customsValue - Customs value amount of the unit / position
 	 */
 	public function __construct($description, $countryCodeOrigin, $customsTariffNumber, $amount, $netWeightInKG, $customsValue) {
-		if(! $description || ! $countryCodeOrigin || ! $customsTariffNumber || ! $amount || ! $netWeightInKG || ! $customsValue) {
+		if(! $description || ! $countryCodeOrigin || ! $amount || ! $netWeightInKG || ! $customsValue) {
 			error_log('PHP-DHL-API: ' . __CLASS__ . '->' . __FUNCTION__ .
 				': All values must be filled out! (Not null, Not false, Not 0, Not "", Not empty) - Ignore this function for this call now');
 			return;
