@@ -225,11 +225,11 @@ You don't need to create the `\Petschko\DHL\ReturnReceiver` Object if you don't 
 
 You can also setup more details for your Shipment by using the `\Petschko\DHL\Service` Object. It's an optional Object but may you should look, what you can set to this Object.
 
-I'll not explain the Service-Object because there are to many settings. Please look into the Service-PHP-File by yourself. The fields are well documented.
+I'll not explain the Service-Object because there are too many settings. Please look into the Service-PHP-File by yourself. The fields are well documented.
 
 ##### \Petschko\DHL\BankData Object
 
-You can also use the `\Petschko\DHL\BankData` Object, but I don't know whenever you need this... But may you need it?
+You can also use the `\Petschko\DHL\BankData` Object. Bank data can be provided for different purposes. E.g. if COD is booked as service, bank data must be provided by DHL customer (mandatory server logic). The collected money will be transferred to specified bank account.
 
 You can look to the PHP-File of the `\Petschko\DHL\BankData`-Object, and checkout what you can set there. I will not explain it here.
 
@@ -440,14 +440,14 @@ That's all so far
 
 - You can E-Mail me if you have Questions or whatever (No Bug-Reporting please!): peter@petschko.org
 - You can Report Bugs here in the "[Issue](https://github.com/Petschko/dhl-php-sdk/issues)"-Section of the Project.
-	- Of course you can also ask stuff there feel free for that!
-	- If you want to write in German, you can do it, but please think of the other ppl who can't speak German. So better use english, if its a topic that can interesting for other ppl too =)
+	- Of course you can also ask any stuff there, feel free for that!
+	- If you want to use German, you can do it. Please keep in mind that not everybody can speak German, so it's better to use english =)
 
 ## Version 1 Code
 
 You can find my old Version here:
 [Download old Code](https://github.com/Petschko/dhl-php-sdk/releases/download/v0.1/dhl-php-sdk_v0.1.zip)
 
-You can also look to the Code from the guy, where I initial forked that repo. But there is not much code of him left in my current Version. But may you can use his Code better than mine... (His Version supports just DHL-SOAP-Version 1)
+You can also look at the Tobias Redmann's Code, I initially forked that repo. There are not a lot of his code left in my current Version, but you can find his Code better than mine... (His Version supports just DHL-SOAP-Version 1)
 
 He also Build several Plugins for Wordpress + Woocommerce in the past. Check his [GitHub-Page](https://github.com/tobias-redmann) or his [Homepage](http://www.tricd.de)
