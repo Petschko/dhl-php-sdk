@@ -30,7 +30,19 @@ class ShipmentDetails {
 	const PACKAGE = 'PK';
 
 	/**
-	 * Product-Types
+	 * Product-Type Values:
+	 *
+	 * - ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE -> National-Package
+	 * - ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE_PRIO -> National-Package-Prio
+	 * - ShipmentDetails::PRODUCT_TYPE_INTERNATIONAL_PACKAGE -> International-Package
+	 * - ShipmentDetails::PRODUCT_TYPE_EUROPA_PACKAGE -> Europa-Package
+	 * - ShipmentDetails::PRODUCT_TYPE_PACKED_CONNECT -> Packed Connect
+	 * - ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE -> Same-Day Package
+	 * - ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER -> Same Day Messenger
+	 * - ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER -> Wish Time Messenger
+	 * - ShipmentDetails::PRODUCT_TYPE_AUSTRIA_PACKAGE -> Austria Package
+	 * - ShipmentDetails::PRODUCT_TYPE_AUSTRIA_INTERNATIONAL_PACKAGE -> Austria International Package
+	 * - ShipmentDetails::PRODUCT_TYPE_CONNECT_PACKAGE -> Connect Package
 	 */
 	const PRODUCT_TYPE_NATIONAL_PACKAGE = 'V01PAK';
 	const PRODUCT_TYPE_NATIONAL_PACKAGE_PRIO = 'V01PRIO';
@@ -47,7 +59,7 @@ class ShipmentDetails {
 	/**
 	 * Contains which Product is used
 	 *
-	 * @var string $product - Product to use
+	 * @var string $product - Product to use (Default National Package)
 	 */
 	private $product = self::PRODUCT_TYPE_NATIONAL_PACKAGE;
 
