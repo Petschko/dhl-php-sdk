@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 17.03.2017
  * Time: 12:09
- * Update: 20.03.2017
- * Version: 1.0.2
+ * Update: 14.07.2018
+ * Version: 1.0.3
  *
  * Notes: Contains the PackStation class
  */
@@ -38,13 +38,6 @@ class PackStation extends Receiver {
 	 * @var string $packStationNumber - Pack-Station-Number
 	 */
 	private $packStationNumber = '';
-
-	/**
-	 * PackStation constructor.
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
 
 	/**
 	 * Clears Memory

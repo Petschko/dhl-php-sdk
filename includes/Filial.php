@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 20.03.2017
  * Time: 13:23
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains the Filial Class
  */
@@ -38,13 +38,6 @@ class Filial extends Receiver {
 	 * @var string $filialNumber - Post-Filial-Number
 	 */
 	private $filialNumber = '';
-
-	/**
-	 * PackStation constructor.
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
 
 	/**
 	 * Clears Memory

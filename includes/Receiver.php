@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 28.01.2017
  * Time: 19:17
- * Update: 20.03.2017
- * Version: 1.0.0
+ * Update: 14.07.2018
+ * Version: 1.0.1
  *
  * Notes: Contains the Receiver class
  */
@@ -19,20 +19,6 @@ use stdClass;
  * Class Receiver
  */
 class Receiver extends SendPerson {
-	/**
-	 * Receiver constructor.
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
-
-	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		parent::__destruct();
-	}
-
 	/**
 	 * Returns a Class for the DHL-SendPerson
 	 *

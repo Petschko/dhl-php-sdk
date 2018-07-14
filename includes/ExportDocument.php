@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 21:05
- * Update: 10.04.2017
- * Version: 0.0.3
+ * Update: 14.07.2018
+ * Version: 0.0.4
  *
  * Notes: Contains the ExportDocument Class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -152,6 +152,13 @@ class ExportDocument {
 	 * @var ExportDocPosition|array|null $exportDocPosition - ExportDocPosition-Class or an array with ExportDocPosition-Objects or null if not needed
 	 */
 	private $exportDocPosition = null;
+
+	/**
+	 * ExportDocument constructor.
+	 */
+	public function __construct() {
+		// VOID
+	}
 
 	/**
 	 * Clears Memory

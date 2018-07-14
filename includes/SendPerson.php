@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:17
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains SendPerson Class
  */
@@ -83,13 +83,6 @@ abstract class SendPerson extends Address {
 	 * @var string|null $contactPerson - Contact Person
 	 */
 	private $contactPerson = null;
-
-	/**
-	 * SendPerson constructor.
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
 
 	/**
 	 * Clears Memory
