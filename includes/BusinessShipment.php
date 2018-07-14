@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 10.04.2017
- * Version: 1.3.0
+ * Update: 14.07.2018
+ * Version: 1.3.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -233,7 +233,7 @@ class BusinessShipment extends Version {
 		$this->setCredentials($credentials);
 
 		// Set Shipment-Class
-		$this->setShipmentDetails(new ShipmentDetails($credentials->getEpk(10) . '0101'));
+		$this->setShipmentDetails(new ShipmentDetails($credentials->getEkp(10) . '0101'));
 	}
 
 	/**

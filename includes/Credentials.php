@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 15.09.2016
  * Time: 14:26
  * Update: 14.07.2018
- * Version: 0.0.2
+ * Version: 0.0.3
  *
  * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
  */
@@ -28,9 +28,10 @@ class Credentials {
 	const DHL_BUSINESS_TEST_USER_PASSWORD = 'pass';
 
 	/**
-	 * DHL Business-API Test-EPK
+	 * DHL Business-API Test-EKP
 	 */
-	const DHL_BUSINESS_TEST_EPK = '2222222222';
+	const DHL_BUSINESS_TEST_EPK = '2222222222'; // Still in here for backward compatibility
+	const DHL_BUSINESS_TEST_EKP = '2222222222';
 
 	/**
 	 * Contains the DHL-Intraship Username
@@ -57,12 +58,12 @@ class Credentials {
 	/**
 	 * Contains the DHL-Customer ID
 	 *
-	 * TEST: Use the Test-EPK for Business-Shipment - Use in constructor true as 1st param
+	 * TEST: Use the Test-EKP for Business-Shipment - Use in constructor true as 1st param
 	 * LIVE: Your DHL-Customer-Number (At least the first 10 Numbers - Can be more)
 	 *
-	 * @var string $epk - DHL-Customer ID
+	 * @var string $ekp - DHL-Customer ID
 	 */
-	private $epk = '';
+	private $ekp = '';
 
 	/**
 	 * Contains the App ID from the developer Account
@@ -93,7 +94,7 @@ class Credentials {
 	/**
 	 * Credentials constructor.
 	 *
-	 * If Test-Modus is true it will set Test-User, Test-Signature, Test-EPK for you!
+	 * If Test-Modus is true it will set Test-User, Test-Signature, Test-EKP for you!
 	 *
 	 * @param bool $useTest - Use Test-Modus or Live Modus (true = test | false = live)
 	 */
@@ -101,7 +102,7 @@ class Credentials {
 		if($useTest) {
 			$this->setUser(self::DHL_BUSINESS_TEST_USER);
 			$this->setSignature(self::DHL_BUSINESS_TEST_USER_PASSWORD);
-			$this->setEpk(self::DHL_BUSINESS_TEST_EPK);
+			$this->setEkp(self::DHL_BUSINESS_TEST_EKP);
 		}
 	}
 
@@ -111,83 +112,144 @@ class Credentials {
 	public function __destruct() {
 		unset($this->user);
 		unset($this->signature);
-		unset($this->epk);
+		unset($this->ekp);
 		unset($this->apiUser);
 		unset($this->apiPassword);
 	}
 
 	/**
-	 * @return string
+	 * Get the DHL-Intraship Username
+	 *
+	 * @return string - DHL-Intraship Username
 	 */
 	public function getUser() {
 		return $this->user;
 	}
 
 	/**
-	 * Sets the User in lower case
+	 * Sets the DHL-Intraship Username in lower case
 	 *
-	 * @param string $user - Username
+	 * @param string $user - DHL-Intraship Username
 	 */
 	public function setUser($user) {
 		$this->user = mb_strtolower($user);
 	}
 
 	/**
-	 * @return string
+	 * Get the DHL-Intraship Password
+	 *
+	 * @return string - DHL-Intraship Password
 	 */
 	public function getSignature() {
 		return $this->signature;
 	}
 
 	/**
-	 * @param string $signature
+	 * Set the DHL-Intraship Password
+	 *
+	 * @param string $signature - DHL-Intraship Password
 	 */
 	public function setSignature($signature) {
 		$this->signature = $signature;
 	}
 
 	/**
-	 * Get the first 10 Digits of the EPK
+	 * Get the first 10 Digits of the EKP
 	 *
 	 * @param null|int $len - Max-Chars to get from this String or null for all
-	 * @return string - EPK-Number with x Chars
+	 * @return string - EKP-Number with x Chars
+	 */
+	public function getEkp($len = null) {
+		return mb_substr($this->ekp, 0, $len);
+	}
+
+	/**
+	 * Alias for $this->getEkp
+	 *
+	 * @param null|int $len - Max-Chars to get from this String or null for all
+	 * @return string - EKP-Number with x Chars
+	 *
+	 * @deprecated - Invalid name of the function
 	 */
 	public function getEpk($len = null) {
-		return mb_substr($this->epk, 0, $len);
+		trigger_error('Called deprecated method ' . __METHOD__ . ': Use getEkp() instead, this method will removed in the future!');
+
+		return $this->getEkp($len);
 	}
 
 	/**
-	 * @param string $epk
+	 * Set the EKP-Number
+	 *
+	 * @param string $ekp - EKP-Number
 	 */
-	public function setEpk($epk) {
-		$this->epk = $epk;
+	public function setEkp($ekp) {
+		$this->ekp = $ekp;
 	}
 
 	/**
-	 * @return string
+	 * Alias for $this->setEkp
+	 *
+	 * @param string $ekp - EKP-Number
+	 *
+	 * @deprecated - Invalid name of the function
+	 */
+	public function setEpk($ekp) {
+		trigger_error('Called deprecated method ' . __METHOD__ . ': Use setEkp() instead, this method will removed in the future!');
+
+		$this->ekp = $ekp;
+	}
+
+	/**
+	 * Get the API-User
+	 *
+	 * @return string - API-User
 	 */
 	public function getApiUser() {
 		return $this->apiUser;
 	}
 
 	/**
-	 * @param string $apiUser
+	 * Set the API-User
+	 *
+	 * @param string $apiUser - API-User
 	 */
 	public function setApiUser($apiUser) {
 		$this->apiUser = $apiUser;
 	}
 
 	/**
-	 * @return string
+	 * Get the API-Password/Key
+	 *
+	 * @return string - API-Password/Key
 	 */
 	public function getApiPassword() {
 		return $this->apiPassword;
 	}
 
 	/**
-	 * @param string $apiPassword
+	 * Alias for $this->getApiPassword
+	 *
+	 * @return string - API-Password/Key
+	 */
+	public function getApiKey() {
+		return $this->getApiPassword();
+	}
+
+	/**
+	 * Set the API-Password/Key
+	 *
+	 * @param string $apiPassword - API-Password/Key
 	 */
 	public function setApiPassword($apiPassword) {
 		$this->apiPassword = $apiPassword;
+	}
+
+	/**
+	 * Alias for $this->setApiPassword
+	 *
+	 * @param string $apiKey - API-Password/Key
+	 */
+	public function setApiKey($apiKey) {
+		$this->setApiPassword($apiKey);
 	}
 }

@@ -15,13 +15,13 @@ $testModus = true;
 $version = '2.2';
 $reference = '1'; // You can use anything here (max 35 chars)
 
-// Set this to true then you can skip set the "User", "Signature" and "EPK" (Just for test-Modus) else false or empty
+// Set this to true then you can skip set the "User", "Signature" and "EKP" (Just for test-Modus) else false or empty
 $credentials = new Credentials($testModus);
 
 if(! $testModus) {
 	$credentials->setUser('Your-DHL-Account');	// Don't needed if initialed with true - Test-Modus
 	$credentials->setSignature('Your-DHL-Account-Password'); // Don't needed if initialed with true - Test-Modus
-	$credentials->setEpk('EPK-Account-Number');	// Don't needed if initialed with true - Test-Modus
+	$credentials->setEkp('EKP-Account-Number');	// Don't needed if initialed with true - Test-Modus
 }
 
 // Set your API-Login
@@ -29,9 +29,9 @@ $credentials->setApiUser('');			// Test-Modus: Your DHL-Dev-Account (Developer-I
 $credentials->setApiPassword('');		// Test-Modus: Your DHL-Dev-Account Password | Production: Your Applications-Token
 
 // Set Shipment Details
-$shipmentDetails = new ShipmentDetails($credentials->getEpk(10) . '0101'); // Create a Shipment-Details with the first 10 digits of your EPK-Number and 0101 (?)
+$shipmentDetails = new ShipmentDetails($credentials->getEkp(10) . '0101'); // Create a Shipment-Details with the first 10 digits of your EKP-Number and 0101 (?)
 $shipmentDetails->setShipmentDate('2017-01-30'); // Optional: Need to be in the future and NOT on a sunday | null or drop it, to use today
-//$shipmentDetails->setReturnAccountNumber($credentials->getEpk(10) . '0701'); // Needed if you want to print a return label
+//$shipmentDetails->setReturnAccountNumber($credentials->getEkp(10) . '0701'); // Needed if you want to print a return label
 //$shipmentDetails->setReturnReference($reference); // Only needed if you want to print a return label
 
 // Set Sender
