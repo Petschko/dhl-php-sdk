@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 15.09.2016
  * Time: 15:23
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains the DHL-Address Class
  */
