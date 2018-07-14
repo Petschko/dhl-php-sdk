@@ -4,6 +4,8 @@ This *unofficial* library is wrapping some functions of the DHL SOAP API in orde
 
 ## Installation
 
+### Composer
+
 You can use [Composer](https://getcomposer.org/) to install the package to your project:
 
 ```
@@ -11,6 +13,16 @@ composer require petschko/dhl-php-sdk
 ```
 
 The classes are then added to the autoloader automatically.
+
+### Without Composer
+
+If you can't use Composer (or don't want to), you can also use this SDK without it.
+
+To initial this SDK, just require the [_nonComposerLoader.php](https://github.com/Petschko/dhl-php-sdk/blob/master/includes/_nonComposerLoader.php)-File from the `/includes/` directory.
+
+```php
+require_once('includes' . DIRECTORY_SEPARATOR . '_nonComposerLoader.php');
+```
 
 ## Motivation
 
