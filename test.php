@@ -37,7 +37,9 @@ $shipmentDetails->setShipmentDate('2017-01-30'); // Optional: Need to be in the 
 // Set Sender
 $sender = new Sender();
 $sender->setName('Peter Muster');
-$sender->setFullStreet('Test Straße 12a');
+/*$sender->setFullStreet('Test Straße 12a'); // Do not use this anymore!*/
+$sender->setStreetName('Test Straße');
+$sender->setStreetNumber('12a');
 $sender->setZip('21037');
 $sender->setCity('Hamburg');
 $sender->setCountry('Germany');
@@ -46,7 +48,9 @@ $sender->setCountryISOCode('DE');
 // Set Receiver
 $receiver = new Receiver();
 $receiver->setName('Test Empfänger');
-$receiver->setFullStreet('Test Straße 23b');
+/*$receiver->setFullStreet('Test Straße 23b'); // Do not use this anymore!*/
+$receiver->setStreetName('Test Straße');
+$receiver->setStreetNumber('23b');
 $receiver->setZip('21037');
 $receiver->setCity('Hamburg');
 $receiver->setCountry('Germany');

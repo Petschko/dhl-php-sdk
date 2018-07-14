@@ -290,8 +290,12 @@ abstract class Address {
 	 * Found here: https://www.tricd.de/php/php-strassenname-und-hausnummer-mit-php-parsen/
 	 *
 	 * @param string $street - Address (Street plus number)
+	 *
+	 * @deprecated - Buggy on some addresses, please separate the number and street by yourself
 	 */
 	public final function setFullStreet($street) {
+		trigger_error('Called deprecated method ' . __METHOD__ . ': Buggy on some addresses, please separate the number and street by yourself', E_USER_DEPRECATED);
+
 		$match = array();
 
 		preg_match('/^([^\d]*[^\d\s]) *(\d.*)$/', $street, $match);
