@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 15.09.2016
  * Time: 14:26
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
  */
@@ -73,9 +73,9 @@ class Credentials {
 	 * LIVE: Your Applications-ID
 	 * (You can get this here: https://entwickler.dhl.de/group/ep/home?myaction=viewFreigabe )
 	 *
-	 * @var string $api_user - App ID from the developer Account
+	 * @var string $apiUser - App ID from the developer Account
 	 */
-	private $api_user = '';
+	private $apiUser = '';
 
 	/**
 	 * Contains the App token from the developer Account
@@ -86,9 +86,9 @@ class Credentials {
 	 * LIVE: Your Applications-Token
 	 * (You can get this here: https://entwickler.dhl.de/group/ep/home?myaction=viewFreigabe )
 	 *
-	 * @var string $api_password - Contains the App token from the developer Account
+	 * @var string $apiPassword - Contains the App token from the developer Account
 	 */
-	private $api_password = '';
+	private $apiPassword = '';
 
 	/**
 	 * Credentials constructor.
@@ -112,8 +112,8 @@ class Credentials {
 		unset($this->user);
 		unset($this->signature);
 		unset($this->epk);
-		unset($this->api_user);
-		unset($this->api_password);
+		unset($this->apiUser);
+		unset($this->apiPassword);
 	}
 
 	/**
@@ -167,27 +167,27 @@ class Credentials {
 	 * @return string
 	 */
 	public function getApiUser() {
-		return $this->api_user;
+		return $this->apiUser;
 	}
 
 	/**
-	 * @param string $api_user
+	 * @param string $apiUser
 	 */
-	public function setApiUser($api_user) {
-		$this->api_user = $api_user;
+	public function setApiUser($apiUser) {
+		$this->apiUser = $apiUser;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getApiPassword() {
-		return $this->api_password;
+		return $this->apiPassword;
 	}
 
 	/**
-	 * @param string $api_password
+	 * @param string $apiPassword
 	 */
-	public function setApiPassword($api_password) {
-		$this->api_password = $api_password;
+	public function setApiPassword($apiPassword) {
+		$this->apiPassword = $apiPassword;
 	}
 }

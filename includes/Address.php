@@ -23,9 +23,9 @@ abstract class Address {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string $street_name - Street Name (without number)
+	 * @var string $streetName - Street Name (without number)
 	 */
-	private $street_name = '';
+	private $streetName = '';
 
 	/**
 	 * Contains the Street Number (may with extra stuff like a/b/c/d etc)
@@ -33,9 +33,9 @@ abstract class Address {
 	 * Min-Len: -
 	 * Max-Len: 5
 	 *
-	 * @var string $street_number - Street Number (may with extra stuff like a/b/c/d etc)
+	 * @var string $streetNumber - Street Number (may with extra stuff like a/b/c/d etc)
 	 */
-	private $street_number = '';
+	private $streetNumber = '';
 
 	/**
 	 * Contains other Info about the Address like if its hard to find or where it is exactly located
@@ -44,9 +44,9 @@ abstract class Address {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $address_addition - Address-Addition
+	 * @var string|null $addressAddition - Address-Addition
 	 */
-	private $address_addition = null;
+	private $addressAddition = null;
 
 	/**
 	 * Contains Optional Dispatching Info
@@ -123,9 +123,9 @@ abstract class Address {
 	 * Clears the Memory
 	 */
 	public function __destruct() {
-		unset($this->street_name);
-		unset($this->street_number);
-		unset($this->address_addition);
+		unset($this->streetName);
+		unset($this->streetNumber);
+		unset($this->addressAddition);
 		unset($this->dispatchingInfo);
 		unset($this->zip);
 		unset($this->location);
@@ -138,42 +138,42 @@ abstract class Address {
 	 * @return string
 	 */
 	public function getStreetName() {
-		return $this->street_name;
+		return $this->streetName;
 	}
 
 	/**
-	 * @param string $street_name
+	 * @param string $streetName
 	 */
-	public function setStreetName($street_name) {
-		$this->street_name = $street_name;
+	public function setStreetName($streetName) {
+		$this->streetName = $streetName;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getStreetNumber() {
-		return $this->street_number;
+		return $this->streetNumber;
 	}
 
 	/**
-	 * @param string $street_number
+	 * @param string $streetNumber
 	 */
-	public function setStreetNumber($street_number) {
-		$this->street_number = $street_number;
+	public function setStreetNumber($streetNumber) {
+		$this->streetNumber = $streetNumber;
 	}
 
 	/**
 	 * @return null|string
 	 */
 	public function getAddressAddition() {
-		return $this->address_addition;
+		return $this->addressAddition;
 	}
 
 	/**
-	 * @param null|string $address_addition
+	 * @param null|string $addressAddition
 	 */
-	public function setAddressAddition($address_addition) {
-		$this->address_addition = $address_addition;
+	public function setAddressAddition($addressAddition) {
+		$this->addressAddition = $addressAddition;
 	}
 
 	/**

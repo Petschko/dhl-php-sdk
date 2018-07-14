@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 10.04.2017
- * Version: 1.1.0
+ * Update: 14.07.2018
+ * Version: 1.1.1
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -41,18 +41,18 @@ class Response extends Version {
 	/**
 	 * Shipment-Number
 	 *
-	 * @var null|string $shipment_number - Shipment-Number
+	 * @var null|string $shipmentNumber - Shipment-Number
 	 */
-	private $shipment_number = null;
+	private $shipmentNumber = null;
 
 	/**
 	 * TODO DOCUMENT ME
 	 *
 	 * Note: Just used in v1
 	 *
-	 * @var null|string $piece_number
+	 * @var null|string $pieceNumber
 	 */
-	private $piece_number = null;
+	private $pieceNumber = null;
 
 	/**
 	 * Label URL/Base64-Data - Can also have the return label in one
@@ -150,8 +150,8 @@ class Response extends Version {
 	 */
 	public function __destruct() {
 		parent::__destruct();
-		unset($this->shipment_number);
-		unset($this->piece_number);
+		unset($this->shipmentNumber);
+		unset($this->pieceNumber);
 		unset($this->label);
 		unset($this->returnLabel);
 		unset($this->exportDoc);
@@ -168,7 +168,7 @@ class Response extends Version {
 	 * @return null|string - Shipment-Number or null if not set
 	 */
 	public function getShipmentNumber() {
-		return $this->shipment_number;
+		return $this->shipmentNumber;
 	}
 
 	/**
@@ -177,7 +177,7 @@ class Response extends Version {
 	 * @param null|string $shipment_number - Shipment-Number or null for not set
 	 */
 	private function setShipmentNumber($shipment_number) {
-		$this->shipment_number = $shipment_number;
+		$this->shipmentNumber = $shipment_number;
 	}
 
 	/**
@@ -188,7 +188,7 @@ class Response extends Version {
 	 * @return null|string - null if not set else piece_number (just used in API-Version 1)
 	 */
 	public function getPieceNumber() {
-		return $this->piece_number;
+		return $this->pieceNumber;
 	}
 
 	/**
@@ -199,7 +199,7 @@ class Response extends Version {
 	 * @param null|string $piece_number - null for not set else piece_number (just used in API-Version 1)
 	 */
 	private function setPieceNumber($piece_number) {
-		$this->piece_number = $piece_number;
+		$this->pieceNumber = $piece_number;
 	}
 
 	/**

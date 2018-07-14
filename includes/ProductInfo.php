@@ -58,9 +58,9 @@ class ProductInfo {
 	/**
 	 * Contains all Products
 	 *
-	 * @var array $products - Products
+	 * @var array $dhlProducts - Products
 	 */
-	private static $dhl_products = array();
+	private static $dhlProducts = array();
 
 	/**
 	 * Disabled Clone-Function
@@ -332,7 +332,7 @@ class ProductInfo {
 		if(! self::isInit())
 			self::init();
 
-		return self::$dhl_products;
+		return self::$dhlProducts;
 	}
 
 	/**
@@ -341,7 +341,7 @@ class ProductInfo {
 	 * @param Product $product - Product to add
 	 */
 	private static function addProduct($product) {
-		self::$dhl_products[$product->getType()] = $product;
+		self::$dhlProducts[$product->getType()] = $product;
 	}
 
 	/**
@@ -354,9 +354,9 @@ class ProductInfo {
 		if(! self::isInit())
 			self::init();
 
-		if(! array_key_exists($productType, self::$dhl_products))
+		if(! array_key_exists($productType, self::$dhlProducts))
 			return null;
 
-		return self::$dhl_products[$productType];
+		return self::$dhlProducts[$productType];
 	}
 }
