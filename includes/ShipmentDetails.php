@@ -164,6 +164,15 @@ class ShipmentDetails {
 	private $packageType = self::PACKAGE;
 
 	/**
+	 * E-mail address for shipping notification
+	 *
+	 * Note: Optional
+	 *
+	 * @var string|null $notificationEmail - Notification E-Mail
+	 */
+	private $notificationEmail;
+
+	/**
 	 * ShipmentDetails constructor.
 	 *
 	 * @param string $accountNumber - Account-Number
@@ -357,6 +366,20 @@ class ShipmentDetails {
 	}
 
 	/**
+	 * @return string|null
+	 */
+	public function getNotificationEmail() {
+		return $this->notificationEmail;
+	}
+
+	/**
+	 * @param string|null $notificationEmail
+	 */
+	public function setNotificationEmail($notificationEmail) {
+		$this->notificationEmail = $notificationEmail;
+	}
+
+	/**
 	 * Creates a Default Shipment-Date (Today or if Sunday the next Day)
 	 *
 	 * @return string - Default-Date
@@ -411,6 +434,11 @@ class ShipmentDetails {
 			$class->ShipmentItem->widthInCM = $this->getWidth();
 		if($this->getHeight() !== null)
 			$class->ShipmentItem->heightInCM = $this->getHeight();
+
+		if($this->notificationEmail) {
+			$class->Notification = new StdClass;
+			$class->Notification->recipientEmailAddress = $this->notificationEmail;
+		}
 
 		return $class;
 	}
