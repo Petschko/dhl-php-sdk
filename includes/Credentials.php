@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 15.09.2016
  * Time: 14:26
  * Update: 16.07.2018
- * Version: 0.0.4
+ * Version: 0.0.5
  *
  * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
  */
@@ -178,7 +178,7 @@ class Credentials {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getEpk($len = null) {
-		trigger_error('Called deprecated method ' . __METHOD__ . ': Use getEkp() instead, this method will removed in the future!');
+		trigger_error('Called deprecated method ' . __METHOD__ . ': Use getEkp() instead, this method will removed in the future!', E_USER_DEPRECATED);
 
 		return $this->getEkp($len);
 	}
@@ -200,9 +200,9 @@ class Credentials {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setEpk($ekp) {
-		trigger_error('Called deprecated method ' . __METHOD__ . ': Use setEkp() instead, this method will removed in the future!');
+		trigger_error('Called deprecated method ' . __METHOD__ . ': Use setEkp() instead, this method will removed in the future!', E_USER_DEPRECATED);
 
-		$this->ekp = $ekp;
+		$this->setEkp($ekp);
 	}
 
 	/**
