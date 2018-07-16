@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:18
- * Update: 14.07.2018
- * Version: 0.0.2
+ * Update: 16.07.2018
+ * Version: 0.0.3
  *
  * Notes: Contains the Service Class
  */
@@ -325,6 +325,7 @@ class Service {
 	 * Note: Optional
 	 *
 	 * @var bool|null $personalHandover - Is this enabled | null uses default
+	 * @deprecated - DHL-API-Version 1 Field
 	 */
 	private $personalHandover = null;
 
@@ -846,15 +847,21 @@ class Service {
 
 	/**
 	 * @return bool|null
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getPersonalHandover() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		return $this->personalHandover;
 	}
 
 	/**
 	 * @param bool|null $personalHandover
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function setPersonalHandover($personalHandover) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		$this->personalHandover = $personalHandover;
 	}
 
@@ -1039,6 +1046,7 @@ class Service {
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
 		//todo implement getClass_v1()
+
 		return new StdClass;
 	}
 
@@ -1145,10 +1153,6 @@ class Service {
 		if($this->getPerishables() !== null) {
 			$class->Perishables = new StdClass;
 			$class->Perishables->active = (int) $this->getPerishables();
-		}
-		if($this->getPersonalHandover() !== null) {
-			$class->Personally = new StdClass;
-			$class->Personally->active = (int) $this->getPersonalHandover();
 		}
 		if($this->getDisableNeighbourDelivery() !== null) {
 			$class->NoNeighbourDelivery = new StdClass;
