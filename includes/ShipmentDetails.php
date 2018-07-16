@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 13:07
- * Update: 10.06.2017
- * Version: 0.0.2
+ * Update: 14.07.2018
+ * Version: 0.0.3
  *
  * Notes: Details for a Shipment (Like size/Weight etc)
  */
@@ -375,8 +375,13 @@ class ShipmentDetails {
 	 * Returns an DHL-Class of this Object for DHL-Shipment Details
 	 *
 	 * @return StdClass - ShipmentDetailsClass
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getShipmentDetailsClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		// todo implement getClass_v1()
 		return new StdClass;
 	}

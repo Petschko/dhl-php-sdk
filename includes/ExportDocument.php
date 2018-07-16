@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 21:05
  * Update: 14.07.2018
- * Version: 0.0.4
+ * Version: 0.0.5
  *
  * Notes: Contains the ExportDocument Class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -338,11 +338,16 @@ class ExportDocument {
 
 	/**
 	 * @return StdClass
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getExportDocumentClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$class = new StdClass;
 
-		// todo implement
+		// todo implement v1 method
 
 		return $class;
 	}

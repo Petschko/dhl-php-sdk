@@ -6,8 +6,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:06
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains all stuff for Ident-Check
  */
@@ -71,6 +71,20 @@ class IdentCheck {
 		unset($this->firstName);
 		unset($this->birthday);
 		unset($this->minimumAge);
+	}
+
+	/**
+	 * @return stdClass
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
+	 */
+	public function getIdentClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
+		// todo implement v1 method
+
+		return new StdClass;
 	}
 
 	/**

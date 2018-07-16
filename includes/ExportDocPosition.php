@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 10.04.2017
  * Time: 12:48
- * Update: 10.04.2017
- * Version: 0.0.2
+ * Update: 14.07.2018
+ * Version: 0.0.3
  *
  * Notes: Contains the ExportDocPosition class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -86,7 +86,7 @@ class ExportDocPosition {
 	public function __construct($description, $countryCodeOrigin, $customsTariffNumber, $amount, $netWeightInKG, $customsValue) {
 		if(! $description || ! $countryCodeOrigin || ! $amount || ! $netWeightInKG || ! $customsValue) {
 			error_log('PHP-DHL-API: ' . __CLASS__ . '->' . __FUNCTION__ .
-				': All values must be filled out! (Not null, Not false, Not 0, Not "", Not empty) - Ignore this function for this call now');
+				': All values must be filled out! (Not null, Not false, Not 0, Not "", Not empty) - Ignore this function for this call now', E_USER_NOTICE);
 			return;
 		}
 
@@ -196,11 +196,16 @@ class ExportDocPosition {
 
 	/**
 	 * @return StdClass
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	protected function getExportDocPositionClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$class = new StdClass;
 
-		// todo implement
+		// todo implement v1 method
 
 		return $class;
 	}

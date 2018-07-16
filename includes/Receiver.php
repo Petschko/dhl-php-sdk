@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 28.01.2017
  * Time: 19:17
  * Update: 14.07.2018
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Notes: Contains the Receiver class
  */
@@ -19,16 +19,6 @@ use stdClass;
  * Class Receiver
  */
 class Receiver extends SendPerson {
-	/**
-	 * Returns a Class for the DHL-SendPerson
-	 *
-	 * @return StdClass - DHL-SendPerson-class
-	 */
-	public function getClass_v1() {
-		// TODO: Implement getClass_v1() method.
-		return new StdClass;
-	}
-
 	/**
 	 * Returns a Class for the DHL-SendPerson
 	 *

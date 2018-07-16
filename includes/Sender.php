@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 28.01.2017
  * Time: 19:15
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains the Sender Class
  */
@@ -19,16 +19,6 @@ use stdClass;
  * Class Sender
  */
 class Sender extends SendPerson {
-	/**
-	 * Returns a Class for the DHL-SendPerson
-	 *
-	 * @return StdClass - DHL-SendPerson-class
-	 */
-	public function getClass_v1() {
-		// TODO: Implement getClass_v1() method.
-		return new StdClass;
-	}
-
 	/**
 	 * Returns a Class for the DHL-SendPerson
 	 *

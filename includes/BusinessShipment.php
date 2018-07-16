@@ -639,11 +639,16 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string $shipmentNumber - Shipment-Number for the Manifest
 	 * @return StdClass - Data-Object
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	private function createDoManifestClass_v1($shipmentNumber) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$data = new StdClass;
 
-		//todo
+		// todo implement v1 method
 
 		return $data;
 	}
@@ -717,11 +722,16 @@ class BusinessShipment extends Version {
 	 * Creates the Data-Object for the Request
 	 *
 	 * @return StdClass - Data-Object
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	private function createShipmentClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$data = new StdClass;
 
-		//todo
+		// todo implement v1 method
 
 		return $data;
 	}
@@ -838,11 +848,16 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
 	 * @return StdClass - Data-Object
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	private function createDeleteClass_v1($shipmentNumber) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$data = new StdClass;
 
-		//todo
+		// todo implement v1 method
 
 		return $data;
 	}
@@ -915,11 +930,16 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string $shipmentNumber - Number of the Shipment
 	 * @return StdClass - Data-Object
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	private function getLabelClass_v1($shipmentNumber) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$data = new StdClass;
 
-		// todo
+		// todo implement v1 method
 
 		return $data;
 	}
@@ -994,11 +1014,16 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string $shipmentNumber - Number of the Shipment
 	 * @return StdClass - Data-Object
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	private function getExportDocClass_v1($shipmentNumber) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		$data = new StdClass;
 
-		// todo
+		// todo implement v1 method
 
 		return $data;
 	}

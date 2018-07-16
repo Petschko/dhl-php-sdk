@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 17.03.2017
  * Time: 12:09
  * Update: 14.07.2018
- * Version: 1.0.3
+ * Version: 1.0.4
  *
  * Notes: Contains the PackStation class
  */
@@ -74,17 +74,6 @@ class PackStation extends Receiver {
 	 */
 	public function setPackStationNumber($packStationNumber) {
 		$this->packStationNumber = $packStationNumber;
-	}
-
-	/**
-	 * Returns a Class for the DHL-SendPerson
-	 *
-	 * @return StdClass - DHL-SendPerson-class
-	 */
-	public function getClass_v1() {
-		// TODO: Implement getClass_v1() method.
-
-		return new StdClass;
 	}
 
 	/**

@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 18:17
  * Update: 14.07.2018
- * Version: 0.0.2
+ * Version: 0.0.3
  *
  * Notes: Contains SendPerson Class
  */
@@ -186,8 +186,15 @@ abstract class SendPerson extends Address {
 	 * Returns a Class for the DHL-SendPerson
 	 *
 	 * @return StdClass - DHL-SendPerson-class
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	abstract public function getClass_v1();
+	public function getClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
+		return new StdClass;
+	}
 
 	/**
 	 * Returns a Class for the DHL-SendPerson

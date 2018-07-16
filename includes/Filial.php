@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 20.03.2017
  * Time: 13:23
  * Update: 14.07.2018
- * Version: 0.0.2
+ * Version: 0.0.3
  *
  * Notes: Contains the Filial Class
  */
@@ -92,17 +92,6 @@ class Filial extends Receiver {
 	 */
 	public function setPostFilialNumber($filialNumber) {
 		$this->filialNumber = $filialNumber;
-	}
-
-	/**
-	 * Returns a Class for the DHL-SendPerson
-	 *
-	 * @return StdClass - DHL-SendPerson-class
-	 */
-	public function getClass_v1() {
-		// TODO: Implement getClass_v1() method.
-
-		return new StdClass;
 	}
 
 	/**

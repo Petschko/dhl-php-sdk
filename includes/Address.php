@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 15.09.2016
  * Time: 15:23
  * Update: 14.07.2018
- * Version: 0.0.2
+ * Version: 0.0.3
  *
  * Notes: Contains the DHL-Address Class
  */
@@ -294,7 +294,7 @@ abstract class Address {
 	 * @deprecated - Buggy on some addresses, please separate the number and street by yourself
 	 */
 	public final function setFullStreet($street) {
-		trigger_error('Called deprecated method ' . __METHOD__ . ': Buggy on some addresses, please separate the number and street by yourself', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called deprecated method ' . __METHOD__ . ': Buggy on some addresses, please separate the number and street by yourself. This method will removed in the future!', E_USER_DEPRECATED);
 
 		$match = array();
 

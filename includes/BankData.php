@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 20:14
- * Update: 10.04.2017
- * Version: 0.0.2
+ * Update: 14.07.2018
+ * Version: 0.0.3
  *
  * Notes: Contains BankData Class
  */
@@ -212,7 +212,23 @@ class BankData {
 	}
 
 	/**
-	 * Returns a DHL-Bank-Class
+	 * Returns a DHL-Bank-Class for API v1
+	 *
+	 * @return stdClass - DHL-Bank-Class
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
+	 */
+	public function getBankClass_v1() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
+		// TODO: Implement getBankClass_v1() method.
+
+		return new StdClass;
+	}
+
+	/**
+	 * Returns a DHL-Bank-Class for API v2
 	 *
 	 * @return StdClass - DHL-Bank-Class
 	 */

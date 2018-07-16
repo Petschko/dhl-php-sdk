@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 18.11.2016
  * Time: 16:00
  * Update: 14.07.2018
- * Version: 1.1.1
+ * Version: 1.1.2
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -368,8 +368,12 @@ class Response extends Version {
 	 * Loads a DHL-Response into this Object
 	 *
 	 * @param Object $response - DHL-Response
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	private function loadResponse_v1($response) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		// Set Shipment-Number if exists
 		if(isset($response->CreationState->ShipmentNumber->shipmentNumber))
 			$this->setShipmentNumber((string) $response->CreationState->ShipmentNumber->shipmentNumber);

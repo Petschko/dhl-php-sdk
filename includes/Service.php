@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:18
- * Update: -
- * Version: 0.0.1
+ * Update: 14.07.2018
+ * Version: 0.0.2
  *
  * Notes: Contains the Service Class
  */
@@ -1031,8 +1031,13 @@ class Service {
 	 *
 	 * @param string $productType - Type of the Product
 	 * @return StdClass - Service-DHL-Class
+	 *
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getServiceClass_v1($productType) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+
 		//todo implement getClass_v1()
 		return new StdClass;
 	}
