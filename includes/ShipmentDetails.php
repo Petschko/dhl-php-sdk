@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 13:07
- * Update: 14.07.2018
- * Version: 0.0.3
+ * Update: 16.07.2018
+ * Version: 0.1.0
  *
  * Notes: Details for a Shipment (Like size/Weight etc)
  */
@@ -168,9 +168,9 @@ class ShipmentDetails {
 	 *
 	 * Note: Optional
 	 *
-	 * @var string|null $notificationEmail - Notification E-Mail
+	 * @var string|null $notificationEmail - Notification E-Mail or null for none
 	 */
-	private $notificationEmail;
+	private $notificationEmail = null;
 
 	/**
 	 * ShipmentDetails constructor.
@@ -196,6 +196,7 @@ class ShipmentDetails {
 		unset($this->width);
 		unset($this->height);
 		unset($this->packageType);
+		unset($this->notificationEmail);
 	}
 
 	/**
@@ -435,9 +436,9 @@ class ShipmentDetails {
 		if($this->getHeight() !== null)
 			$class->ShipmentItem->heightInCM = $this->getHeight();
 
-		if($this->notificationEmail) {
+		if($this->getNotificationEmail() !== null) {
 			$class->Notification = new StdClass;
-			$class->Notification->recipientEmailAddress = $this->notificationEmail;
+			$class->Notification->recipientEmailAddress = $this->getNotificationEmail();
 		}
 
 		return $class;
