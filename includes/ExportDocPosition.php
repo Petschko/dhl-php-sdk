@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 10.04.2017
  * Time: 12:48
- * Update: 14.07.2018
- * Version: 0.0.3
+ * Update: 16.07.2018
+ * Version: 0.0.4
  *
  * Notes: Contains the ExportDocPosition class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -48,7 +48,7 @@ class ExportDocPosition {
 	 * Min-Len: -
 	 * Max-Len: 10
 	 *
-	 * @var string|null $customsTariffNumber - Customs tariff number of the unit / position (HS-code)
+	 * @var string|null $customsTariffNumber - Customs tariff number of the unit / position (HS-code) or null for none
 	 */
 	private $customsTariffNumber = null;
 
@@ -78,7 +78,7 @@ class ExportDocPosition {
 	 *
 	 * @param string $description - Description of the unit / position
 	 * @param string $countryCodeOrigin - Origin Country-ISO-Code
-	 * @param string|null $customsTariffNumber - Customs tariff number of the unit / position (HS-code)
+	 * @param string|null $customsTariffNumber - Customs tariff number of the unit / position (HS-code) or null for none
 	 * @param int $amount - Quantity of the unit / position
 	 * @param int|float $netWeightInKG - Net weight of the unit / position
 	 * @param int|float $customsValue - Customs value amount of the unit / position
@@ -111,91 +111,117 @@ class ExportDocPosition {
 	}
 
 	/**
-	 * @return string|null
+	 * Get the Description
+	 *
+	 * @return string|null - Description or null on failure
 	 */
 	public function getDescription() {
 		return $this->description;
 	}
 
 	/**
-	 * @param string|null $description
+	 * Set the Description
+	 *
+	 * @param string $description - Description
 	 */
 	private function setDescription($description) {
 		$this->description = $description;
 	}
 
 	/**
-	 * @return string|null
+	 * Get the Country Code Origin
+	 *
+	 * @return string|null - Country Code Origin or null on failure
 	 */
 	public function getCountryCodeOrigin() {
 		return $this->countryCodeOrigin;
 	}
 
 	/**
-	 * @param string|null $countryCodeOrigin
+	 * Set the Country Code Origin
+	 *
+	 * @param string $countryCodeOrigin - Country Code Origin
 	 */
 	private function setCountryCodeOrigin($countryCodeOrigin) {
 		$this->countryCodeOrigin = $countryCodeOrigin;
 	}
 
 	/**
-	 * @return float|int|string|null
+	 * Get the Custom Tariff Number
+	 *
+	 * @return float|int|string|null - Custom Tariff Number or null for none
 	 */
 	public function getCustomsTariffNumber() {
 		return $this->customsTariffNumber;
 	}
 
 	/**
-	 * @param float|int|string|null $customsTariffNumber
+	 * Set the Custom Tariff Number
+	 *
+	 * @param float|int|string|null $customsTariffNumber - Custom Tariff Number or null for none
 	 */
 	private function setCustomsTariffNumber($customsTariffNumber) {
 		$this->customsTariffNumber = $customsTariffNumber;
 	}
 
 	/**
-	 * @return int|null
+	 * Get the Amount
+	 *
+	 * @return int|null - Amount or null on failure
 	 */
 	public function getAmount() {
 		return $this->amount;
 	}
 
 	/**
-	 * @param int|null $amount
+	 * Set the Amount
+	 *
+	 * @param int $amount - Amount
 	 */
 	private function setAmount($amount) {
 		$this->amount = $amount;
 	}
 
 	/**
-	 * @return float|null
+	 * Get the Weight in KG
+	 *
+	 * @return float|null - Weight in KG or null on failure
 	 */
 	public function getNetWeightInKG() {
 		return $this->netWeightInKG;
 	}
 
 	/**
-	 * @param float|null $netWeightInKG
+	 * Set the Weight in KG
+	 *
+	 * @param float $netWeightInKG - Weight in KG
 	 */
 	private function setNetWeightInKG($netWeightInKG) {
 		$this->netWeightInKG = $netWeightInKG;
 	}
 
 	/**
-	 * @return float|null
+	 * Get the Customs Value for the Unit / Package
+	 *
+	 * @return float|null - Custom Value for the Unit / Package or null on failure
 	 */
 	public function getCustomsValue() {
 		return $this->customsValue;
 	}
 
 	/**
-	 * @param float|null $customsValue
+	 * Sets the Customs Value for the Unit / Package
+	 *
+	 * @param float $customsValue - Customs Value for the Unit / Package
 	 */
 	private function setCustomsValue($customsValue) {
 		$this->customsValue = $customsValue;
 	}
 
 	/**
-	 * @return StdClass
+	 * Returns a Class for ExportDocPosition
+	 *
+	 * @return StdClass - DHL-ExportDocPosition-Class
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */

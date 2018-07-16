@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 14.07.2018
- * Version: 1.3.1
+ * Version: 1.3.2
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -109,7 +109,7 @@ class BusinessShipment extends Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var Service|null $service - Service Object
+	 * @var Service|null $service - Service Object | null for none
 	 */
 	private $service = null;
 
@@ -118,7 +118,7 @@ class BusinessShipment extends Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var BankData|null $bank - Bank-Object
+	 * @var BankData|null $bank - Bank-Object | null for none
 	 */
 	private $bank = null;
 
@@ -141,7 +141,7 @@ class BusinessShipment extends Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var ReturnReceiver|null $returnReceiver - Return Receiver Object
+	 * @var ReturnReceiver|null $returnReceiver - Return Receiver Object | null for none
 	 */
 	private $returnReceiver = null;
 
@@ -150,7 +150,7 @@ class BusinessShipment extends Version {
 	 *
 	 * Note: Optional
 	 *
-	 * @var ExportDocument|null $exportDocument - Export-Document-Settings Object
+	 * @var ExportDocument|null $exportDocument - Export-Document-Settings Object | null for none
 	 */
 	private $exportDocument = null;
 
@@ -172,7 +172,7 @@ class BusinessShipment extends Version {
 	 * Min-Len: -
 	 * Max-Len: 70
 	 *
-	 * @var string|null $receiverEmail - Receiver-E-Mail
+	 * @var string|null $receiverEmail - Receiver-E-Mail | null for none
 	 */
 	private $receiverEmail = null;
 
@@ -193,14 +193,14 @@ class BusinessShipment extends Version {
 	 * RESPONSE_TYPE_URL -> Url
 	 * RESPONSE_TYPE_B64 -> Base64
 	 *
-	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's)
+	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's) (null uses default)
 	 */
 	private $labelResponseType = null;
 
 	/**
 	 * Custom-WSDL-File URL
 	 *
-	 * @var null|string $customAPIURL - Custom-API URL to use internal let this value null
+	 * @var null|string $customAPIURL - Custom-API URL (null uses default from DHL)
 	 */
 	private $customAPIURL = null;
 
@@ -274,7 +274,9 @@ class BusinessShipment extends Version {
 	}
 
 	/**
-	 * @return null|SoapClient
+	 * Get the Soap-Client if exists
+	 *
+	 * @return null|SoapClient - SoapClient or null on error
 	 */
 	private function getSoapClient() {
 		if($this->soapClient === null)
@@ -296,261 +298,336 @@ class BusinessShipment extends Version {
 	}
 
 	/**
-	 * @param null|SoapClient $soapClient
+	 * Set the Soap-Client
+	 *
+	 * @param null|SoapClient $soapClient - Soap-Client
 	 */
 	private function setSoapClient($soapClient) {
 		$this->soapClient = $soapClient;
 	}
 
 	/**
-	 * @return array
+	 * Get Error-Array
+	 *
+	 * @return array - Error-Array
 	 */
 	public function getErrors() {
 		return $this->errors;
 	}
 
 	/**
-	 * @param array $errors
+	 * Set Error-Array
+	 *
+	 * @param array $errors - Error-Array
 	 */
 	public function setErrors($errors) {
 		$this->errors = $errors;
 	}
 
 	/**
-	 * @param string $error
+	 * Adds an Error to the Error-Array
+	 *
+	 * @param string $error - Error-Message
 	 */
 	private function addError($error) {
 		$this->errors[] = $error;
 	}
 
 	/**
-	 * @return bool
+	 * Returns if this instance run in Test-Mode / Sandbox-Mode
+	 *
+	 * @return bool - Runs in Test-Mode / Sandbox-Mode
 	 */
 	private function isTest() {
 		return $this->test;
 	}
 
 	/**
-	 * @param bool $test
+	 * Set if this instance runs in Test-Mode / Sandbox-Mode
+	 *
+	 * @param bool $test - Runs in Test-Mode / Sandbox-Mode
 	 */
 	private function setTest($test) {
 		$this->test = $test;
 	}
 
 	/**
-	 * @return bool
+	 * Returns if log is enabled
+	 *
+	 * @return bool - Log enabled
 	 */
 	public function isLog() {
 		return $this->log;
 	}
 
 	/**
-	 * @param bool $log
+	 * Set if log enabled
+	 *
+	 * @param bool $log - Enable log
 	 */
 	public function setLog($log) {
 		$this->log = $log;
 	}
 
 	/**
-	 * @return Credentials
+	 * Get Credentials-Object
+	 *
+	 * @return Credentials - Credentials-Object
 	 */
 	private function getCredentials() {
 		return $this->credentials;
 	}
 
 	/**
-	 * @param Credentials $credentials
+	 * Set Credentials-Object
+	 *
+	 * @param Credentials $credentials - Credentials-Object
 	 */
 	public function setCredentials($credentials) {
 		$this->credentials = $credentials;
 	}
 
 	/**
-	 * @return ShipmentDetails
+	 * Get Shipment-Details-Object
+	 *
+	 * @return ShipmentDetails - Shipment-Details-Object
 	 */
 	public function getShipmentDetails() {
 		return $this->shipmentDetails;
 	}
 
 	/**
-	 * @param ShipmentDetails $shipmentDetails
+	 * Set Shipment-Details-Object
+	 *
+	 * @param ShipmentDetails $shipmentDetails - Shipment-Details-Object
 	 */
 	public function setShipmentDetails($shipmentDetails) {
 		$this->shipmentDetails = $shipmentDetails;
 	}
 
 	/**
-	 * @return Service|null
+	 * Get the Service-Object
+	 *
+	 * @return Service|null - Service-Object or null if none
 	 */
 	public function getService() {
 		return $this->service;
 	}
 
 	/**
-	 * @param Service|null $service
+	 * Set the Service-Object
+	 *
+	 * @param Service|null $service - Service-Object or null for none
 	 */
 	public function setService($service) {
 		$this->service = $service;
 	}
 
 	/**
-	 * @return BankData|null
+	 * Get the Bank-Object
+	 *
+	 * @return BankData|null - Bank-Object or null if none
 	 */
 	public function getBank() {
 		return $this->bank;
 	}
 
 	/**
-	 * @param BankData|null $bank
+	 * Set the Bank-Object
+	 *
+	 * @param BankData|null $bank - Bank-Object or null for none
 	 */
 	public function setBank($bank) {
 		$this->bank = $bank;
 	}
 
 	/**
-	 * @return Sender
+	 * Get the Sender-Object
+	 *
+	 * @return Sender - sender-Object
 	 */
 	public function getSender() {
 		return $this->sender;
 	}
 
 	/**
-	 * @param Sender $sender
+	 * Set the Sender-Object
+	 *
+	 * @param Sender $sender - Sender-Object
 	 */
 	public function setSender($sender) {
 		$this->sender = $sender;
 	}
 
 	/**
-	 * @return Receiver
+	 * Get the Receiver-Object
+	 *
+	 * @return Receiver|PackStation|Filial - Receiver-Object
 	 */
 	public function getReceiver() {
 		return $this->receiver;
 	}
 
 	/**
-	 * @param Receiver $receiver
+	 * Set the Receiver-Object
+	 *
+	 * @param Receiver|PackStation|Filial $receiver - Receiver-Object
 	 */
 	public function setReceiver($receiver) {
 		$this->receiver = $receiver;
 	}
 
 	/**
-	 * @return ReturnReceiver|null
+	 * Get the ReturnReceiver-Object
+	 *
+	 * Usually only used for Re-Tour (In most cases the same Address like the Sender)
+	 *
+	 * @return ReturnReceiver|null - ReturnReceiver-Object or null if none
 	 */
 	public function getReturnReceiver() {
 		return $this->returnReceiver;
 	}
 
 	/**
-	 * @param ReturnReceiver|null $returnReceiver
+	 * Set the ReturnReceiver-Object
+	 *
+	 * Usually only used for Re-Tour (In most cases the same Address like the Sender)
+	 *
+	 * @param ReturnReceiver|null $returnReceiver - ReturnReceiver-Object or null for none
 	 */
 	public function setReturnReceiver($returnReceiver) {
 		$this->returnReceiver = $returnReceiver;
 	}
 
 	/**
-	 * @return ExportDocument|null
+	 * Get the ExportDocument-Object
+	 *
+	 * @return ExportDocument|null - ExportDocument-Object or null if none
 	 */
 	public function getExportDocument() {
 		return $this->exportDocument;
 	}
 
 	/**
-	 * @param ExportDocument|null $exportDocument
+	 * Set the ExportDocument-Object
+	 *
+	 * @param ExportDocument|null $exportDocument - ExportDocument-Object or null for none
 	 */
 	public function setExportDocument($exportDocument) {
 		$this->exportDocument = $exportDocument;
 	}
 
 	/**
-	 * @return string
+	 * Get the Sequence-Number
+	 *
+	 * @return string - Sequence-Number
 	 */
 	public function getSequenceNumber() {
 		return $this->sequenceNumber;
 	}
 
 	/**
-	 * @param string $sequenceNumber
+	 * Set the Sequence-Number
+	 *
+	 * @param string $sequenceNumber - sequence-Number
 	 */
 	public function setSequenceNumber($sequenceNumber) {
 		$this->sequenceNumber = $sequenceNumber;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Receiver-Email
+	 *
+	 * @return null|string - Receiver-Email or null if none
 	 */
 	public function getReceiverEmail() {
 		return $this->receiverEmail;
 	}
 
 	/**
-	 * @param null|string $receiverEmail
+	 * Set the Receiver-Email
+	 *
+	 * @param null|string $receiverEmail - Receiver-Email or null for none
 	 */
 	public function setReceiverEmail($receiverEmail) {
 		$this->receiverEmail = $receiverEmail;
 	}
 
 	/**
-	 * @return bool|null
+	 * Get if the label should only printed if the Receiver-Address is valid
+	 *
+	 * @return bool|null - Should the label only printed on a valid Address | null means DHL-Default
 	 */
 	public function getPrintOnlyIfReceiverIsValid() {
 		return $this->printOnlyIfReceiverIsValid;
 	}
 
 	/**
-	 * @param bool|null $printOnlyIfReceiverIsValid
+	 * Set if the label should only printed if the Receiver-Address is valid
+	 *
+	 * WARNING: The Address-Validation can fail sometimes also on existing Addresses (for example new streets) use with care!
+	 *
+	 * @param bool|null $printOnlyIfReceiverIsValid - Should the label only printed on a valid Address | null uses default from DHL
 	 */
 	public function setPrintOnlyIfReceiverIsValid($printOnlyIfReceiverIsValid) {
 		$this->printOnlyIfReceiverIsValid = $printOnlyIfReceiverIsValid;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Label-Response type
+	 *
+	 * @return null|string - Label-Response type | null means DHL-Default
 	 */
 	public function getLabelResponseType() {
 		return $this->labelResponseType;
 	}
 
 	/**
-	 * @param null|string $labelResponseType
+	 * Set the Label-Response type
+	 *
+	 * @param null|string $labelResponseType - Label-Response type | null uses DHL-Default
 	 */
 	public function setLabelResponseType($labelResponseType) {
 		$this->labelResponseType = $labelResponseType;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Custom-API-URL
+	 *
+	 * @return null|string - Custom-API-URL or null for none
 	 */
 	public function getCustomAPIURL() {
 		return $this->customAPIURL;
 	}
 
 	/**
-	 * @param null|string $customAPIURL
+	 * Set the Custom-API-URL
+	 *
+	 * @param null|string $customAPIURL - Custom-API-URL or null for none
 	 */
 	public function setCustomAPIURL($customAPIURL) {
 		$this->customAPIURL = $customAPIURL;
 	}
 
 	/**
-	 * Add the Massage to Log if enabled
+	 * Add the Message to the Log if enabled
 	 *
-	 * @param mixed $message - Message to add to Log
+	 * @param string|array|object $message - Message to add to Log
+	 * @param int $errorLevel - PHP-Error-Level (Default E_USER_NOTICE) | See: http://php.net/manual/en/errorfunc.configuration.php#ini.error-reporting
 	 */
-	private function log($message) {
+	private function log($message, $errorLevel = E_USER_NOTICE) {
 		if($this->isLog()) {
 			if(is_array($message) || is_object($message))
-				error_log(print_r($message, true));
+				error_log(print_r($message, true), $errorLevel);
 			else
-				error_log($message);
+				error_log($message, $errorLevel);
 		}
 	}
 
 	/**
 	 * Build SOAP-Auth-Header
 	 *
-	 * @return SoapHeader
+	 * @return SoapHeader - Soap-Auth-Header
 	 */
 	private function buildAuthHeader() {
 		$auth_params = array(

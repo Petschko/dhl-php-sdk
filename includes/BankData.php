@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 20:14
  * Update: 14.07.2018
- * Version: 0.0.3
+ * Version: 0.0.4
  *
  * Notes: Contains BankData Class
  */
@@ -27,7 +27,7 @@ class BankData {
 	 *
 	 * @var string $accountOwnerName - Account-Owner Name
 	 */
-	private $accountOwnerName;
+	private $accountOwnerName = '';
 
 	/**
 	 * Name of the Bank
@@ -37,7 +37,7 @@ class BankData {
 	 *
 	 * @var string $bankName - Name of the Bank
 	 */
-	private $bankName;
+	private $bankName = '';
 
 	/**
 	 * IBAN of the Account
@@ -47,7 +47,7 @@ class BankData {
 	 *
 	 * @var string $iban - IBAN of the Account
 	 */
-	private $iban;
+	private $iban = '';
 
 	/**
 	 * Purpose of bank information
@@ -56,7 +56,7 @@ class BankData {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $note1 - Purpose of bank information or null for none
+	 * @var string|null $note1 - Purpose of bank information | null for none
 	 */
 	private $note1 = null;
 
@@ -67,7 +67,7 @@ class BankData {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $note2 - Purpose of more bank information or null for none
+	 * @var string|null $note2 - Purpose of more bank information | null for none
 	 */
 	private $note2 = null;
 
@@ -78,7 +78,7 @@ class BankData {
 	 * Min-Len: -
 	 * Max-Len: 11
 	 *
-	 * @var string|null $bic - Bank-Information-Code (BankCCL) of bank account or null for none
+	 * @var string|null $bic - Bank-Information-Code (BankCCL) of bank account | null for none
 	 */
 	private $bic = null;
 
@@ -89,7 +89,7 @@ class BankData {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $accountReference - Account reference to customer profile
+	 * @var string|null $accountReference - Account reference to customer profile | null for none
 	 */
 	private $accountReference = null;
 
@@ -114,98 +114,126 @@ class BankData {
 	}
 
 	/**
-	 * @return string
+	 * Get the Account Owner Name
+	 *
+	 * @return string - Account Owner Name
 	 */
 	public function getAccountOwnerName() {
 		return $this->accountOwnerName;
 	}
 
 	/**
-	 * @param string $accountOwnerName
+	 * Set the Account Owner Name
+	 *
+	 * @param string $accountOwnerName - Account Owner Name
 	 */
 	public function setAccountOwnerName($accountOwnerName) {
 		$this->accountOwnerName = $accountOwnerName;
 	}
 
 	/**
-	 * @return string
+	 * Get the Bank-Name
+	 *
+	 * @return string - Bank-Name
 	 */
 	public function getBankName() {
 		return $this->bankName;
 	}
 
 	/**
-	 * @param string $bankName
+	 * Set the Bank-Name
+	 *
+	 * @param string $bankName - Bank-Name
 	 */
 	public function setBankName($bankName) {
 		$this->bankName = $bankName;
 	}
 
 	/**
-	 * @return string
+	 * Get the IBAN
+	 *
+	 * @return string - IBAN
 	 */
 	public function getIban() {
 		return $this->iban;
 	}
 
 	/**
-	 * @param string $iban
+	 * Set the IBAN
+	 *
+	 * @param string $iban - IBAN
 	 */
 	public function setIban($iban) {
 		$this->iban = $iban;
 	}
 
 	/**
-	 * @return null|string
+	 * Get additional Bank-Note (1)
+	 *
+	 * @return null|string - Bank-Note (1) or null for none
 	 */
 	public function getNote1() {
 		return $this->note1;
 	}
 
 	/**
-	 * @param null|string $note1
+	 * Set addition Bank-Note (1)
+	 *
+	 * @param null|string $note1 - Bank-Note (1) or null for none
 	 */
 	public function setNote1($note1) {
 		$this->note1 = $note1;
 	}
 
 	/**
-	 * @return null|string
+	 * Get additional Bank-Note (2)
+	 *
+	 * @return null|string - Bank-Note (2) or null for none
 	 */
 	public function getNote2() {
 		return $this->note2;
 	}
 
 	/**
-	 * @param null|string $note2
+	 * Set additional Bank-Note (2)
+	 *
+	 * @param null|string $note2 - Bank-Note (2) or null for none
 	 */
 	public function setNote2($note2) {
 		$this->note2 = $note2;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the BIC
+	 *
+	 * @return null|string - BIC or null for none
 	 */
 	public function getBic() {
 		return $this->bic;
 	}
 
 	/**
-	 * @param null|string $bic
+	 * Set the BIC
+	 *
+	 * @param null|string $bic - BIC or null for none
 	 */
 	public function setBic($bic) {
 		$this->bic = $bic;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Account reference
+	 *
+	 * @return null|string - Account reference or null for none
 	 */
 	public function getAccountReference() {
 		return $this->accountReference;
 	}
 
 	/**
-	 * @param null|string $accountReference
+	 * Set the Account reference
+	 *
+	 * @param null|string $accountReference - Account reference or null for none
 	 */
 	public function setAccountReference($accountReference) {
 		$this->accountReference = $accountReference;

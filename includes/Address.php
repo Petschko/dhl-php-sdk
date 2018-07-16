@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 15.09.2016
  * Time: 15:23
  * Update: 14.07.2018
- * Version: 0.0.3
+ * Version: 0.0.4
  *
  * Notes: Contains the DHL-Address Class
  */
@@ -44,7 +44,7 @@ abstract class Address {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $addressAddition - Address-Addition
+	 * @var string|null $addressAddition - Address-Addition | null for none
 	 */
 	private $addressAddition = null;
 
@@ -55,7 +55,7 @@ abstract class Address {
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $dispatchingInfo - Optional Dispatching Info
+	 * @var string|null $dispatchingInfo - Optional Dispatching Info | null for none
 	 */
 	private $dispatchingInfo = null;
 
@@ -86,7 +86,7 @@ abstract class Address {
 	 * Min-Len: -
 	 * Max-Len: 30
 	 *
-	 * @var string|null $country - Country
+	 * @var string|null $country - Country | null for none
 	 */
 	private $country = null;
 
@@ -97,18 +97,18 @@ abstract class Address {
 	 * Min-Len: 2
 	 * Max-Len: 2
 	 *
-	 * @var string|null $countryISOCode - Country-ISO-Code
+	 * @var string|null $countryISOCode - Country-ISO-Code | null for none
 	 */
 	private $countryISOCode = null;
 
 	/**
-	 * Contains the Name of the State
+	 * Contains the Name of the State (Geo-Location)
 	 *
 	 * Note: Optional
 	 * Min-Len: -
 	 * Max-Len: 30
 	 *
-	 * @var string|null $state - Name of the State
+	 * @var string|null $state - Name of the State (Geo-Location) | null for none
 	 */
 	private $state = null;
 
@@ -135,84 +135,108 @@ abstract class Address {
 	}
 
 	/**
-	 * @return string
+	 * Get the Street name
+	 *
+	 * @return string - Street name
 	 */
 	public function getStreetName() {
 		return $this->streetName;
 	}
 
 	/**
-	 * @param string $streetName
+	 * Set the Street name
+	 *
+	 * @param string $streetName - Street name
 	 */
 	public function setStreetName($streetName) {
 		$this->streetName = $streetName;
 	}
 
 	/**
-	 * @return string
+	 * Get the Street number
+	 *
+	 * @return string - Street Number
 	 */
 	public function getStreetNumber() {
 		return $this->streetNumber;
 	}
 
 	/**
-	 * @param string $streetNumber
+	 * Set the Street number
+	 *
+	 * @param string $streetNumber - Street Number
 	 */
 	public function setStreetNumber($streetNumber) {
 		$this->streetNumber = $streetNumber;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Address addition
+	 *
+	 * @return null|string - Address addition or null for none
 	 */
 	public function getAddressAddition() {
 		return $this->addressAddition;
 	}
 
 	/**
-	 * @param null|string $addressAddition
+	 * Set the Address addition
+	 *
+	 * @param null|string $addressAddition - Address addition or null for none
 	 */
 	public function setAddressAddition($addressAddition) {
 		$this->addressAddition = $addressAddition;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Dispatching-Info
+	 *
+	 * @return null|string - Dispatching-Info or null for none
 	 */
 	public function getDispatchingInfo() {
 		return $this->dispatchingInfo;
 	}
 
 	/**
-	 * @param null|string $dispatchingInfo
+	 * Set the Dispatching-Info
+	 *
+	 * @param null|string $dispatchingInfo - Dispatching-Info or null for none
 	 */
 	public function setDispatchingInfo($dispatchingInfo) {
 		$this->dispatchingInfo = $dispatchingInfo;
 	}
 
 	/**
-	 * @return string
+	 * Get the ZIP
+	 *
+	 * @return string - ZIP
 	 */
 	public function getZip() {
 		return $this->zip;
 	}
 
 	/**
-	 * @param string $zip
+	 * Set the ZIP
+	 *
+	 * @param string $zip - ZIP
 	 */
 	public function setZip($zip) {
 		$this->zip = $zip;
 	}
 
 	/**
-	 * @return string
+	 * Get the Location
+	 *
+	 * @return string - Location
 	 */
 	public function getLocation() {
 		return $this->location;
 	}
 
 	/**
-	 * @param string $location
+	 * Set the Location
+	 *
+	 * @param string $location - Location
 	 */
 	public function setLocation($location) {
 		$this->location = $location;
@@ -221,7 +245,7 @@ abstract class Address {
 	/**
 	 * Alias for getLocation
 	 *
-	 * @return string
+	 * @return string - Location
 	 */
 	public function getCity() {
 		return $this->location;
@@ -230,21 +254,25 @@ abstract class Address {
 	/**
 	 * Alias for setLocation
 	 *
-	 * @param string $city
+	 * @param string $city - Location
 	 */
 	public function setCity($city) {
 		$this->location = $city;
 	}
 
 	/**
-	 * @return string|null
+	 * Get the Country
+	 *
+	 * @return string|null - Country or null for none
 	 */
 	public function getCountry() {
 		return $this->country;
 	}
 
 	/**
-	 * @param string|null $country
+	 * Set the Country
+	 *
+	 * @param string|null $country - Country or null for none
 	 */
 	public final function setCountry($country) {
 		if($country !== null)
@@ -254,14 +282,18 @@ abstract class Address {
 	}
 
 	/**
-	 * @return string|null
+	 * Get the Country-ISO-Code
+	 *
+	 * @return string|null - Country-ISO-Code or null for none
 	 */
 	public function getCountryISOCode() {
 		return $this->countryISOCode;
 	}
 
 	/**
-	 * @param string|null $countryISOCode
+	 * Set the Country-ISO-Code
+	 *
+	 * @param string|null $countryISOCode - Country-ISO-Code or null for none
 	 */
 	public final function setCountryISOCode($countryISOCode) {
 		if($countryISOCode !== null)
@@ -271,14 +303,18 @@ abstract class Address {
 	}
 
 	/**
-	 * @return null|string
+	 * Get the State (Geo-Location)
+	 *
+	 * @return null|string - State (Geo-Location) or null for none
 	 */
 	public function getState() {
 		return $this->state;
 	}
 
 	/**
-	 * @param null|string $state
+	 * Set the State (Geo-Location)
+	 *
+	 * @param null|string $state - State (Geo-Location) or null for none
 	 */
 	public function setState($state) {
 		$this->state = $state;
