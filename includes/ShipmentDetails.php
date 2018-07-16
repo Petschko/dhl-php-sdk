@@ -21,11 +21,15 @@ use stdClass;
 class ShipmentDetails {
 	/**
 	 * DHL-Package-Type "Palette"
+	 *
+	 * @deprecated - DHL-API-Version 1 Constant
 	 */
 	const PALETTE = 'PL';
 
 	/**
 	 * DHL-Package-Type "Package"
+	 *
+	 * @deprecated - DHL-API-Version 1 Constant
 	 */
 	const PACKAGE = 'PK';
 
@@ -160,6 +164,7 @@ class ShipmentDetails {
 	 * Note: Optional
 	 *
 	 * @var string $packageType - Package-Type
+	 * @deprecated - DHL-API-Version 1 Field
 	 */
 	private $packageType = self::PACKAGE;
 
@@ -354,15 +359,21 @@ class ShipmentDetails {
 
 	/**
 	 * @return string
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getPackageType() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		return $this->packageType;
 	}
 
 	/**
 	 * @param string $packageType
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function setPackageType($packageType) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		$this->packageType = $packageType;
 	}
 
@@ -407,6 +418,7 @@ class ShipmentDetails {
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
 		// todo implement getClass_v1()
+
 		return new StdClass;
 	}
 
