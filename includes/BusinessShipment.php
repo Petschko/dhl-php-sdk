@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 14.07.2018
- * Version: 1.3.2
+ * Update: 16.07.2018
+ * Version: 1.4.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -173,6 +173,7 @@ class BusinessShipment extends Version {
 	 * Max-Len: 70
 	 *
 	 * @var string|null $receiverEmail - Receiver-E-Mail | null for none
+	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	private $receiverEmail = null;
 
@@ -539,8 +540,13 @@ class BusinessShipment extends Version {
 	 * Get the Receiver-Email
 	 *
 	 * @return null|string - Receiver-Email or null if none
+	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	public function getReceiverEmail() {
+		trigger_error('[DHL-PHP-SDK]: Called deprecated method ' . __METHOD__ . ' in class ' . __CLASS__ .
+			'. The notification E-Mail (or receiver E-Mail) was moved into the ShipmentDetail class!' .
+			' Please use the new function, this here will removed in the future!', E_USER_DEPRECATED);
+
 		return $this->receiverEmail;
 	}
 
@@ -548,8 +554,13 @@ class BusinessShipment extends Version {
 	 * Set the Receiver-Email
 	 *
 	 * @param null|string $receiverEmail - Receiver-Email or null for none
+	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	public function setReceiverEmail($receiverEmail) {
+		trigger_error('[DHL-PHP-SDK]: Called deprecated method ' . __METHOD__ . ' in class ' . __CLASS__ .
+			'. The notification E-Mail (or receiver E-Mail) was moved into the ShipmentDetail class!' .
+			' Please use the new function, this here will removed in the future!', E_USER_DEPRECATED);
+
 		$this->receiverEmail = $receiverEmail;
 	}
 
@@ -833,9 +844,15 @@ class BusinessShipment extends Version {
 			$data->ShipmentOrder->Shipment->ShipmentDetails->Service = $this->getService()->getServiceClass_v2($this->getShipmentDetails()->getProduct());
 
 		// Notification
-		if($this->getReceiverEmail() !== null) {
+		$email = null; // Check for backward compatibility
+		if($this->getShipmentDetails()->getNotificationEmail() !== null)
+			$email = $this->getShipmentDetails()->getNotificationEmail();
+		else if($this->receiverEmail !== null)
+			$email = $this->getReceiverEmail();
+
+		if($email !== null) {
 			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification = new StdClass;
-			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification->recipientEmailAddress = $this->getReceiverEmail();
+			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification->recipientEmailAddress = $email;
 		}
 
 		// Bank-Data
