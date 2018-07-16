@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 15.09.2016
  * Time: 14:26
- * Update: 14.07.2018
- * Version: 0.0.3
+ * Update: 16.07.2018
+ * Version: 0.0.4
  *
  * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
  */
@@ -29,8 +29,14 @@ class Credentials {
 
 	/**
 	 * DHL Business-API Test-EKP
+	 *
+	 * @deprecated - Typo in name...
 	 */
 	const DHL_BUSINESS_TEST_EPK = '2222222222'; // Still in here for backward compatibility
+
+	/**
+	 * DHL Business-API Test-EKP
+	 */
 	const DHL_BUSINESS_TEST_EKP = '2222222222';
 
 	/**
