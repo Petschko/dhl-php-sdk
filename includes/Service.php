@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 18:18
  * Update: 16.07.2018
- * Version: 0.0.3
+ * Version: 0.0.4
  *
  * Notes: Contains the Service Class
  */
@@ -307,6 +307,7 @@ class Service {
 	 * Note: Optional|Version 1 ONLY
 	 *
 	 * @var bool|null $goGreen - Is this enabled | null uses default
+	 * @deprecated - DHL-API-Version 1 Field
 	 */
 	private $goGreen = null;
 
@@ -819,15 +820,21 @@ class Service {
 
 	/**
 	 * @return bool|null
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getGoGreen() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		return $this->goGreen;
 	}
 
 	/**
 	 * @param bool|null $goGreen
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function setGoGreen($goGreen) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		$this->goGreen = $goGreen;
 	}
 
