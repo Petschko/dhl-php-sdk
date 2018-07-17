@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 14.07.2018
- * Version: 1.1.2
+ * Update: 17.07.2018
+ * Version: 1.1.3
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -41,23 +41,23 @@ class Response extends Version {
 	/**
 	 * Shipment-Number
 	 *
-	 * @var null|string $shipmentNumber - Shipment-Number
+	 * @var null|string $shipmentNumber - Shipment-Number | null if not set
 	 */
 	private $shipmentNumber = null;
 
 	/**
-	 * TODO DOCUMENT ME
-	 *
 	 * Note: Just used in v1
 	 *
-	 * @var null|string $pieceNumber
+	 * @var null|string $pieceNumber - pieceNumber or null if not set
+	 *
+	 * @deprecated - DHL-API-Version 1 Field
 	 */
 	private $pieceNumber = null;
 
 	/**
 	 * Label URL/Base64-Data - Can also have the return label in one
 	 *
-	 * @var null|string $label - Label-URL or Base64-Label-Data
+	 * @var null|string $label - Label-URL or Base64-Label-Data | null if not set
 	 */
 	private $label = null;
 
@@ -78,14 +78,14 @@ class Response extends Version {
 	/**
 	 * Label-Response-Type (Base64 or URL)
 	 *
-	 * @var null|string $labelType - Label-Response-Type (Base64 or URL)
+	 * @var null|string $labelType - Label-Response-Type (Base64 or URL) | null for default
 	 */
 	private $labelType;
 
 	/**
 	 * Sequence-Number (Useful for AJAX-Requests)
 	 *
-	 * @var string|null $sequenceNumber - Sequence-Number of the Request
+	 * @var string|null $sequenceNumber - Sequence-Number of the Request | null for none
 	 */
 	private $sequenceNumber = null;
 
@@ -108,14 +108,14 @@ class Response extends Version {
 	/**
 	 * Contains the Status-Text
 	 *
-	 * @var string|null $statusText - Status-Text
+	 * @var string|null $statusText - Status-Text | null if not set
 	 */
 	private $statusText = null;
 
 	/**
 	 * Contains the Status-Message (Mostly more detailed, but longer)
 	 *
-	 * @var string|null $statusMessage - Status-Message
+	 * @var string|null $statusMessage - Status-Message | null if not set
 	 */
 	private $statusMessage = null;
 
@@ -181,25 +181,29 @@ class Response extends Version {
 	}
 
 	/**
-	 * TODO DOCUMENT ME
+	 * Getter for pieceNumber
 	 *
-	 * Getter for piece_number
+	 * @return null|string - null if not set else pieceNumber (just used in API-Version 1)
 	 *
-	 * @return null|string - null if not set else piece_number (just used in API-Version 1)
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getPieceNumber() {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
 		return $this->pieceNumber;
 	}
 
 	/**
-	 * TODO DOCUMENT ME
+	 * Setter for pieceNumber
 	 *
-	 * Setter for piece_number
+	 * @param null|string $pieceNumber - null for not set else pieceNumber (just used in API-Version 1)
 	 *
-	 * @param null|string $piece_number - null for not set else piece_number (just used in API-Version 1)
+	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function setPieceNumber($piece_number) {
-		$this->pieceNumber = $piece_number;
+	private function setPieceNumber($pieceNumber) {
+		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+
+		$this->pieceNumber = $pieceNumber;
 	}
 
 	/**
@@ -383,14 +387,13 @@ class Response extends Version {
 
 		// Set Label if exists
 		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
-			if(isset($response->CreationState->Labeldata)) // todo: is valid???
+			if(isset($response->CreationState->Labeldata))
 				$this->setLabel($response->CreationState->Labeldata);
 		} else if(isset($response->CreationState->Labelurl))
 			$this->setLabel($response->CreationState->Labelurl);
 
 		$this->setStatusCode((int) $response->status->StatusCode);
 		$this->setStatusMessage($response->status->StatusMessage);
-		//todo add more from v1
 	}
 
 	/**
