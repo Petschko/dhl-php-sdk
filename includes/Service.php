@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:18
- * Update: 16.07.2018
- * Version: 0.0.4
+ * Update: 17.07.2018
+ * Version: 0.0.5
  *
  * Notes: Contains the Service Class
  */
@@ -444,13 +444,6 @@ class Service {
 	 * @var IdentCheck|null $identCheckObj - Ident-Check Object
 	 */
 	private $identCheckObj = null;
-
-	/**
-	 * Service constructor.
-	 */
-	public function __construct() {
-		// VOID
-	}
 
 	/**
 	 * Clears Memory
