@@ -757,6 +757,71 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Creates the getManifest-Request
+	 *
+	 * @param string|int $manifestDate - Manifest-Date as String (YYYY-MM-DD) or the int time() value of the date
+	 * @param bool $useTimeStamp - Use the int Time Value instead of a String
+	 * @return bool|Response - false on error or DHL-Response Object
+	 */
+	public function getManifest($manifestDate, $useTimeStamp = false) {
+		if($useTimeStamp) {
+			// Convert to Date-Format for DHL
+			$manifestDate = date('Y-m-d', $manifestDate);
+		}
+
+		switch($this->getMayor()) {
+			case 1:
+				trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+				$this->addError('Version 1 Method "' . __METHOD__ . '" is not implemented or removed!');
+
+				return false;
+			case 2:
+			default:
+				$data = $this->createGetManifestClass_v2($manifestDate);
+		}
+
+		try {
+			$response = $this->sendGetManifestRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Creates the Data-Object for getManifest
+	 *
+	 * @param string $manifestDate - Manifest Date (String-Format: YYYY-MM-DD)
+	 * @return StdClass - Data-Object
+	 */
+	private function createGetManifestClass_v2($manifestDate) {
+		$data = new StdClass;
+
+		$data->Version = $this->getVersionClass();
+		$data->manifestDate = $manifestDate;
+
+		return $data;
+	}
+
+	/**
+	 * Creates the getManifest-Request via SOAP
+	 *
+	 * @param Object|array $data - Manifest-Data
+	 * @return Object - DHL-Response
+	 */
+	private function sendGetManifestRequest($data) {
+		return $this->getSoapClient()->getManifest($data);
+	}
+
+	/**
 	 * Creates the Shipment-Order Request via SOAP
 	 *
 	 * @param Object|array $data - Shipment-Data
