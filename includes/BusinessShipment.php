@@ -7,7 +7,7 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 16.07.2018
+ * Update: 01.08.2018
  * Version: 1.4.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
@@ -809,13 +809,22 @@ class BusinessShipment extends Version {
 	 * Creates the getManifest-Request
 	 *
 	 * @param string|int $manifestDate - Manifest-Date as String (YYYY-MM-DD) or the int time() value of the date
-	 * @param bool $useTimeStamp - Use the int Time Value instead of a String
+	 * @param bool $useIntTime - Use the int Time Value instead of a String
 	 * @return bool|Response - false on error or DHL-Response Object
 	 */
-	public function getManifest($manifestDate, $useTimeStamp = false) {
-		if($useTimeStamp) {
+	public function getManifest($manifestDate, $useIntTime = false) {
+		if($useIntTime) {
 			// Convert to Date-Format for DHL
+			$oldDate = $manifestDate;
 			$manifestDate = date('Y-m-d', $manifestDate);
+
+			if($manifestDate === false) {
+				$this->addError('Could not convert given time() value "' . $oldDate . '" to YYYY-MM-DD... Called method: ' . __METHOD__);
+
+				return false;
+			}
+
+			unset($oldDate);
 		}
 
 		switch($this->getMayor()) {

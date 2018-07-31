@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 13:07
- * Update: 16.07.2018
- * Version: 0.1.0
+ * Update: 01.08.2018
+ * Version: 0.1.1
  *
  * Notes: Details for a Shipment (Like size/Weight etc)
  */
@@ -259,18 +259,19 @@ class ShipmentDetails {
 	/**
 	 * Set the Shipment-Date
 	 *
-	 * @param string|int|null $shipmentDate - Shipment-Date
-	 * @param bool $useTimeStamp - Use a Time-Stamp
+	 * @param string|int|null $shipmentDate - Shipment-Date as String YYYY-MM-DD or the int value time() of the date | null for none
+	 * @param bool $useIntTime - Use the int Time Value instead of a String
 	 */
-	public function setShipmentDate($shipmentDate, $useTimeStamp = false) {
-		if($useTimeStamp) {
+	public function setShipmentDate($shipmentDate, $useIntTime = false) {
+		if($useIntTime) {
 			// Convert Time-Stamp to Date
-			$this->shipmentDate = date('Y-m-d', $shipmentDate);
+			$shipmentDate = date('Y-m-d', $shipmentDate);
 
-			if($this->shipmentDate === false)
-				$this->setShipmentDate($shipmentDate);
-		} else
-			$this->shipmentDate = $shipmentDate;
+			if($shipmentDate === false)
+				$shipmentDate = null;
+		}
+
+		$this->shipmentDate = $shipmentDate;
 	}
 
 	/**

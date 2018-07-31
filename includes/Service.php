@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:18
- * Update: 17.07.2018
- * Version: 0.0.5
+ * Update: 01.08.2018
+ * Version: 0.1.0
  *
  * Notes: Contains the Service Class
  */
@@ -511,9 +511,17 @@ class Service {
 	}
 
 	/**
-	 * @param null|string $dayOfDeliveryDate
+	 * @param null|int|string $dayOfDeliveryDate - The Day of Delivery as ISO-Date-Format (YYYY-MM-DD) or the day as time() int value
+	 * @param bool $useIntTime - Use the int Time Value instead of a String
 	 */
-	public function setDayOfDeliveryDate($dayOfDeliveryDate) {
+	public function setDayOfDeliveryDate($dayOfDeliveryDate, $useIntTime = false) {
+		if($useIntTime) {
+			$dayOfDeliveryDate = date('Y-m-d', $dayOfDeliveryDate);
+
+			if($dayOfDeliveryDate === false)
+				$dayOfDeliveryDate = null;
+		}
+
 		$this->dayOfDeliveryDate = $dayOfDeliveryDate;
 	}
 
