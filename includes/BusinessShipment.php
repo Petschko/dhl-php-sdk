@@ -675,6 +675,55 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Gets the current (local)-Version or Request it via SOAP from DHL
+	 *
+	 * @param bool $viaSOAP - Request the Version from DHL (Default: false - get local-version as string)
+	 * @param bool $getBuildNumber - Return the Build number as well (String look then like this: 2.2.12) - Default false
+	 * @return bool|Response|string - Returns the Version as String or false on error
+	 */
+	public function getVersion($viaSOAP = false, $getBuildNumber = false) {
+		if(! $viaSOAP)
+			return parent::getVersion();
+
+		switch($this->getMayor()) {
+			case 1:
+				trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
+				$this->addError('Version 1 SOAP-Method "' . __METHOD__ . '" is not implemented or removed!');
+
+				return false;
+			case 2:
+			default:
+				$data = $this->getVersionClass();
+		}
+
+		try {
+			$response = $this->sendGetVersionRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return $response->Version->majorRelease . '.' . $response->Version->minorRelease .
+				(($getBuildNumber) ? '.' . $response->Version->build : '');
+	}
+
+	/**
+	 * Creates the getVersion-Request via SOAP
+	 *
+	 * @param Object|array $data - Version-Data
+	 * @return Object - DHL-Response
+	 */
+	private function sendGetVersionRequest($data) {
+		return $this->getSoapClient()->getVersion($data);
+	}
+
+	/**
 	 * Creates the doManifest-Request via SOAP
 	 *
 	 * @param Object|array $data - Manifest-Data
