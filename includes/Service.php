@@ -921,20 +921,30 @@ class Service {
 
 	/**
 	 * @return bool|null
+	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getPersonalHandover() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error(
+			'[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon ( Called method ' . __METHOD__ .
+			' - Version 2 Function: getNamedPersonOnly() )!',
+			E_USER_DEPRECATED
+		);
 
 		return $this->personalHandover;
 	}
 
 	/**
 	 * @param bool|null $personalHandover
+	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function setPersonalHandover($personalHandover) {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
+		trigger_error(
+			'[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon ( Called method ' . __METHOD__ .
+			' - Version2 Function: setNamedPersonOnly($name) )!',
+			E_USER_DEPRECATED
+		);
 
 		$this->personalHandover = $personalHandover;
 	}
