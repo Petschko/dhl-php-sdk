@@ -111,23 +111,23 @@ class Service {
 	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
 	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 *
-	 * @var bool|null $individualSenderRequiredmentsEnabled - Is this enabled | null uses default
+	 * @var bool|null $individualSenderRequirementsEnabled - Is this enabled | null uses default
 	 */
-	private $individualSenderRequiredmentsEnabled = null;
+	private $individualSenderRequirementsEnabled = null;
 
 	/**
 	 * Contains the Requirement (Free text)
 	 *
-	 * Note: Optional|Required if $individualSenderRequiredmentsEnabled
+	 * Note: Optional|Required if $individualSenderRequirementsEnabled
 	 * Available for:
 	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER
 	 *  DHL_ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 	 * Min-Len: 1
 	 * Max-Len: 250
 	 *
-	 * @var string|null $individualSenderRequiredmentsText - Sender Requirement (Free text)
+	 * @var string|null $individualSenderRequirementsText - Sender Requirement (Free text) | null for none
 	 */
-	private $individualSenderRequiredmentsText = null;
+	private $individualSenderRequirementsText = null;
 
 	/**
 	 * Contains if Packaging return is enabled
@@ -455,8 +455,8 @@ class Service {
 		unset($this->deliveryTimeframe);
 		unset($this->preferredTimeEnabled);
 		unset($this->preferredTime);
-		unset($this->individualSenderRequiredmentsEnabled);
-		unset($this->individualSenderRequiredmentsText);
+		unset($this->individualSenderRequirementsEnabled);
+		unset($this->individualSenderRequirementsText);
 		unset($this->packagingReturn);
 		unset($this->returnImmediatlyIfShipmentFailed);
 		unset($this->noticeNonDeliverability);
@@ -582,32 +582,98 @@ class Service {
 	}
 
 	/**
+	 * Alias for $this->getIndividualSenderRequirementsEnabled()
+	 *
 	 * @return bool|null
+	 *
+	 * @deprecated - Invalid name of the function
 	 */
 	public function getIndividualSenderRequiredmentsEnabled() {
-		return $this->individualSenderRequiredmentsEnabled;
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use getIndividualSenderRequirementsEnabled() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+
+		return $this->getIndividualSenderRequirementsEnabled();
 	}
 
 	/**
-	 * @param bool|null $individualSenderRequiredmentsEnabled
+	 * Alias for $this->setIndividualSenderRequirementsEnabled()
+	 *
+	 * @param bool|null $individualSenderRequirementsEnabled
+	 *
+	 * @deprecated - Invalid name of the function
 	 */
-	public function setIndividualSenderRequiredmentsEnabled($individualSenderRequiredmentsEnabled) {
-		$this->individualSenderRequiredmentsEnabled = $individualSenderRequiredmentsEnabled;
+	public function setIndividualSenderRequiredmentsEnabled($individualSenderRequirementsEnabled) {
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use setIndividualSenderRequirementsEnabled() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+
+		$this->setIndividualSenderRequirementsEnabled($individualSenderRequirementsEnabled);
+	}
+
+	/**
+	 * Alias for $this->getIndividualSenderRequirementsText()
+	 *
+	 * @return null|string
+	 *
+	 * @deprecated - Invalid name of the function
+	 */
+	public function getIndividualSenderRequiredmentsText() {
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use getIndividualSenderRequirementsText() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+
+		return $this->getIndividualSenderRequirementsText();
+	}
+
+	/**
+	 * Alias for $this->setIndividualSenderRequirementsText()
+	 *
+	 * @param null|string $individualSenderRequirementsText
+	 *
+	 * @deprecated - Invalid name of the function
+	 */
+	public function setIndividualSenderRequiredmentsText($individualSenderRequirementsText) {
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use setIndividualSenderRequirementsText() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+
+		$this->setIndividualSenderRequirementsText($individualSenderRequirementsText);
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	public function getIndividualSenderRequirementsEnabled() {
+		return $this->individualSenderRequirementsEnabled;
+	}
+
+	/**
+	 * @param bool|null $individualSenderRequirementsEnabled
+	 */
+	public function setIndividualSenderRequirementsEnabled($individualSenderRequirementsEnabled) {
+		$this->individualSenderRequirementsEnabled = $individualSenderRequirementsEnabled;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public function getIndividualSenderRequiredmentsText() {
-		return $this->individualSenderRequiredmentsText;
+	public function getIndividualSenderRequirementsText() {
+		return $this->individualSenderRequirementsText;
 	}
 
 	/**
-	 * @param null|string $individualSenderRequiredmentsText
+	 * @param null|string $individualSenderRequirementsText
 	 */
-	public function setIndividualSenderRequiredmentsText($individualSenderRequiredmentsText) {
-		$this->individualSenderRequiredmentsText = $individualSenderRequiredmentsText;
+	public function setIndividualSenderRequirementsText($individualSenderRequirementsText) {
+		$this->individualSenderRequirementsText = $individualSenderRequirementsText;
 	}
+
+
 
 	/**
 	 * @return bool|null
