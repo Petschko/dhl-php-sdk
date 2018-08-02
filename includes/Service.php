@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:18
- * Update: 01.08.2018
- * Version: 0.1.0
+ * Update: 02.08.2018
+ * Version: 0.1.1
  *
  * Notes: Contains the Service Class
  */
@@ -145,18 +145,18 @@ class Service {
 	 * Available for:
 	 *  DHL_ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
 	 *
-	 * @var bool|null $returnImmediatlyIfShipmentFailed - Is this enabled | null uses default
+	 * @var bool|null $returnImmediatelyIfShipmentFailed - Is this enabled | null uses default
 	 */
-	private $returnImmediatlyIfShipmentFailed = null;
+	private $returnImmediatelyIfShipmentFailed = null;
 
 	/**
 	 * Contains if Notice on Non-Deliverable is enabled
 	 *
 	 * Note: Optional
 	 *
-	 * @var bool|null $noticeNonDeliverability - Is this enabled | null uses default
+	 * @var bool|null $noticeOnNonDeliverable - Is this enabled | null uses default
 	 */
-	private $noticeNonDeliverability = null;
+	private $noticeOnNonDeliverable = null;
 
 	/**
 	 * Contains if Shipment-Handling is enabled
@@ -458,8 +458,8 @@ class Service {
 		unset($this->individualSenderRequirementsEnabled);
 		unset($this->individualSenderRequirementsText);
 		unset($this->packagingReturn);
-		unset($this->returnImmediatlyIfShipmentFailed);
-		unset($this->noticeNonDeliverability);
+		unset($this->returnImmediatelyIfShipmentFailed);
+		unset($this->noticeOnNonDeliverable);
 		unset($this->shipmentHandlingEnabled);
 		unset($this->shipmentHandlingType);
 		unset($this->endorsementEnabled);
@@ -673,8 +673,6 @@ class Service {
 		$this->individualSenderRequirementsText = $individualSenderRequirementsText;
 	}
 
-
-
 	/**
 	 * @return bool|null
 	 */
@@ -690,31 +688,99 @@ class Service {
 	}
 
 	/**
-	 * @return bool|null
+	 * Alias for $this->getReturnImmediatelyIfShipmentFailed()
+	 *
+	 * @return bool|null - Should Package return immediately when the shipping has failed or null for default
+	 * 
+	 * @deprecated - Invalid name of the function
 	 */
 	public function getReturnImmediatlyIfShipmentFailed() {
-		return $this->returnImmediatlyIfShipmentFailed;
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use getReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+		
+		return $this->getReturnImmediatelyIfShipmentFailed();
 	}
 
 	/**
-	 * @param bool|null $returnImmediatlyIfShipmentFailed
+	 * Alias for $this->setReturnImmediatelyIfShipmentFailed()
+	 *
+	 * @param bool|null $returnImmediatelyIfShipmentFailed - Should Package return immediately when the shipping has failed or null for default
+	 * 
+	 * @deprecated - Invalid name of the function
 	 */
-	public function setReturnImmediatlyIfShipmentFailed($returnImmediatlyIfShipmentFailed) {
-		$this->returnImmediatlyIfShipmentFailed = $returnImmediatlyIfShipmentFailed;
+	public function setReturnImmediatlyIfShipmentFailed($returnImmediatelyIfShipmentFailed) {
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use setReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+		
+		$this->setReturnImmediatelyIfShipmentFailed($returnImmediatelyIfShipmentFailed);
+	}
+	
+	/**
+	 * Get if the Package should return immediately when the shipping has failed
+	 * 
+	 * @return bool|null - Should Package return immediately when the shipping has failed or null for default
+	 */
+	public function getReturnImmediatelyIfShipmentFailed() {
+		return $this->returnImmediatelyIfShipmentFailed;
+	}
+
+	/**
+	 * Set if the Package should return immediately when the shipping has failed
+	 * 
+	 * @param bool|null $returnImmediatelyIfShipmentFailed - Should Package return immediately when the shipping has failed or null for default
+	 */
+	public function setReturnImmediatelyIfShipmentFailed($returnImmediatelyIfShipmentFailed) {
+		$this->returnImmediatelyIfShipmentFailed = $returnImmediatelyIfShipmentFailed;
+	}
+
+	/**
+	 * Alias for $this->getNoticeOnNonDeliverable()
+	 *
+	 * @return bool|null
+	 *
+	 * @deprecated - Invalid name of the function
+	 */
+	public function getNoticeNonDeliverability() {
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use getNoticeOnNonDeliverable() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+
+		return $this->getNoticeOnNonDeliverable();
+	}
+
+	/**
+	 * Alias for $this->setNoticeOnNonDeliverable()
+	 *
+	 * @param bool|null $noticeOnNonDeliverable
+	 *
+	 * @deprecated - Invalid name of the function
+	 */
+	public function setNoticeNonDeliverability($noticeOnNonDeliverable) {
+		trigger_error(
+			'Called deprecated method ' . __METHOD__ . ': Use setNoticeOnNonDeliverable() instead, this method will removed in the future!',
+			E_USER_DEPRECATED
+		);
+
+		$this->setNoticeOnNonDeliverable($noticeOnNonDeliverable);
 	}
 
 	/**
 	 * @return bool|null
 	 */
-	public function getNoticeNonDeliverability() {
-		return $this->noticeNonDeliverability;
+	public function getNoticeOnNonDeliverable() {
+		return $this->noticeOnNonDeliverable;
 	}
 
 	/**
-	 * @param bool|null $noticeNonDeliverability
+	 * @param bool|null $noticeOnNonDeliverable
 	 */
-	public function setNoticeNonDeliverability($noticeNonDeliverability) {
-		$this->noticeNonDeliverability = $noticeNonDeliverability;
+	public function setNoticeOnNonDeliverable($noticeOnNonDeliverable) {
+		$this->noticeOnNonDeliverable = $noticeOnNonDeliverable;
 	}
 
 	/**
@@ -887,6 +953,7 @@ class Service {
 
 	/**
 	 * @return bool|null
+	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getGoGreen() {
@@ -897,6 +964,7 @@ class Service {
 
 	/**
 	 * @param bool|null $goGreen
+	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function setGoGreen($goGreen) {
@@ -1129,8 +1197,6 @@ class Service {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
-		//todo implement getClass_v1()
-
 		return new StdClass;
 	}
 
@@ -1173,31 +1239,31 @@ class Service {
 			$class->PreferredTime->active = (int) $this->getPreferredTimeEnabled();
 			$class->PreferredTime->type = $this->getPreferredTime();
 		}
-		if($this->getIndividualSenderRequiredmentsEnabled() !== null && in_array(
+		if($this->getIndividualSenderRequirementsEnabled() !== null && in_array(
 				$productType,
 				array(
 					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER,
 					ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER
 				))) {
 			$class->IndividualSenderRequirement = new StdClass;
-			$class->IndividualSenderRequirement->active = (int) $this->getIndividualSenderRequiredmentsEnabled();
-			$class->IndividualSenderRequirement->details = $this->getIndividualSenderRequiredmentsText();
+			$class->IndividualSenderRequirement->active = (int) $this->getIndividualSenderRequirementsEnabled();
+			$class->IndividualSenderRequirement->details = $this->getIndividualSenderRequirementsText();
 		}
 		if($this->getPackagingReturn() !== null) {
 			$class->PackagingReturn = new StdClass;
 			$class->PackagingReturn->active = (int) $this->getPackagingReturn();
 		}
-		if($this->getReturnImmediatlyIfShipmentFailed() !== null && in_array(
+		if($this->getReturnImmediatelyIfShipmentFailed() !== null && in_array(
 				$productType,
 				array(
 					ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE
 				))) {
 			$class->ReturnImmediately = new StdClass;
-			$class->ReturnImmediately->active = (int) $this->getReturnImmediatlyIfShipmentFailed();
+			$class->ReturnImmediately->active = (int) $this->getReturnImmediatelyIfShipmentFailed();
 		}
-		if($this->getNoticeNonDeliverability() !== null) {
+		if($this->getNoticeOnNonDeliverable() !== null) {
 			$class->NoticeOfNonDeliverability = new StdClass;
-			$class->NoticeOfNonDeliverability->active = (int) $this->getNoticeNonDeliverability();
+			$class->NoticeOfNonDeliverability->active = (int) $this->getNoticeOnNonDeliverable();
 		}
 		if($this->getShipmentHandlingEnabled() !== null && in_array(
 				$productType,
