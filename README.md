@@ -33,7 +33,7 @@ require_once(__DIR__ . '/includes/_nonComposerLoader.php');
 
 This Project is written for the DHL-SOAP-API **Version 2 or higher**.
 
-Version 1 Methods are marked as @deprecated and will removed soon. Please upgrade to the API-Version 2 as soon as possible.
+Version 1 Methods are marked as deprecated and will removed soon. Please upgrade to the API-Version 2 as soon as possible.
 
 ## Usage / Getting started
 

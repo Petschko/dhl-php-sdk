@@ -31,13 +31,13 @@ $credentials->setApiPassword('');		// Test-Modus: Your DHL-Dev-Account Password 
 // Set Shipment Details
 $shipmentDetails = new ShipmentDetails($credentials->getEkp(10) . '0101'); // Create a Shipment-Details with the first 10 digits of your EKP-Number and 0101 (?)
 $shipmentDetails->setShipmentDate('2017-01-30'); // Optional: Need to be in the future and NOT on a sunday | null or drop it, to use today
+$shipmentDetails->setNotificationEmail('peter-91@hotmail.de'); // Needed if you want inform the receiver via mail
 //$shipmentDetails->setReturnAccountNumber($credentials->getEkp(10) . '0701'); // Needed if you want to print a return label
 //$shipmentDetails->setReturnReference($reference); // Only needed if you want to print a return label
 
 // Set Sender
 $sender = new Sender();
 $sender->setName('Peter Muster');
-/*$sender->setFullStreet('Test Straße 12a'); // Do not use this anymore!*/
 $sender->setStreetName('Test Straße');
 $sender->setStreetNumber('12a');
 $sender->setZip('21037');
@@ -48,7 +48,6 @@ $sender->setCountryISOCode('DE');
 // Set Receiver
 $receiver = new Receiver();
 $receiver->setName('Test Empfänger');
-/*$receiver->setFullStreet('Test Straße 23b'); // Do not use this anymore!*/
 $receiver->setStreetName('Test Straße');
 $receiver->setStreetNumber('23b');
 $receiver->setZip('21037');
@@ -65,6 +64,7 @@ $service = new Service();
 
 // Required just Credentials also accept Test-Modus and Version
 $dhl = new BusinessShipment($credentials, /*Optional*/$testModus, /*Optional*/$version);
+
 // You can add your own API-File (if you want to use a remote one or your own) - else you don't need this
 //$dhl->setCustomAPIURL('http://myserver.com/myAPIFile.wsdl');
 
@@ -75,7 +75,6 @@ $dhl->setReceiver($receiver); // You can set these Object-Types here: DHL_Filial
 //$dhl->setReturnReceiver($returnReceiver); // Needed if you want print a return label
 $dhl->setService($service);
 $dhl->setShipmentDetails($shipmentDetails);
-//$dhl->setReceiverEmail('receiver@mail.com'); // Needed if you want inform the receiver via mail
 $dhl->setLabelResponseType(BusinessShipment::RESPONSE_TYPE_URL);
 
 $response = $dhl->createShipment(); // Creates the request
@@ -92,6 +91,10 @@ $response = $dhl->createShipment(); // Creates the request
 // To do a Manifest-Request you can use the doManifest method - you have to provide a Shipment-Number
 //$manifestDHL = new BusinessShipment($credentials, $testModus, $version);
 //$manifestResponse = $manifestDHL->doManifest('shipmentNumber');
+
+// To do a Manifest-Request you can use the doManifest method - you have to provide a Shipment-Number
+//$getManifestDHL = new BusinessShipment($credentials, $testModus, $version);
+//$getManifestResponse = $getManifestDHL->getManifest('YYYY-MM-DD'); // Need to be in the past or today after doManifest()
 
 // Get the result (just use var_dump to show all results)
 if($response !== false)
