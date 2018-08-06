@@ -97,11 +97,11 @@ You need to setup the Shipment-Details for your Shipment (like Size/Weight etc).
 
 ```php
 // Create the Object with the first 10 Digits of your Account-Number (EKP).
-// You can use the \Petschko\DHL\Credentials function "->getEko((int) amount)" to get just the first 10 digits if longer
-$shipmentDetails = new \Petschko\DHL\ShipmentDetails((string) $credentials->getEkp(10) . '0101'); // Ensure the 0101 at the end
+// You can use the \Petschko\DHL\Credentials function "->getEkp((int) amount)" to get just the first 10 digits if longer
+$shipmentDetails = new \Petschko\DHL\ShipmentDetails((string) $credentials->getEkp(10) . '0101'); // Ensure the 0101 at the end (or the number you need for your Product)
 ```
 
-You can setup details for that, if you need. If you don't set them, it use the default values _(This Part is Optional)_
+You can setup details for that, if you need. If you don't set them, it uses the default values _(This Part is Optional)_
 
 ```php
 // Setup details
@@ -144,19 +144,15 @@ $shipmentDetails->setReturnReference((string) 'freetext 35 len'); // Default: nu
 
 // Sizes/Weight
 $shipmentDetails->setWeight((float) $weightInKG); // Default: 5.0 (KG)
-$shipmentDetails->setLength((int) $lengthInCM); // Default: null -> Unset
-$shipmentDetails->setWidth((int) $widthInCM); // Default: null -> Unset
-$shipmentDetails->setHeight((int) $heightInCM); // Default: null -> Unset
+$shipmentDetails->setLength((int) $lengthInCM); // Default: null -> Unset|none
+$shipmentDetails->setWidth((int) $widthInCM); // Default: null -> Unset|none
+$shipmentDetails->setHeight((int) $heightInCM); // Default: null -> Unset|none
 
-// -- Package-Type (ONLY NEEDED IN VERSION 1)
-/* Sets the Type of the Package. Possible Values:
-* PALETTE = 'PL';
-* PACKAGE = 'PK';
-*/
-$shipmentDetails->setPackageType((string) \Petschko\DHL\ShipmentDetails::{type}); // Default: PACKAGE
+// Notification E-Mail for this Shipping
+$shipmentDetails->setNotificationEmail((string) $email); // Default: null -> Disabled
 ```
 
-##### \Petschko\DHL\Sender, \Petschko\DHL\Receiver + \Petschko\DHL\ReturnReceiver Object(s)
+##### \Petschko\DHL\Sender, \Petschko\DHL\Receiver & \Petschko\DHL\ReturnReceiver Object(s)
 
 Now you have to create a Sender and a Receiver. They are similar to set, just the XML creation is different so you have to use different Objects for that.
 
@@ -173,12 +169,10 @@ Setup all **Required** Information
 ```php
 $sender->setName((string) 'Organisation Petschko'); // Can be a Person-Name or Company Name
 
-// You can add the whole address with that setter if you want
-$sender->setFullStreet((string) 'Oberer Landweg 12a');
-
-// If you want to set the elements on your own use the setter for them
+// You need to seperate the StreetName from the Number and set each one to its own setter
+// Example Full Address: "Oberer Landweg 12a" 
 $sender->setStreetName((string) 'Oberer Landweg');
-$sender->setStreetNumber((string) '12a');
+$sender->setStreetNumber((string) '12a'); // A Number is ALWAYS needed
 
 $sender->setZip((string) '21035');
 $sender->setCity((string) 'Hamburg');
@@ -200,7 +194,7 @@ $sender->setName3((string) 'Name Line 3'); // Default: null -> Disabled
 $sender->setPhone((string) '04073409677'); // Default: null -> Disabled
 $sender->setEmail((string) 'peter-91@hotmail.de'); // Default: null -> Disabled
 
-// Mostly used in bigger Companies
+// Mostly used in bigger Companies (Contact-Person)
 $sender->setContactPerson((string) 'Peter Dragicevic'); // Default: null -> Disabled
 ```
 
@@ -219,7 +213,7 @@ I'll not explain the Service-Object because there are too many settings. Please 
 
 ##### \Petschko\DHL\BankData Object
 
-You can also use the `\Petschko\DHL\BankData` Object. Bank data can be provided for different purposes. E.g. if COD is booked as service, bank data must be provided by DHL customer (mandatory server logic). The collected money will be transferred to specified bank account.
+You can also use the `\Petschko\DHL\BankData` Object. Bank data can be provided for different purposes. E.g. if COD (Cash on Delivery) is booked as service, bank data must be provided by DHL customer (mandatory server logic). The collected money will be transferred to specified bank account.
 
 You can look to the PHP-File of the `\Petschko\DHL\BankData`-Object, and checkout what you can set there. I will not explain it here.
 
@@ -264,9 +258,6 @@ $dhl->setLog((bool) true);
 
 // Set a Sequence-Number if you need a referrence when you get the response
 $dhl->setSequenceNumber((string) '1'); // Default: '1'
-
-// You can let DHL send a Mail to the Receiver, if you want that set the Mail
-$dhl->setReceiverEmail((string) 'receiver@mail.com'); // Default: null -> Disabled
 
 /* You can get the Label as URL or as Base64-Data-String - set it how you want to have it
 * Possible Values:
@@ -386,10 +377,40 @@ It works like deleting a Shipment:
 $dhl = new \Petschko\DHL\BusinessShipment($credentials);
 
 // Do the Manifest-Request
-$dhl->doManifest((string) 'shipment_number');
+$response = $dhl->doManifest((string) 'shipment_number');
 ```
 
 If the request failed, you get `false` else a `\Petschko\DHL\Response` Object.
+For more Information about the Response, look down where I describe the `\Petschko\DHL\Response` Class.
+
+### GetManifest
+
+_Please note, that you need the `\Petschko\DHL\Credentials` Object with Valid Login-Information for that._
+
+I personally also don't know for what is this for, but it works!
+
+#### Classes used
+
+- `\Petschko\DHL\Credentials` **(Req)** - Login Information
+- `\Petschko\DHL\BusinessShipment` **(Req)** - Manages all Actions + Information
+	- `\Petschko\DHL\Version` (Parent)
+- `\Petschko\DHL\Response` **(Req|Auto)** - Response Information
+	- `\Petschko\DHL\Version` (Parent)
+
+#### How to create
+
+The syntax is quite simple, you just need to specify the date where you want to have the manifest:
+
+```php
+// Create a \Petschko\DHL\BusinessShipment Object with your credentials
+$dhl = new \Petschko\DHL\BusinessShipment($credentials);
+
+// Request to get the manifest from a specific date, the date can be given with an ISO-Date String (YYYY-MM-DD) or with the `time()` value of the day
+$response = $dhl->getManifest('2018-08-06');
+```
+
+If the request failed, you get `false` else a `\Petschko\DHL\Response` Object.
+For more Information about the Response, look down where I describe the `\Petschko\DHL\Response` Class.
 
 ### \Petschko\DHL\Response Object
 
@@ -403,6 +424,8 @@ I will explain which values you can get from the Response-Object
 (string) $response->getShipmentNumber(); // Returns the Shipment-Number of the Request or null
 (string) $response->getLabel(); // Returns the Label URL or Base64-Label-String or null
 (string) $response->getReturnLabel(); // Returns the ReturnLabel (URL/B64) or null
+(string) $response->getExportDoc(); // Returns the Export-Document (URL/B64) or null (Can only be obtained if the Export-Doc Object was added to the Shipment request)
+(string) $response->getManifestData(); // Returns the Manifest PDF-Data as Base64 String (Can be obtained via getManifest) or null
 (string) $response->getSequenceNumber(); // Returns your provided sequence number or null
 (int) $response->getStatusCode(); // Returns the Status-Code (Difference to DHL - Weak-Validation is 1 not 0)
 (string) $response->getStatusText(); // Returns the Status-Text or null
@@ -411,7 +434,7 @@ I will explain which values you can get from the Response-Object
 
 If a value is not set you get usually `null` as result. Not every Action fills out all of these values!
 
-You can also take a look at the Class Constance's, they are helping you to identify the Status-Codes:
+You can also take a look at the Class Constants, they are helping you to identify the Status-Codes:
 
 ```php
 const \Petschko\DHL\Response::ERROR_NOT_SET = -1;
