@@ -9,7 +9,11 @@
             "email": "peter@petschko.org"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=5.3.10",
+        "ext-soap": "*",
+        "ext-mbstring": "*"
+    },
     "autoload": {
         "psr-4": {
             "Petschko\\DHL\\": "includes/"
