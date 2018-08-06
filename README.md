@@ -26,7 +26,7 @@ If you can't use Composer (or don't want to), you can also use this SDK without 
 To initial this SDK, just require the [_nonComposerLoader.php](https://github.com/Petschko/dhl-php-sdk/blob/master/includes/_nonComposerLoader.php)-File from the `/includes/` directory.
 
 ```php
-require_once(__DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . '_nonComposerLoader.php');
+require_once(__DIR__ . '/includes/_nonComposerLoader.php');
 ```
 
 ## Compatibility
@@ -40,7 +40,7 @@ Version 1 Methods are marked as @deprecated and will removed soon. Please upgrad
 - [Getting started (Just a quick guide how you have to use it)](https://github.com/Petschko/dhl-php-sdk/blob/master/examples/getting-started.md)
 - _More examples soon_
 
-Please have a look at the [`examples` Directory](https://github.com/Petschko/dhl-php-sdk/tree/master/examples). There you can find how to use this SDK also with Code-Examples, else check the _(Doxygen)_ [Documentation](http://docs.petschko.org/dhl-php-sdk/index.html) for deeper knowledge.
+Please have a look at the `examples` [Directory](https://github.com/Petschko/dhl-php-sdk/tree/master/examples). There you can find how to use this SDK also with Code-Examples, else check the _(Doxygen)_ [Documentation](http://docs.petschko.org/dhl-php-sdk/index.html) for deeper knowledge.
 
 ## Code Documentation
 

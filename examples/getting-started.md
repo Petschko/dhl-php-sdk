@@ -91,7 +91,7 @@ One of them:
 
 #### How to create
 
-##### \Petschko\DHL\ShipmentDetails Object
+##### `\Petschko\DHL\ShipmentDetails` Object
 
 You need to setup the Shipment-Details for your Shipment (like Size/Weight etc). You can do that with the `\Petschko\DHL\ShipmentDetails` Object.
 
@@ -152,11 +152,11 @@ $shipmentDetails->setHeight((int) $heightInCM); // Default: null -> Unset|none
 $shipmentDetails->setNotificationEmail((string) $email); // Default: null -> Disabled
 ```
 
-##### \Petschko\DHL\Sender, \Petschko\DHL\Receiver & \Petschko\DHL\ReturnReceiver Object(s)
+##### `\Petschko\DHL\Sender`, `\Petschko\DHL\Receiver` & `\Petschko\DHL\ReturnReceiver` Object(s)
 
 Now you have to create a Sender and a Receiver. They are similar to set, just the XML creation is different so you have to use different Objects for that.
 
-If you want to lookup all values, you can search trough the `\Petschko\DHL\SendPerson` + `\Petschko\DHL\Address` Classes.
+If you want to lookup all values, you can search trough the `\Petschko\DHL\SendPerson` & `\Petschko\DHL\Address` Classes.
 
 Lets start with the Sender, in the most cases you =). Create a `\Petschko\DHL\Sender` Object:
 
@@ -205,19 +205,19 @@ Please note, that they need some extra information.
 
 You don't need to create the `\Petschko\DHL\ReturnReceiver` Object if you don't want a return Label.
 
-##### \Petschko\DHL\Service Object
+##### `\Petschko\DHL\Service` Object
 
 You can also setup more details for your Shipment by using the `\Petschko\DHL\Service` Object. It's an optional Object but may you should look, what you can set to this Object.
 
 I'll not explain the Service-Object because there are too many settings. Please look into the Service-PHP-File by yourself. The fields are well documented.
 
-##### \Petschko\DHL\BankData Object
+##### `\Petschko\DHL\BankData` Object
 
 You can also use the `\Petschko\DHL\BankData` Object. Bank data can be provided for different purposes. E.g. if COD (Cash on Delivery) is booked as service, bank data must be provided by DHL customer (mandatory server logic). The collected money will be transferred to specified bank account.
 
 You can look to the PHP-File of the `\Petschko\DHL\BankData`-Object, and checkout what you can set there. I will not explain it here.
 
-##### \Petschko\DHL\BusinessShipment Object
+##### `\Petschko\DHL\BusinessShipment` Object
 
 Finally you can add all together. You have to create the `\Petschko\DHL\BusinessShipment` Object
 
@@ -412,7 +412,7 @@ $response = $dhl->getManifest('2018-08-06');
 If the request failed, you get `false` else a `\Petschko\DHL\Response` Object.
 For more Information about the Response, look down where I describe the `\Petschko\DHL\Response` Class.
 
-### \Petschko\DHL\Response Object
+### `\Petschko\DHL\Response` Object
 
 If you get a Response that is not `false`, you have to mess with the `\Petschko\DHL\Response` Object.
 
