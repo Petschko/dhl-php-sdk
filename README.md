@@ -2,6 +2,11 @@
 
 This *unofficial* library is wrapping some functions of the DHL SOAP API in order to easy create/delete shipments and labels.
 
+## Requirements
+
+- You need a [DHL developer Account](https://entwickler.dhl.de/) and - as long as you want to use the API in production systems - a DHL Intraship Account.
+- PHP-SOAP-Client installed + enabled on your Server. [More information on php.net](http://php.net/manual/en/soap.setup.php)
+
 ## Installation
 
 ### Composer
@@ -21,33 +26,21 @@ If you can't use Composer (or don't want to), you can also use this SDK without 
 To initial this SDK, just require the [_nonComposerLoader.php](https://github.com/Petschko/dhl-php-sdk/blob/master/includes/_nonComposerLoader.php)-File from the `/includes/` directory.
 
 ```php
-require_once('includes' . DIRECTORY_SEPARATOR . '_nonComposerLoader.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . '_nonComposerLoader.php');
 ```
-
-## Motivation
-
-I had a lot of pain studying and programming the DHL SOAP API - just to wrap some bits in a lot of XML. There is a lot, but not very helpful, documentation to the API. So I decided to create some functions in an easy to use and understand library.
-
-There is also a lot of old stuff in the Documentation, so that you can not sure if it is right...
-
-## Requirements
-
-- You need a DHL developer account and - as long as you want to use the API in production systems - a DHL Intraship Account.
-- PHP-SOAP-Client installed + enabled on your Server
 
 ## Compatibility
 
 This Project is written for the DHL-SOAP-API **Version 2 or higher**.
 
-It barely supports Version 1, feel free to complete the missing functions for Version 1. They are named usually `{functionname}_v1`. They are also marked with "todo" if they are not implemented
+Version 1 Methods are marked as @deprecated and will removed soon. Please upgrade to the API-Version 2 as soon as possible.
 
-I can't find a Documentation for Version 1 anymore, so its hard to implement them properly...
+## Usage / Getting started
 
-## Usage
+- [Getting started (Just a quick guide how you have to use it)](https://github.com/Petschko/dhl-php-sdk/blob/master/examples/getting-started.md)
+- _More examples soon_
 
-**todo: add links for some examples here**
-
-Please have a look at the `examples` Directory. There you can find how to use this SDK also with Code-Examples, else check the [Documentation](http://docs.petschko.org/dhl-php-sdk/index.html) for deeper knowledge.
+Please have a look at the [`examples` Directory](https://github.com/Petschko/dhl-php-sdk/tree/master/examples). There you can find how to use this SDK also with Code-Examples, else check the _(Doxygen)_ [Documentation](http://docs.petschko.org/dhl-php-sdk/index.html) for deeper knowledge.
 
 ## Code Documentation
 
@@ -55,9 +48,16 @@ You find Code-Examples with explanations in the `examples` Directory. I also exp
 
 You can find a Code-Reference here: _(Doxygen)_ http://docs.petschko.org/dhl-php-sdk/index.html
 
+## Motivation
+
+I had a lot of pain studying and programming the DHL SOAP API - just to wrap some bits in a lot of XML. There is a lot, but not very helpful, documentation to the API. So I decided to create some functions in an easy to use and understand library.
+
+There is also a lot of old stuff in the Documentation, so that you can not sure if it is right...
+
 ## Credits
 
 All these Persons helped to create this SDK for the DHL-API:
+- [aschempp](https://github.com/aschempp) - For the help with the Notification E-Mail
 - [cedricziel](https://github.com/cedricziel) - For turning this Project into a [Composer](https://getcomposer.org/)-Package
 - [Dakror](https://github.com/Dakror) - For the `ProductInfo`-Class
 - [octlabs](https://github.com/octlabs) - For adding some missing Documentation
@@ -71,12 +71,3 @@ All these Persons helped to create this SDK for the DHL-API:
 - You can Report Bugs here in the "[Issue](https://github.com/Petschko/dhl-php-sdk/issues)"-Section of the Project.
 	- Of course you can also ask any stuff there, feel free for that!
 	- If you want to use German, you can do it. Please keep in mind that not everybody can speak German, so it's better to use english =)
-
-### DHL-API Version 1 Code
-
-You can find my old Version here:
-[Download old Code](https://github.com/Petschko/dhl-php-sdk/releases/download/v0.1/dhl-php-sdk_v0.1.zip)
-
-You can also look at the Tobias Redmann's Code, I initially forked that repo. There are not a lot of his code left in my current Version, but you can find his Code better than mine... (His Version supports just DHL-SOAP-Version 1)
-
-He also Build several Plugins for Wordpress + Woocommerce in the past. Check his [GitHub-Page](https://github.com/tobias-redmann) or his [Homepage](http://www.tricd.de)
