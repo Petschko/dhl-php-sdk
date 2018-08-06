@@ -312,21 +312,27 @@ class ProductInfo {
 	}
 
 	/**
-	 * @return bool
+	 * Returns if the Object is initiated
+	 *
+	 * @return bool - Is this Object initiated
 	 */
 	private static function isInit() {
 		return self::$init;
 	}
 
 	/**
-	 * @param bool $init
+	 * Set if the Object is initiated
+	 *
+	 * @param bool $init - Is this Object initiated
 	 */
 	private static function setInit($init) {
 		self::$init = $init;
 	}
 
 	/**
-	 * @return array
+	 * Get the DHL-Products
+	 *
+	 * @return array - DHL-Product-Objects
 	 */
 	public static function getDhlProducts() {
 		if(! self::isInit())

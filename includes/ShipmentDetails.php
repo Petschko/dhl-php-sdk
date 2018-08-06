@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 13:07
- * Update: 01.08.2018
- * Version: 0.1.1
+ * Update: 05.08.2018
+ * Version: 0.1.2
  *
  * Notes: Details for a Shipment (Like size/Weight etc)
  */
@@ -63,16 +63,32 @@ class ShipmentDetails {
 	/**
 	 * Contains which Product is used
 	 *
-	 * @var string $product - Product to use (Default National Package)
+	 * Allowed values: (Use PRODUCT_TYPE_* constants - See above)
+	 * 	'V01PAK' or ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE -> National-Package
+	 * 	'V01PRIO' or ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE_PRIO -> National-Package-Prio
+	 * 	'V53WPAK' or ShipmentDetails::PRODUCT_TYPE_INTERNATIONAL_PACKAGE -> International-Package
+	 * 	'V54EPAK' or ShipmentDetails::PRODUCT_TYPE_EUROPA_PACKAGE -> Europa-Package
+	 * 	'V55PAK' or ShipmentDetails::PRODUCT_TYPE_PACKED_CONNECT -> Packed Connect
+	 * 	'V06PAK' or ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE -> Same-Day Package
+	 * 	'V06TG' or ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER -> Same Day Messenger
+	 * 	'V06WZ' or ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER -> Wish Time Messenger
+	 * 	'V86PARCEL' or ShipmentDetails::PRODUCT_TYPE_AUSTRIA_PACKAGE -> Austria Package
+	 * 	'V82PARCEL' or ShipmentDetails::PRODUCT_TYPE_AUSTRIA_INTERNATIONAL_PACKAGE -> Austria International Package
+	 * 	'V87PARCEL' or ShipmentDetails::PRODUCT_TYPE_CONNECT_PACKAGE -> Connect Package
+	 *
+	 * @var string $product - Product to use (Default: National Package)
 	 */
 	private $product = self::PRODUCT_TYPE_NATIONAL_PACKAGE;
 
 	/**
 	 * Contains the
-	 * EPK Account Number         (10 Digits) Example 123457890
+	 * EKP Account Number         (10 Digits) Example 123457890
 	 * concat Product Type Number (2 Digits)  Example 01 for V01PAK or 53 for V53WPAK or 07 for Retoure Online
 	 * concat Process Type Number (2 Digits)  Example 01 for default or 02 for block pricing/flat fee
 	 *                                         = 1234578900101
+	 *
+	 * More Information: https://entwickler.dhl.de/group/ep/wsapis/geschaeftskundenversand/authentifizierung
+	 *
 	 * Min-Len: 14
 	 * Max-Len: 14
 	 *
@@ -84,10 +100,11 @@ class ShipmentDetails {
 	 * Contains the Customer-Reference
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $customerReference - Customer Reference or null for disabling
+	 * @var string|null $customerReference - Customer Reference or null for none
 	 */
 	private $customerReference = null;
 
@@ -95,21 +112,23 @@ class ShipmentDetails {
 	 * Contains the Shipment-Date
 	 *
 	 * Note: ISO-Date-Format (YYYY-MM-DD)
+	 *
 	 * Min-Len: 10
 	 * Max-Len: 10
 	 *
-	 * @var string|null $shipmentDate - Shipment-Data or null (= Today if Sunday then +1 Day)
+	 * @var string|null $shipmentDate - Shipment-Date or null for today (+1 Day if Sunday)
 	 */
 	private $shipmentDate = null;
 
 	/**
-	 * Contains the Return-Account-Number (EPK)
+	 * Contains the Return-Account-Number (EKP)
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: 14
 	 * Max-Len: 14
 	 *
-	 * @var string|null $returnAccountNumber - Return-Account-Number or null for disabling
+	 * @var string|null $returnAccountNumber - Return-Account-Number or null for none
 	 */
 	private $returnAccountNumber = null;
 
@@ -117,10 +136,11 @@ class ShipmentDetails {
 	 * Contains the Return-Reference
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
-	 * @var string|null $returnReference - Return-Reference or null for disabling
+	 * @var string|null $returnReference - Return-Reference or null for none
 	 */
 	private $returnReference = null;
 
@@ -163,7 +183,12 @@ class ShipmentDetails {
 	 *
 	 * Note: Optional
 	 *
+	 * Allowed values:
+	 * 	'PK' or ShipmentDetails::PACKAGE -> DHL-Package-Type "Package"
+	 * 	'PL' or ShipmentDetails::PALETTE -> DHL-Package-Type "Palette"
+	 *
 	 * @var string $packageType - Package-Type
+	 *
 	 * @deprecated - DHL-API-Version 1 Field
 	 */
 	private $packageType = self::PACKAGE;
@@ -205,49 +230,97 @@ class ShipmentDetails {
 	}
 
 	/**
-	 * @return string
+	 * Get which Product is used
+	 *
+	 * 	Return values: (Use PRODUCT_TYPE_* constants - See above)
+	 * 	'V01PAK' or ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE -> National-Package
+	 * 	'V01PRIO' or ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE_PRIO -> National-Package-Prio
+	 * 	'V53WPAK' or ShipmentDetails::PRODUCT_TYPE_INTERNATIONAL_PACKAGE -> International-Package
+	 * 	'V54EPAK' or ShipmentDetails::PRODUCT_TYPE_EUROPA_PACKAGE -> Europa-Package
+	 * 	'V55PAK' or ShipmentDetails::PRODUCT_TYPE_PACKED_CONNECT -> Packed Connect
+	 * 	'V06PAK' or ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE -> Same-Day Package
+	 * 	'V06TG' or ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER -> Same Day Messenger
+	 * 	'V06WZ' or ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER -> Wish Time Messenger
+	 * 	'V86PARCEL' or ShipmentDetails::PRODUCT_TYPE_AUSTRIA_PACKAGE -> Austria Package
+	 * 	'V82PARCEL' or ShipmentDetails::PRODUCT_TYPE_AUSTRIA_INTERNATIONAL_PACKAGE -> Austria International Package
+	 * 	'V87PARCEL' or ShipmentDetails::PRODUCT_TYPE_CONNECT_PACKAGE -> Connect Package
+	 *
+	 * @return string - Used Product
 	 */
 	public function getProduct() {
 		return $this->product;
 	}
 
 	/**
-	 * @param string $product
+	 * Set which Product is used
+	 *
+	 * Allowed values: (Use PRODUCT_TYPE_* constants - See above)
+	 * 	'V01PAK' or ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE -> National-Package
+	 * 	'V01PRIO' or ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE_PRIO -> National-Package-Prio
+	 * 	'V53WPAK' or ShipmentDetails::PRODUCT_TYPE_INTERNATIONAL_PACKAGE -> International-Package
+	 * 	'V54EPAK' or ShipmentDetails::PRODUCT_TYPE_EUROPA_PACKAGE -> Europa-Package
+	 * 	'V55PAK' or ShipmentDetails::PRODUCT_TYPE_PACKED_CONNECT -> Packed Connect
+	 * 	'V06PAK' or ShipmentDetails::PRODUCT_TYPE_SAME_DAY_PACKAGE -> Same-Day Package
+	 * 	'V06TG' or ShipmentDetails::PRODUCT_TYPE_SAME_DAY_MESSENGER -> Same Day Messenger
+	 * 	'V06WZ' or ShipmentDetails::PRODUCT_TYPE_WISH_TIME_MESSENGER -> Wish Time Messenger
+	 * 	'V86PARCEL' or ShipmentDetails::PRODUCT_TYPE_AUSTRIA_PACKAGE -> Austria Package
+	 * 	'V82PARCEL' or ShipmentDetails::PRODUCT_TYPE_AUSTRIA_INTERNATIONAL_PACKAGE -> Austria International Package
+	 * 	'V87PARCEL' or ShipmentDetails::PRODUCT_TYPE_CONNECT_PACKAGE -> Connect Package
+	 *
+	 * @param string $product - Product, which should be used
 	 */
 	public function setProduct($product) {
 		$this->product = $product;
 	}
 
 	/**
-	 * @return string
+	 * Get the
+	 * EKP Account Number         (10 Digits) Example 123457890
+	 * concat Product Type Number (2 Digits)  Example 01 for V01PAK or 53 for V53WPAK or 07 for Retoure Online
+	 * concat Process Type Number (2 Digits)  Example 01 for default or 02 for block pricing/flat fee
+	 *                                         = 1234578900101
+	 *
+	 * @return string - Account-Number plus Product Type Number plus Process Type Number
 	 */
 	private function getAccountNumber() {
 		return $this->accountNumber;
 	}
 
 	/**
-	 * @param string $accountNumber
+	 * Set the
+	 * EKP Account Number         (10 Digits) Example 123457890
+	 * concat Product Type Number (2 Digits)  Example 01 for V01PAK or 53 for V53WPAK or 07 for Retoure Online
+	 * concat Process Type Number (2 Digits)  Example 01 for default or 02 for block pricing/flat fee
+	 *                                         = 1234578900101
+	 *
+	 * @param string $accountNumber - Account-Number plus Product Type Number plus Process Type Number
 	 */
 	private function setAccountNumber($accountNumber) {
 		$this->accountNumber = $accountNumber;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Customer-Reference
+	 *
+	 * @return null|string - Customer Reference or null for none
 	 */
 	public function getCustomerReference() {
 		return $this->customerReference;
 	}
 
 	/**
-	 * @param null|string $customerReference
+	 * Set the Customer-Reference
+	 *
+	 * @param null|string $customerReference - Customer Reference or null for none
 	 */
 	public function setCustomerReference($customerReference) {
 		$this->customerReference = $customerReference;
 	}
 
 	/**
-	 * @return string
+	 * Get the Shipment-Date (and set the default one -today- if none was set)
+	 *
+	 * @return string - Shipment-Date as ISO-Date String YYYY-MM-DD
 	 */
 	public function getShipmentDate() {
 		if($this->shipmentDate === null)
@@ -259,7 +332,7 @@ class ShipmentDetails {
 	/**
 	 * Set the Shipment-Date
 	 *
-	 * @param string|int|null $shipmentDate - Shipment-Date as String YYYY-MM-DD or the int value time() of the date | null for none
+	 * @param string|int|null $shipmentDate - Shipment-Date as String YYYY-MM-DD or the int value time() of the date | null for today (+1 Day on Sunday)
 	 * @param bool $useIntTime - Use the int Time Value instead of a String
 	 */
 	public function setShipmentDate($shipmentDate, $useIntTime = false) {
@@ -275,91 +348,122 @@ class ShipmentDetails {
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Return-Account-Number (EKP)
+	 *
+	 * @return null|string - Return-Account-Number or null for none
 	 */
 	public function getReturnAccountNumber() {
 		return $this->returnAccountNumber;
 	}
 
 	/**
-	 * @param null|string $returnAccountNumber
+	 * Set the Return-Account-Number (EKP)
+	 *
+	 * @param null|string $returnAccountNumber - Return-Account-Number or null for none
 	 */
 	public function setReturnAccountNumber($returnAccountNumber) {
 		$this->returnAccountNumber = $returnAccountNumber;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Return-Reference
+	 *
+	 * @return null|string - Return-Reference or null for none
 	 */
 	public function getReturnReference() {
 		return $this->returnReference;
 	}
 
 	/**
-	 * @param null|string $returnReference
+	 * Set the Return-Reference
+	 *
+	 * @param null|string $returnReference - Return-Reference or null for none
 	 */
 	public function setReturnReference($returnReference) {
 		$this->returnReference = $returnReference;
 	}
 
 	/**
-	 * @return float
+	 * Get the Weight
+	 *
+	 * @return float - Weight in KG
 	 */
 	public function getWeight() {
 		return $this->weight;
 	}
 
 	/**
-	 * @param float $weight
+	 * Set the Weight
+	 *
+	 * @param float $weight - Weight in KG
 	 */
 	public function setWeight($weight) {
 		$this->weight = $weight;
 	}
 
 	/**
-	 * @return int|null
+	 * Get the Length
+	 *
+	 * @return int|null - Length in CM or null for none
 	 */
 	public function getLength() {
 		return $this->length;
 	}
 
 	/**
-	 * @param int|null $length
+	 * Set the Length
+	 *
+	 * @param int|null $length - Length in CM or null for none
 	 */
 	public function setLength($length) {
 		$this->length = $length;
 	}
 
 	/**
-	 * @return int|null
+	 * Get the Width
+	 *
+	 * @return int|null - Width in CM or null for none
 	 */
 	public function getWidth() {
 		return $this->width;
 	}
 
 	/**
-	 * @param int|null $width
+	 * Set the Width
+	 *
+	 * @param int|null $width - Width in CM or null for none
 	 */
 	public function setWidth($width) {
 		$this->width = $width;
 	}
 
 	/**
-	 * @return int|null
+	 * Get the Height
+	 *
+	 * @return int|null - Height in CM or null for none
 	 */
 	public function getHeight() {
 		return $this->height;
 	}
 
 	/**
-	 * @param int|null $height
+	 * Set the Height
+	 *
+	 * @param int|null $height - Height in CM or null for none
 	 */
 	public function setHeight($height) {
 		$this->height = $height;
 	}
 
 	/**
-	 * @return string
+	 * Get the Type of the Package
+	 *
+	 * Return values:
+	 * 	'PK' or ShipmentDetails::PACKAGE -> DHL-Package-Type "Package"
+	 * 	'PL' or ShipmentDetails::PALETTE -> DHL-Package-Type "Palette"
+	 *
+	 * @return string - Type of the Package
+	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function getPackageType() {
@@ -369,7 +473,14 @@ class ShipmentDetails {
 	}
 
 	/**
-	 * @param string $packageType
+	 * Set the Type of the Package
+	 *
+	 * Allowed values:
+	 * 	'PK' or ShipmentDetails::PACKAGE -> DHL-Package-Type "Package"
+	 * 	'PL' or ShipmentDetails::PALETTE -> DHL-Package-Type "Palette"
+	 *
+	 * @param string $packageType - Type of the Package
+	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
 	public function setPackageType($packageType) {
@@ -379,14 +490,18 @@ class ShipmentDetails {
 	}
 
 	/**
-	 * @return string|null
+	 * Get the Notification E-Mail
+	 *
+	 * @return string|null - Notification E-Mail or null for none
 	 */
 	public function getNotificationEmail() {
 		return $this->notificationEmail;
 	}
 
 	/**
-	 * @param string|null $notificationEmail
+	 * Set the Notification E-Mail
+	 *
+	 * @param string|null $notificationEmail - Notification E-Mail or null for none
 	 */
 	public function setNotificationEmail($notificationEmail) {
 		$this->notificationEmail = $notificationEmail;
@@ -395,7 +510,7 @@ class ShipmentDetails {
 	/**
 	 * Creates a Default Shipment-Date (Today or if Sunday the next Day)
 	 *
-	 * @return string - Default-Date
+	 * @return string - Default-Date as ISO-Date String
 	 */
 	private function createDefaultShipmentDate() {
 		$now = time();
@@ -417,8 +532,6 @@ class ShipmentDetails {
 	public function getShipmentDetailsClass_v1() {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
-
-		// todo implement getClass_v1()
 
 		return new StdClass;
 	}

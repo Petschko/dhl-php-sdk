@@ -119,154 +119,198 @@ class Product {
 	}
 
 	/**
-	 * @return string
+	 * Get the Product-Type
+	 *
+	 * @return string - Product-Type
 	 */
 	public function getType() {
 		return $this->type;
 	}
 
 	/**
-	 * @param string $type
+	 * Set the Product-Type
+	 *
+	 * @param string $type - Product-Type
 	 */
 	private function setType($type) {
 		$this->type = $type;
 	}
 
 	/**
-	 * @return string
+	 * Get the Name
+	 *
+	 * @return string - Name
 	 */
 	public function getName() {
 		return $this->name;
 	}
 
 	/**
-	 * @param string $name
+	 * Set the Name
+	 *
+	 * @param string $name - Name
 	 */
 	public function setName($name) {
 		$this->name = $name;
 	}
 
 	/**
-	 * @return bool
+	 * Shows if send to Austria is allowed
+	 *
+	 * @return bool - Is send to Austria allowed
 	 */
 	public function isAustria() {
 		return $this->austria;
 	}
 
 	/**
-	 * @param bool $austria
+	 * Set if send to Austria is allowed
+	 *
+	 * @param bool $austria - Is send to Austria allowed
 	 */
 	public function setAustria($austria) {
 		$this->austria = $austria;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Min-Length
+	 *
+	 * @return float|int - Min-Length
 	 */
 	public function getMinLength() {
 		return $this->minLength;
 	}
 
 	/**
-	 * @param float|int $minLength
+	 * Set the Min-Length
+	 *
+	 * @param float|int $minLength - Min-Length
 	 */
 	public function setMinLength($minLength) {
 		$this->minLength = $minLength;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Max-Length
+	 *
+	 * @return float|int - Max-Length
 	 */
 	public function getMaxLength() {
 		return $this->maxLength;
 	}
 
 	/**
-	 * @param float|int $maxLength
+	 * Set the Max-Length
+	 *
+	 * @param float|int $maxLength - Max-Length
 	 */
 	public function setMaxLength($maxLength) {
 		$this->maxLength = $maxLength;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Min-Width
+	 *
+	 * @return float|int - Min-Width
 	 */
 	public function getMinWidth() {
 		return $this->minWidth;
 	}
 
 	/**
-	 * @param float|int $minWidth
+	 * Set the Min-Width
+	 *
+	 * @param float|int $minWidth - Min-Width
 	 */
 	public function setMinWidth($minWidth) {
 		$this->minWidth = $minWidth;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Max-Width
+	 *
+	 * @return float|int - Max-Width
 	 */
 	public function getMaxWidth() {
 		return $this->maxWidth;
 	}
 
 	/**
-	 * @param float|int $maxWidth
+	 * Set the Max-Width
+	 *
+	 * @param float|int $maxWidth - Max-Width
 	 */
 	public function setMaxWidth($maxWidth) {
 		$this->maxWidth = $maxWidth;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Min-Height
+	 *
+	 * @return float|int - Min-Height
 	 */
 	public function getMinHeight() {
 		return $this->minHeight;
 	}
 
 	/**
-	 * @param float|int $minHeight
+	 * Set the Min-Height
+	 *
+	 * @param float|int $minHeight - Min-Height
 	 */
 	public function setMinHeight($minHeight) {
 		$this->minHeight = $minHeight;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Max-Height
+	 *
+	 * @return float|int - Max-Height
 	 */
 	public function getMaxHeight() {
 		return $this->maxHeight;
 	}
 
 	/**
-	 * @param float|int $maxHeight
+	 * Set the Max-Height
+	 *
+	 * @param float|int $maxHeight - Max-Height
 	 */
 	public function setMaxHeight($maxHeight) {
 		$this->maxHeight = $maxHeight;
 	}
 
 	/**
-	 * @return float|int
+	 * Get the Max-Weight
+	 *
+	 * @return float|int - Max-Weight
 	 */
 	public function getMaxWeight() {
 		return $this->maxWeight;
 	}
 
 	/**
-	 * @param float|int $maxWeight
+	 * Set the Max-Weight
+	 *
+	 * @param float|int $maxWeight - Max-Weight
 	 */
 	public function setMaxWeight($maxWeight) {
 		$this->maxWeight = $maxWeight;
 	}
 
 	/**
-	 * @return array
+	 * Get the Services
+	 *
+	 * @return array - Services
 	 */
 	public function getServices() {
 		return $this->services;
 	}
 
 	/**
-	 * @param array $services
+	 * Set Services
+	 *
+	 * @param array $services - Services
 	 */
 	public function setServices($services) {
 		$this->services = $services;

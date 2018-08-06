@@ -250,8 +250,6 @@ class BankData {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
-		// TODO: Implement getBankClass_v1() method.
-
 		return new StdClass;
 	}
 

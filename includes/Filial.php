@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 20.03.2017
  * Time: 13:23
- * Update: 14.07.2018
- * Version: 0.0.3
+ * Update: 16.07.2018
+ * Version: 0.0.4
  *
  * Notes: Contains the Filial Class
  */
@@ -49,46 +49,54 @@ class Filial extends Receiver {
 	}
 
 	/**
-	 * @return string
+	 * Get the Post-Number
+	 *
+	 * @return string - Post-Number
 	 */
 	public function getPostNumber() {
 		return $this->postNumber;
 	}
 
 	/**
-	 * @param string $postNumber
+	 * Set the Post-Number
+	 *
+	 * @param string $postNumber - Post-Number
 	 */
 	public function setPostNumber($postNumber) {
 		$this->postNumber = $postNumber;
 	}
 
 	/**
-	 * @return string
+	 * Get the Filial-Number
+	 *
+	 * @return string - Filial-Number
 	 */
 	public function getFilialNumber() {
 		return $this->filialNumber;
 	}
 
 	/**
-	 * Alias for getFilialNumber
+	 * Alias for $this->getFilialNumber
 	 *
-	 * @return string $filialNumber
+	 * @return string $filialNumber - Filial-Number
 	 */
 	public function getPostFilialNumber() {
 		return $this->filialNumber;
 	}
 
 	/**
-	 * @param string $filialNumber
+	 * Set the Filial-Number
+	 *
+	 * @param string $filialNumber - Filial-Number
 	 */
 	public function setFilialNumber($filialNumber) {
 		$this->filialNumber = $filialNumber;
 	}
 
 	/**
-	 * Alias for setFilialNumber
+	 * Alias for $this->setFilialNumber
 	 *
-	 * @param string $filialNumber
+	 * @param string $filialNumber - Filial-Number
 	 */
 	public function setPostFilialNumber($filialNumber) {
 		$this->filialNumber = $filialNumber;

@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 15.09.2016
  * Time: 15:23
- * Update: 14.07.2018
- * Version: 0.0.4
+ * Update: 16.07.2018
+ * Version: 0.0.5
  *
  * Notes: Contains the DHL-Address Class
  */
@@ -243,7 +243,7 @@ abstract class Address {
 	}
 
 	/**
-	 * Alias for getLocation
+	 * Alias for $this->getLocation
 	 *
 	 * @return string - Location
 	 */
@@ -252,7 +252,7 @@ abstract class Address {
 	}
 
 	/**
-	 * Alias for setLocation
+	 * Alias for $this->setLocation
 	 *
 	 * @param string $city - Location
 	 */

@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:17
- * Update: 14.07.2018
- * Version: 0.0.3
+ * Update: 17.07.2018
+ * Version: 0.0.4
  *
  * Notes: Contains SendPerson Class
  */
@@ -36,7 +36,7 @@ abstract class SendPerson extends Address {
 	 * Min-Len: -
 	 * Max-Len: 50
 	 *
-	 * @var string|null $name2 - Name (Part 2)
+	 * @var string|null $name2 - Name (Part 2) | null for none
 	 */
 	private $name2 = null;
 
@@ -47,7 +47,7 @@ abstract class SendPerson extends Address {
 	 * Min-Len: -
 	 * Max-Len: 50
 	 *
-	 * @var string|null $name3 - Name (Part 3)
+	 * @var string|null $name3 - Name (Part 3) | null for none
 	 */
 	private $name3 = null;
 
@@ -58,7 +58,7 @@ abstract class SendPerson extends Address {
 	 * Min-Len: -
 	 * Max-Len: 20
 	 *
-	 * @var string|null $phone - Phone-Number
+	 * @var string|null $phone - Phone-Number | null for none
 	 */
 	private $phone = null;
 
@@ -69,7 +69,7 @@ abstract class SendPerson extends Address {
 	 * Min-Len: -
 	 * Max-Len: 70
 	 *
-	 * @var string|null $email - E-Mail-Address
+	 * @var string|null $email - E-Mail-Address | null for none
 	 */
 	private $email = null;
 
@@ -80,7 +80,7 @@ abstract class SendPerson extends Address {
 	 * Min-Len: -
 	 * Max-Len: 50
 	 *
-	 * @var string|null $contactPerson - Contact Person
+	 * @var string|null $contactPerson - Contact Person | null for none
 	 */
 	private $contactPerson = null;
 
@@ -98,84 +98,108 @@ abstract class SendPerson extends Address {
 	}
 
 	/**
-	 * @return string
+	 * Get the Name
+	 *
+	 * @return string - Name
 	 */
 	public function getName() {
 		return $this->name;
 	}
 
 	/**
-	 * @param string $name
+	 * Set the Name
+	 *
+	 * @param string $name - Name
 	 */
 	public function setName($name) {
 		$this->name = $name;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Name2 Field
+	 *
+	 * @return null|string - Name2 or null if none
 	 */
 	public function getName2() {
 		return $this->name2;
 	}
 
 	/**
-	 * @param null|string $name2
+	 * Set the Name2 Field
+	 *
+	 * @param null|string $name2 - Name2 or null for none
 	 */
 	public function setName2($name2) {
 		$this->name2 = $name2;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Name3 Field
+	 *
+	 * @return null|string - Name3 or null if none
 	 */
 	public function getName3() {
 		return $this->name3;
 	}
 
 	/**
-	 * @param null|string $name3
+	 * Set the Name3 Field
+	 *
+	 * @param null|string $name3 - Name3 or null for none
 	 */
 	public function setName3($name3) {
 		$this->name3 = $name3;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Phone
+	 *
+	 * @return null|string - Phone or null if none
 	 */
 	public function getPhone() {
 		return $this->phone;
 	}
 
 	/**
-	 * @param null|string $phone
+	 * Set the Phone
+	 *
+	 * @param null|string $phone - Phone or null for none
 	 */
 	public function setPhone($phone) {
 		$this->phone = $phone;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the E-Mail
+	 *
+	 * @return null|string - E-Mail or null if none
 	 */
 	public function getEmail() {
 		return $this->email;
 	}
 
 	/**
-	 * @param null|string $email
+	 * Set the E-Mail
+	 *
+	 * @param null|string $email - E-Mail or null for none
 	 */
 	public function setEmail($email) {
 		$this->email = $email;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Contact-Person
+	 *
+	 * @return null|string - Contact-Person or null if none
 	 */
 	public function getContactPerson() {
 		return $this->contactPerson;
 	}
 
 	/**
-	 * @param null|string $contactPerson
+	 * Set the Contact-Person
+	 *
+	 * @param null|string $contactPerson - Contact-Person or null for none
 	 */
 	public function setContactPerson($contactPerson) {
 		$this->contactPerson = $contactPerson;

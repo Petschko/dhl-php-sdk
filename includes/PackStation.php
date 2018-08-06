@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 17.03.2017
  * Time: 12:09
- * Update: 14.07.2018
- * Version: 1.0.4
+ * Update: 17.07.2018
+ * Version: 1.0.5
  *
  * Notes: Contains the PackStation class
  */
@@ -49,28 +49,36 @@ class PackStation extends Receiver {
 	}
 
 	/**
-	 * @return string
+	 * Get the Post-Number
+	 *
+	 * @return string - Post-Number
 	 */
 	public function getPostNumber() {
 		return $this->postNumber;
 	}
 
 	/**
-	 * @param string $postNumber
+	 * Set the Post-Number
+	 *
+	 * @param string $postNumber - Post-Number
 	 */
 	public function setPostNumber($postNumber) {
 		$this->postNumber = $postNumber;
 	}
 
 	/**
-	 * @return string
+	 * Get the Pack-Station-Number
+	 *
+	 * @return string - Pack-station-Number
 	 */
 	public function getPackStationNumber() {
 		return $this->packStationNumber;
 	}
 
 	/**
-	 * @param string $packStationNumber
+	 * Set the Pack-Station-Number
+	 *
+	 * @param string $packStationNumber - Pack-Station-Number
 	 */
 	public function setPackStationNumber($packStationNumber) {
 		$this->packStationNumber = $packStationNumber;

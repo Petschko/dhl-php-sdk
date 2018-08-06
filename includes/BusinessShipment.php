@@ -173,6 +173,7 @@ class BusinessShipment extends Version {
 	 * Max-Len: 70
 	 *
 	 * @var string|null $receiverEmail - Receiver-E-Mail | null for none
+	 *
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	private $receiverEmail = null;
@@ -540,6 +541,7 @@ class BusinessShipment extends Version {
 	 * Get the Receiver-Email
 	 *
 	 * @return null|string - Receiver-Email or null if none
+	 *
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	public function getReceiverEmail() {
@@ -554,6 +556,7 @@ class BusinessShipment extends Version {
 	 * Set the Receiver-Email
 	 *
 	 * @param null|string $receiverEmail - Receiver-Email or null for none
+	 *
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	public function setReceiverEmail($receiverEmail) {
@@ -732,7 +735,7 @@ class BusinessShipment extends Version {
 	private function sendDoManifestRequest($data) {
 		switch($this->getMayor()) {
 			case 1:
-				return $this->getSoapClient()->DoManifestTD($data); // todo verify if correct
+				return $this->getSoapClient()->DoManifestTD($data);
 			case 2:
 			default:
 				return $this->getSoapClient()->doManifest($data);
@@ -784,8 +787,6 @@ class BusinessShipment extends Version {
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
 		$data = new StdClass;
-
-		// todo implement v1 method
 
 		return $data;
 	}
@@ -942,8 +943,6 @@ class BusinessShipment extends Version {
 
 		$data = new StdClass;
 
-		// todo implement v1 method
-
 		return $data;
 	}
 
@@ -971,7 +970,7 @@ class BusinessShipment extends Version {
 		if($this->getShipmentDetails()->getNotificationEmail() !== null)
 			$email = $this->getShipmentDetails()->getNotificationEmail();
 		else if($this->receiverEmail !== null)
-			$email = $this->getReceiverEmail();
+			$email = $this->getReceiverEmail(); // Use old E-Mail implementation for BC
 
 		if($email !== null) {
 			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification = new StdClass;
@@ -1074,8 +1073,6 @@ class BusinessShipment extends Version {
 
 		$data = new StdClass;
 
-		// todo implement v1 method
-
 		return $data;
 	}
 
@@ -1155,8 +1152,6 @@ class BusinessShipment extends Version {
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
 		$data = new StdClass;
-
-		// todo implement v1 method
 
 		return $data;
 	}
@@ -1239,8 +1234,6 @@ class BusinessShipment extends Version {
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
 		$data = new StdClass;
-
-		// todo implement v1 method
 
 		return $data;
 	}

@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 21:05
- * Update: 14.07.2018
- * Version: 0.0.5
+ * Update: 16.07.2018
+ * Version: 0.0.6
  *
  * Notes: Contains the ExportDocument Class
  * ToDo: Please edit/add more details to the doc comments if you know more about them
@@ -21,14 +21,18 @@ use stdClass;
  * Class ExportDocument
  */
 class ExportDocument {
-	// Constants for Export-Type
+	/**
+	 * Constants for Export-Type
+	 */
 	const EXPORT_TYPE_OTHER = 'OTHER';
 	const EXPORT_TYPE_PRESENT = 'PRESENT';
 	const EXPORT_TYPE_COMMERCIAL_SAMPLE = 'COMMERCIAL_SAMPLE';
 	const EXPORT_TYPE_DOCUMENT = 'DOCUMENT';
 	const EXPORT_TYPE_RETURN_OF_GOODS = 'RETURN_OF_GOODS';
 
-	// Constants for Terms of Trade
+	/**
+	 * Constants for Terms of Trade
+	 */
 	const TERMS_OF_TRADE_DDP = 'DDP';
 	const TERMS_OF_TRADE_DXV = 'DXV';
 	const TERMS_OF_TRADE_DDU = 'DDU';
@@ -177,140 +181,180 @@ class ExportDocument {
 	}
 
 	/**
-	 * @return float|int|null|string
+	 * Get the Invoice-Number
+	 *
+	 * @return float|int|null|string - Invoice-Number or null if none
 	 */
 	public function getInvoiceNumber() {
 		return $this->invoiceNumber;
 	}
 
 	/**
-	 * @param float|int|null|string $invoiceNumber
+	 * Set the Invoice-Number
+	 *
+	 * @param float|int|null|string $invoiceNumber - Invoice-Number or null for none
 	 */
 	public function setInvoiceNumber($invoiceNumber) {
 		$this->invoiceNumber = $invoiceNumber;
 	}
 
 	/**
-	 * @return string
+	 * Get the Export-Type
+	 *
+	 * @return string - Export-Type
 	 */
 	public function getExportType() {
 		return $this->exportType;
 	}
 
 	/**
-	 * @param string $exportType
+	 * Set the Export-Type
+	 *
+	 * @param string $exportType - Export-Type
 	 */
 	public function setExportType($exportType) {
 		$this->exportType = $exportType;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Export-Type-Description
+	 *
+	 * @return null|string - Export-Type-Description or null if none
 	 */
 	public function getExportTypeDescription() {
 		return $this->exportTypeDescription;
 	}
 
 	/**
-	 * @param null|string $exportTypeDescription
+	 * Set the Export-Type-Description
+	 *
+	 * @param null|string $exportTypeDescription - Export-Type-Description or null for none
 	 */
 	public function setExportTypeDescription($exportTypeDescription) {
 		$this->exportTypeDescription = $exportTypeDescription;
 	}
 
 	/**
-	 * @return null|string
+	 * Get the Terms of Trade
+	 *
+	 * @return null|string - Terms of Trade or null if none
 	 */
 	public function getTermsOfTrade() {
 		return $this->termsOfTrade;
 	}
 
 	/**
-	 * @param null|string $termsOfTrade
+	 * Set the Terms of Trade
+	 *
+	 * @param null|string $termsOfTrade - Terms of Trade or null for none
 	 */
 	public function setTermsOfTrade($termsOfTrade) {
 		$this->termsOfTrade = $termsOfTrade;
 	}
 
 	/**
-	 * @return string
+	 * Get the Place of Committal
+	 *
+	 * @return string - Place of Committal
 	 */
 	public function getPlaceOfCommittal() {
 		return $this->placeOfCommittal;
 	}
 
 	/**
-	 * @param string $placeOfCommittal
+	 * Set the Place of Committal
+	 *
+	 * @param string $placeOfCommittal - Place of Committal
 	 */
 	public function setPlaceOfCommittal($placeOfCommittal) {
 		$this->placeOfCommittal = $placeOfCommittal;
 	}
 
 	/**
-	 * @return float
+	 * Get the additional Fee
+	 *
+	 * @return float - Additional Fee
 	 */
 	public function getAdditionalFee() {
 		return $this->additionalFee;
 	}
 
 	/**
-	 * @param float $additionalFee
+	 * Sets the additional Fee
+	 *
+	 * @param float $additionalFee - Additional Fee
 	 */
 	public function setAdditionalFee($additionalFee) {
 		$this->additionalFee = $additionalFee;
 	}
 
 	/**
-	 * @return float|int|null|string
+	 * Get the Permit-Number
+	 *
+	 * @return float|int|null|string - Permit-Number or null if none
 	 */
 	public function getPermitNumber() {
 		return $this->permitNumber;
 	}
 
 	/**
-	 * @param float|int|null|string $permitNumber
+	 * Set the Permit-Number
+	 *
+	 * @param float|int|null|string $permitNumber - Permit-Number or null for none
 	 */
 	public function setPermitNumber($permitNumber) {
 		$this->permitNumber = $permitNumber;
 	}
 
 	/**
-	 * @return float|int|null|string
+	 * Get the Attestation-Number
+	 *
+	 * @return float|int|null|string - Attestation-Number or null if none
 	 */
 	public function getAttestationNumber() {
 		return $this->attestationNumber;
 	}
 
 	/**
-	 * @param float|int|null|string $attestationNumber
+	 * Set the Attestation-Number
+	 *
+	 * @param float|int|null|string $attestationNumber - Attestation-Number or null for none
 	 */
 	public function setAttestationNumber($attestationNumber) {
 		$this->attestationNumber = $attestationNumber;
 	}
 
 	/**
-	 * @return bool|null
+	 * Get if it is with Electronic Export Notifications
+	 *
+	 * @return bool|null - Is it with Electronic Export Notifications or null if default
 	 */
 	public function getWithElectronicExportNotification() {
 		return $this->withElectronicExportNotification;
 	}
 
 	/**
-	 * @param bool|null $withElectronicExportNotification
+	 * Set if it is with Electronic Export Notifications
+	 *
+	 * @param bool|null $withElectronicExportNotification - Is it with Electronic Export Notifications or null for default
 	 */
 	public function setWithElectronicExportNotification($withElectronicExportNotification) {
 		$this->withElectronicExportNotification = $withElectronicExportNotification;
 	}
 
 	/**
-	 * @return ExportDocPosition|array|null
+	 * Get the ExportDocPosition(s) class(es)
+	 *
+	 * @return ExportDocPosition|array|null - ExportDocPosition(s) class(es) or null if none
 	 */
 	public function getExportDocPosition() {
 		return $this->exportDocPosition;
 	}
 
 	/**
-	 * @param ExportDocPosition|array|null $exportDocPosition
+	 * Set the ExportDocPosition(s) class(es)
+	 *
+	 * @param ExportDocPosition|array|null $exportDocPosition - ExportDocPosition(s) class(es) or null for none
 	 */
 	public function setExportDocPosition($exportDocPosition) {
 		$this->exportDocPosition = $exportDocPosition;
@@ -337,7 +381,9 @@ class ExportDocument {
 	}
 
 	/**
-	 * @return StdClass
+	 * Returns a Class for Export-Document
+	 *
+	 * @return StdClass - DHL-ExportDocument-Class
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
@@ -346,8 +392,6 @@ class ExportDocument {
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
 		$class = new StdClass;
-
-		// todo implement v1 method
 
 		return $class;
 	}
