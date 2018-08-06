@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 17.07.2018
- * Version: 1.1.3
+ * Update: 06.08.2018
+ * Version: 1.2.0
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -74,6 +74,13 @@ class Response extends Version {
 	 * @var null|string $exportDoc - Export-Document Label-URL/Base64-Label-Data or null if not requested
 	 */
 	private $exportDoc = null;
+
+	/**
+	 * Manifest PDF-Data as Base64-String
+	 *
+	 * @var null|string $manifestData - Manifest PDF-Data as Base64 String or null if not requested
+	 */
+	private $manifestData = null;
 
 	/**
 	 * Label-Response-Type (Base64 or URL)
@@ -155,6 +162,7 @@ class Response extends Version {
 		unset($this->label);
 		unset($this->returnLabel);
 		unset($this->exportDoc);
+		unset($this->manifestData);
 		unset($this->labelType);
 		unset($this->sequenceNumber);
 		unset($this->statusCode);
@@ -258,6 +266,24 @@ class Response extends Version {
 	 */
 	private function setExportDoc($exportDoc) {
 		$this->exportDoc = $exportDoc;
+	}
+
+	/**
+	 * Get the Manifest PDF-Data as Base64-String
+	 *
+	 * @return null|string - PDF-Data as Base64-String or null if empty/not requested
+	 */
+	public function getManifestData() {
+		return $this->manifestData;
+	}
+
+	/**
+	 * Set the Manifest PDF-Data as Base64-String
+	 *
+	 * @param null|string $manifestData - PDF-Data as Base64-String or null for none
+	 */
+	private function setManifestData($manifestData) {
+		$this->manifestData = $manifestData;
 	}
 
 	/**
@@ -409,10 +435,13 @@ class Response extends Version {
 			! isset($response->ExportDocData->Status->statusCode) &&
 			! isset($response->ValidationState->Status->statusCode)
 		) {
-			// Set fault Status-Code
+			// Set fault Status-Code | Set short responses
 			$this->setStatusCode((int) $response->Status->statusCode);
 			$this->setStatusText($response->Status->statusText);
 			$this->setStatusMessage($response->Status->statusMessage);
+
+			if(isset($response->manifestData))
+				$this->setManifestData($response->manifestData);
 
 			return;
 		}
