@@ -14,6 +14,8 @@ namespace Petschko\DHL;
 
 /**
  * Class ProductInfo
+ *
+ * @package Petschko\DHL
  */
 class ProductInfo {
 	/**

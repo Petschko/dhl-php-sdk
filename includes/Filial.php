@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class Filial
+ *
+ * @package Petschko\DHL
  */
 class Filial extends Receiver {
 	/**

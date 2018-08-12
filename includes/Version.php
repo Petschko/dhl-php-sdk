@@ -15,6 +15,8 @@ use stdClass;
 
 /**
  * Class Version
+ *
+ * @package Petschko\DHL
  */
 abstract class Version {
 	/**

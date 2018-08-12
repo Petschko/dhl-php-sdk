@@ -15,6 +15,8 @@ namespace Petschko\DHL;
 
 /**
  * Class Response
+ *
+ * @package Petschko\DHL
  */
 class Response extends Version {
 	/**

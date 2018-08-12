@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class ShipmentDetails
+ *
+ * @package Petschko\DHL
  */
 class ShipmentDetails {
 	/**

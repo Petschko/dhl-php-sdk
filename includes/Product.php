@@ -13,6 +13,8 @@ namespace Petschko\DHL;
 
 /**
  * Class Product
+ *
+ * @package Petschko\DHL
  */
 class Product {
 	/**

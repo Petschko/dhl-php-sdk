@@ -18,6 +18,8 @@ use stdClass;
 /**
  * Class ExportDocPosition
  *
+ * @package Petschko\DHL
+ *
  * Note: If min 1 value is filled out, all other values are required (else none is required)
  */
 class ExportDocPosition {

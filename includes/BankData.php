@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class BankData
+ *
+ * @package Petschko\DHL
  */
 class BankData {
 	/**

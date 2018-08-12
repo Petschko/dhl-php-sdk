@@ -20,6 +20,8 @@ use stdClass;
 
 /**
  * Class BusinessShipment
+ *
+ * @package Petschko\DHL
  */
 class BusinessShipment extends Version {
 	/**

@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class SendPerson
+ *
+ * @package Petschko\DHL
  */
 abstract class SendPerson extends Address {
 	/**

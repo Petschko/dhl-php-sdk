@@ -18,6 +18,8 @@ use stdClass;
 
 /**
  * Class ExportDocument
+ *
+ * @package Petschko\DHL
  */
 class ExportDocument {
 	/**

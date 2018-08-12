@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class IdentCheck
+ *
+ * @package Petschko\DHL
  */
 class IdentCheck {
 	/**

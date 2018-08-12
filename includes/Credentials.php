@@ -15,6 +15,8 @@ namespace Petschko\DHL;
 
 /**
  * Class Credentials
+ *
+ * @package Petschko\DHL
  */
 class Credentials {
 	/**
