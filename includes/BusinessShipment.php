@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 01.08.2018
- * Version: 1.4.0
+ * Update: 12.08.2018
+ * Version: 1.5.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -202,6 +202,15 @@ class BusinessShipment extends Version {
 	private $labelResponseType = null;
 
 	/**
+	 * Contains all Shipment-Orders
+	 *
+	 * Note: Can be up to 30 Shipment-Orders
+	 *
+	 * @var array $shipmentOrders - Contains ShipmentOrder Objects
+	 */
+	private $shipmentOrders = array();
+
+	/**
 	 * Custom-WSDL-File URL
 	 *
 	 * @var null|string $customAPIURL - Custom-API URL (null uses default from DHL)
@@ -261,6 +270,7 @@ class BusinessShipment extends Version {
 		unset($this->receiverEmail);
 		unset($this->printOnlyIfReceiverIsValid);
 		unset($this->labelResponseType);
+		unset($this->shipmentOrders);
 		unset($this->customAPIURL);
 	}
 
@@ -605,6 +615,60 @@ class BusinessShipment extends Version {
 	 */
 	public function setLabelResponseType($labelResponseType) {
 		$this->labelResponseType = $labelResponseType;
+	}
+
+	/**
+	 * Get the list with all Shipment-Orders Objects
+	 *
+	 * @return array - List with all Shipment-Orders Objects
+	 */
+	public function getShipmentOrders() {
+		return $this->shipmentOrders;
+	}
+
+	/**
+	 * Set the list with all Shipment-Orders Objects
+	 *
+	 * @param array $shipmentOrders - Shipment-Order Object-Array
+	 */
+	public function setShipmentOrders($shipmentOrders) {
+		if(! is_array($shipmentOrders)) {
+			trigger_error(
+				'[DHL-PHP-SDK]: The type of $shipmentOrders is NOT an array, but is required to set as array! Called method ' .
+				__METHOD__ . ' in class ' . __CLASS__,
+				E_USER_ERROR
+			);
+			$this->addError(__METHOD__ . ': Non-Array value given');
+
+			return;
+		}
+
+		$this->shipmentOrders = $shipmentOrders;
+	}
+
+	/**
+	 * Adds a Shipment-Order to the List
+	 *
+	 * @param ShipmentOrder $shipmentOrder - Shipment-Order to add
+	 */
+	public function addShipmentOrder($shipmentOrder) {
+		$this->shipmentOrders[] = $shipmentOrder;
+	}
+
+	/**
+	 * Clears the Shipment-Order list
+	 */
+	public function clearShipmentOrders() {
+		$this->setShipmentOrders(array());
+	}
+
+	/**
+	 * Returns how many Shipment-Orders are in this List
+	 *
+	 * @return int - ShipmentOrder Count
+	 */
+	public function countShipmentOrders() {
+		return count($this->getShipmentOrders());
 	}
 
 	/**

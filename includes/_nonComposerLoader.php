@@ -36,4 +36,5 @@ require_once('Response.php');
 require_once('ReturnReceiver.php');
 require_once('Sender.php');
 require_once('Service.php');
+require_once('ShipmentOrder.php');
 require_once('ShipmentDetails.php');
