@@ -221,18 +221,18 @@ class BusinessShipment extends Version {
 	 * BusinessShipment constructor.
 	 *
 	 * @param Credentials $credentials - DHL-Credentials-Object
-	 * @param bool $testModus - Uses the Sandbox-Modus or Live (True uses test-Modus)
+	 * @param bool $testMode - Uses the Sandbox-Mode or Live (True uses test-Mode)
 	 * @param null|string $version - Version to use or null for the newest
 	 */
-	public function __construct($credentials, $testModus = false, $version = null) {
+	public function __construct($credentials, $testMode = false, $version = null) {
 		// Set Version
 		if($version === null)
 			$version = self::NEWEST_VERSION;
 
 		parent::__construct($version);
 
-		// Set Test-Modus
-		$this->setTest($testModus);
+		// Set Test-Mode
+		$this->setTest($testMode);
 
 		// Set Credentials
 		if($this->isTest()) {
