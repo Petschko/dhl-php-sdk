@@ -239,7 +239,10 @@ class BusinessShipment extends Version {
 	 * BusinessShipment constructor.
 	 *
 	 * @param Credentials $credentials - DHL-Credentials-Object
-	 * @param bool $testMode - Uses the Sandbox-Mode or Live (True uses test-Mode)
+	 * @param bool|string $testMode - Use a specific Sandbox-Mode or Production-Mode
+	 * 					Test-Mode (Normal): Credentials::TEST_NORMAL, 'test', true
+	 * 					Test-Mode (Thermo-Printer): Credentials::TEST_THERMO_PRINTER, 'thermo'
+	 * 					Live (No-Test-Mode): false - default
 	 * @param null|string $version - Version to use or null for the newest
 	 */
 	public function __construct($credentials, $testMode = false, $version = null) {
@@ -250,11 +253,11 @@ class BusinessShipment extends Version {
 		parent::__construct($version);
 
 		// Set Test-Mode
-		$this->setTest($testMode);
+		$this->setTest((($testMode) ? true : false));
 
 		// Set Credentials
 		if($this->isTest()) {
-			$c = new Credentials(true);
+			$c = new Credentials($testMode);
 			$c->setApiUser($credentials->getApiUser());
 			$c->setApiPassword($credentials->getApiPassword());
 
