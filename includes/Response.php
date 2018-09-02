@@ -231,6 +231,9 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Label URL/Base64-Data (Can also contain the return label) or null if not set
 	 */
 	public function getLabel() {
+		if($this->label === null && $this->countLabelData() > 0)
+			return $this->getLabelData(0)->getLabel();
+
 		return $this->label;
 	}
 
@@ -249,6 +252,9 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Return Label-URL/Base64-Label-Data or null if not requested/set
 	 */
 	public function getReturnLabel() {
+		if($this->returnLabel === null && $this->countLabelData() > 0)
+			return $this->getLabelData(0)->getReturnLabel();
+
 		return $this->returnLabel;
 	}
 
@@ -267,6 +273,9 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Export-Document Label-URL/Base64-Label-Data or null if not requested/set
 	 */
 	public function getExportDoc() {
+		if($this->exportDoc === null && $this->countLabelData() > 0)
+			return $this->getLabelData(0)->getExportDoc();
+
 		return $this->exportDoc;
 	}
 
@@ -321,6 +330,9 @@ class Response extends Version implements LabelResponse {
 	 * @return string|null - Sequence-Number of the Request or null if not set
 	 */
 	public function getSequenceNumber() {
+		if($this->sequenceNumber === null && $this->countLabelData() > 0)
+			return $this->getLabelData(0)->getSequenceNumber();
+
 		return $this->sequenceNumber;
 	}
 
