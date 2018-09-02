@@ -5,9 +5,9 @@ namespace Petschko\DHL;
 /**
  * Author: Maximilian Stark [mail@dakror.de]
  * Authors-Website: http://dakror.de/
- * Date: 07.06.2017
+ * Date: 02.09.2018
  * Time: 13:17
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Notes: Contains the ProductInfo Class
  */
@@ -60,7 +60,7 @@ class ProductInfo {
 	/**
 	 * Contains all Products
 	 *
-	 * @var array $dhlProducts - Products
+	 * @var Product[] $dhlProducts - Products
 	 */
 	private static $dhlProducts = array();
 
@@ -334,7 +334,7 @@ class ProductInfo {
 	/**
 	 * Get the DHL-Products
 	 *
-	 * @return array - DHL-Product-Objects
+	 * @return Product[] - DHL-Product-Objects
 	 */
 	public static function getDhlProducts() {
 		if(! self::isInit())

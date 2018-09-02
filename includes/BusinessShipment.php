@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 12.08.2018
- * Version: 1.5.0
+ * Update: 02.09.2018
+ * Version: 1.5.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -224,7 +224,7 @@ class BusinessShipment extends Version {
 	 *
 	 * Note: Can be up to 30 Shipment-Orders
 	 *
-	 * @var array $shipmentOrders - Contains ShipmentOrder Objects
+	 * @var ShipmentOrder[] $shipmentOrders - Contains ShipmentOrder Objects
 	 */
 	private $shipmentOrders = array();
 
@@ -807,7 +807,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Get the list with all Shipment-Orders Objects
 	 *
-	 * @return array - List with all Shipment-Orders Objects
+	 * @return ShipmentOrder[] - List with all Shipment-Orders Objects
 	 */
 	public function getShipmentOrders() {
 		return $this->shipmentOrders;
@@ -816,7 +816,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Set the list with all Shipment-Orders Objects
 	 *
-	 * @param array $shipmentOrders - Shipment-Order Object-Array
+	 * @param ShipmentOrder[]|ShipmentOrder $shipmentOrders - Shipment-Order Object-Array or a Single Shipment-Order Object
 	 */
 	public function setShipmentOrders($shipmentOrders) {
 		if(! is_array($shipmentOrders)) {

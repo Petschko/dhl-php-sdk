@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 21:05
- * Update: 06.08.2018
- * Version: 0.0.6
+ * Update: 02.09.2018
+ * Version: 0.0.7
  *
  * Notes: Contains the ExportDocument Class
  */
@@ -339,7 +339,7 @@ class ExportDocument {
 	/**
 	 * Get the ExportDocPosition(s) class(es)
 	 *
-	 * @return ExportDocPosition|array|null - ExportDocPosition(s) class(es) or null if none
+	 * @return ExportDocPosition|ExportDocPosition[]|null - ExportDocPosition(s) class(es) or null if none
 	 */
 	public function getExportDocPosition() {
 		return $this->exportDocPosition;
@@ -348,7 +348,7 @@ class ExportDocument {
 	/**
 	 * Set the ExportDocPosition(s) class(es)
 	 *
-	 * @param ExportDocPosition|array|null $exportDocPosition - ExportDocPosition(s) class(es) or null for none
+	 * @param ExportDocPosition|ExportDocPosition[]|null $exportDocPosition - ExportDocPosition(s) class(es) or null for none
 	 */
 	public function setExportDocPosition($exportDocPosition) {
 		$this->exportDocPosition = $exportDocPosition;
