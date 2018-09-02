@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 06.08.2018
- * Version: 1.2.0
+ * Update: 02.09.2018
+ * Version: 1.3.0
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -129,6 +129,13 @@ class Response extends Version {
 	private $statusMessage = null;
 
 	/**
+	 * Contains all LabelData Objects
+	 *
+	 * @var LabelData[] - LabelData Object-Array
+	 */
+	private $labelData = array();
+
+	/**
 	 * Response constructor.
 	 *
 	 * Loads the correct Version and loads the Response if not null into this Object
@@ -170,6 +177,7 @@ class Response extends Version {
 		unset($this->statusCode);
 		unset($this->statusText);
 		unset($this->statusMessage);
+		unset($this->labelData);
 	}
 
 	/**
@@ -394,6 +402,46 @@ class Response extends Version {
 	 */
 	private function setStatusMessage($statusMessage) {
 		$this->statusMessage = $statusMessage;
+	}
+
+	/**
+	 * Getter for LabelData-Objects
+	 *
+	 * @param null|int $index - Index of the LabelData-Object or null for the array
+	 * @return LabelData[]|LabelData - LabelData-Object(-Array)
+	 */
+	public function getLabelData($index = null) {
+		if($index === null)
+			return $this->labelData;
+		else
+			return $this->labelData[$index];
+	}
+
+	/**
+	 * Setter for all LabelData-Objects
+	 *
+	 * @param LabelData[] $labelData - LabelData-Object-Array
+	 */
+	private function setLabelData($labelData) {
+		$this->labelData = $labelData;
+	}
+
+	/**
+	 * Adds a LabelData-Object to the LabelData-Object-Array
+	 *
+	 * @param LabelData $labelData - LabelData-Object to add
+	 */
+	private function addLabelData($labelData) {
+		$this->labelData[] = $labelData;
+	}
+
+	/**
+	 * Returns how many LabelData-Objects are in this List
+	 *
+	 * @return int - LabelData Count
+	 */
+	public function countLabelData() {
+		return count($this->getLabelData());
 	}
 
 	/**
