@@ -7,13 +7,11 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 02.09.2018
  * Time: 13:13
- * Update: -
- * Version: 0.0.1
+ * Update: 02.09.2018
+ * Version: 0.0.2
  *
- * Notes: -
+ * Notes: Contains the LabelData Class
  */
-
-use Exception;
 
 /**
  * Class LabelData
@@ -94,23 +92,13 @@ class LabelData extends Version {
 	private $codLabel = null;
 
 	/**
-	 * Label-Response-Type (Base64 or URL)
-	 *
-	 * @var null|string $labelType - Label-Response-Type (Base64 or URL) | null for default
-	 */
-	private $labelType;
-
-	/**
 	 * LabelData constructor.
 	 *
 	 * @param string $version - Current DHL-Version
 	 * @param object $labelData - LabelData-Object from DHL-Response
-	 * @param null|string $labelType - Label-Response-Type (Base64 or URL) or null for default (URL)
 	 */
-	public function __construct($version, $labelData, $labelType) {
+	public function __construct($version, $labelData) {
 		parent::__construct($version);
-
-		$this->setLabelType($labelType);
 
 		if($labelData !== null) {
 			switch($this->getMayor()) {
@@ -137,7 +125,6 @@ class LabelData extends Version {
 		unset($this->returnLabel);
 		unset($this->exportDoc);
 		unset($this->codLabel);
-		unset($this->labelType);
 	}
 
 	/**
@@ -318,24 +305,6 @@ class LabelData extends Version {
 	 */
 	private function setCodLabel($codLabel) {
 		$this->codLabel = $codLabel;
-	}
-
-	/**
-	 * Getter for Label-Response-Type
-	 *
-	 * @return null|string - Label-Response-Type (Base64 or URL) or null for default (URL)
-	 */
-	private function getLabelType() {
-		return $this->labelType;
-	}
-
-	/**
-	 * Setter for Label-Response-Type
-	 *
-	 * @param null|string $labelType - Label-Response-Type (Base64 or URL) or null for default (URL)
-	 */
-	private function setLabelType($labelType) {
-		$this->labelType = $labelType;
 	}
 
 	private function loadLabelData_v2($response) {
