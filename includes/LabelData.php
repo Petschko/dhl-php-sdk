@@ -18,7 +18,7 @@ namespace Petschko\DHL;
  *
  * @package Petschko\DHL
  */
-class LabelData extends Version {
+class LabelData extends Version implements LabelResponse {
 	/**
 	 * Contains the Status-Code
 	 *
@@ -307,6 +307,18 @@ class LabelData extends Version {
 		$this->codLabel = $codLabel;
 	}
 
+	/**
+	 * Check if the current Status-Code is correct and set the correct one if not
+	 */
+	private function validateStatusCode() {
+		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
+			$this->setStatusCode(Response::DHL_ERROR_WEAK_WARNING);
+	}
+
+	/**
+	 * todo doc
+	 * @param $response
+	 */
 	private function loadLabelData_v2($response) {
 		//todo
 	}

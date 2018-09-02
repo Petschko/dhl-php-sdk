@@ -18,7 +18,7 @@ namespace Petschko\DHL;
  *
  * @package Petschko\DHL
  */
-class Response extends Version {
+class Response extends Version implements LabelResponse {
 	/**
 	 * Contains Status-Code-Values:
 	 *
@@ -157,6 +157,7 @@ class Response extends Version {
 				case 2:
 				default:
 					$this->loadResponse_v2($response);
+					$this->validateStatusCode();
 			}
 		}
 	}
@@ -445,6 +446,26 @@ class Response extends Version {
 	}
 
 	/**
+	 * Check if the current Status-Code is correct and set the correct one if not
+	 */
+	private function validateStatusCode() {
+		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
+			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
+	}
+
+	/**
+	 * Getter for Cod-Label
+	 *
+	 * @return null|string - Cod-Label-URL/Base64-Data or null if not requested/set
+	 */
+	function getCodLabel() {
+		if($this->countLabelData() > 0)
+			return $this->getLabelData(0)->getCodLabel();
+
+		return null;
+	}
+
+	/**
 	 * Loads a DHL-Response into this Object
 	 *
 	 * @param Object $response - DHL-Response
@@ -518,10 +539,6 @@ class Response extends Version {
 			else
 				$this->setStatusMessage($response->Status->statusMessage);
 		}
-
-		// Change Status-Code if a weak-validation error occurs
-		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
-			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
 
 		// Set Shipment-Number if exists
 		if(isset($response->CreationState->LabelData->shipmentNumber))
