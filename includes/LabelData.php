@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 02.09.2018
  * Time: 13:13
- * Update: 02.09.2018
- * Version: 0.0.2
+ * Update: 05.09.2018
+ * Version: 1.0.0
  *
  * Notes: Contains the LabelData Class
  */
@@ -316,10 +316,71 @@ class LabelData extends Version implements LabelResponse {
 	}
 
 	/**
-	 * todo doc
-	 * @param $response
+	 * Set all Values of the LabelResponse to this Object
+	 *
+	 * @param Object $response - LabelData-Response
 	 */
 	private function loadLabelData_v2($response) {
-		//todo
+		$labelResponse = $response;
+		// Check if the tree is correct (and may reconfigure it)
+		if(isset($response->LabelData))
+			$labelResponse = $response->LabelData;
+
+		// Get Sequence-Number
+		if(isset($response->sequenceNumber))
+			$this->setSequenceNumber((string) $response->sequenceNumber);
+		else if(isset($labelResponse->sequenceNumber))
+			$this->setSequenceNumber((string) $labelResponse->sequenceNumber);
+
+		// Get Status
+		if(isset($labelResponse->Status)) {
+			if(isset($labelResponse->Status->statusCode))
+				$this->setStatusCode((int) $labelResponse->Status->statusCode);
+			if(isset($labelResponse->Status->statusText)) {
+				if(is_array($labelResponse->Status->statusText))
+					$this->setStatusText(implode(';', $labelResponse->Status->statusText));
+				else
+					$this->setStatusText($labelResponse->Status->statusText);
+			}
+			if(isset($labelResponse->Status->statusMessage)) {
+				if(is_array($labelResponse->Status->statusMessage))
+					$this->setStatusMessage(implode(';', $labelResponse->Status->statusMessage));
+				else
+					$this->setStatusMessage($labelResponse->Status->statusMessage);
+			}
+
+			$this->validateStatusCode();
+		}
+
+		// Get Shipment-Number
+		if(isset($labelResponse->shipmentNumber))
+			$this->setShipmentNumber((string) $labelResponse->shipmentNumber);
+
+		// Get Label-Data
+		if(isset($labelResponse->labelUrl))
+			$this->setLabel($labelResponse->labelUrl);
+		else if(isset($labelResponse->labelData))
+			$this->setLabel($labelResponse->labelData);
+
+		// Get Return-Label
+		if(isset($labelResponse->returnLabelUrl))
+			$this->setReturnLabel($labelResponse->returnLabelUrl);
+		else if(isset($labelResponse->returnLabelData))
+			$this->setReturnLabel($labelResponse->returnLabelData);
+
+		// Get Export-Doc
+		if(isset($labelResponse->exportLabelUrl))
+			$this->setExportDoc($labelResponse->exportLabelUrl);
+		else if(isset($labelResponse->exportLabelData))
+			$this->setExportDoc($labelResponse->exportLabelData);
+		else if(isset($labelResponse->exportDocURL))
+			$this->setExportDoc($labelResponse->exportDocURL);
+		else if(isset($labelResponse->exportDocData))
+			$this->setExportDoc($labelResponse->exportDocData);
+
+		if(isset($labelResponse->codLabelUrl))
+			$this->setCodLabel($labelResponse->codLabelUrl);
+		else if(isset($labelResponse->codLabelData))
+			$this->setCodLabel($labelResponse->codLabelData);
 	}
 }

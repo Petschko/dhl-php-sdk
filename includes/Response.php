@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 18.11.2016
  * Time: 16:00
  * Update: 05.09.2018
- * Version: 1.3.1
+ * Version: 1.3.2
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -157,7 +157,6 @@ class Response extends Version implements LabelResponse {
 				case 2:
 				default:
 					$this->loadResponse_v2($response);
-					$this->validateStatusCode();
 			}
 		}
 	}
@@ -478,6 +477,21 @@ class Response extends Version implements LabelResponse {
 	}
 
 	/**
+	 * Handles all Multi-Shipment Object/Arrays and add them to Label-Data
+	 *
+	 * @param Object|array $possibleMultiLabelObject - Object or array, which should be added to LabelData
+	 */
+	private function handleMultiShipments($possibleMultiLabelObject) {
+		if(is_array($possibleMultiLabelObject)) {
+			$multiLabelArray = $possibleMultiLabelObject;
+
+			foreach($multiLabelArray as &$singleLabel)
+				$this->addLabelData(new LabelData($this->getVersion(), $singleLabel));
+		} else
+			$this->addLabelData(new LabelData($this->getVersion(), $possibleMultiLabelObject));
+	}
+
+	/**
 	 * Loads a DHL-Response into this Object
 	 *
 	 * @param Object $response - DHL-Response
@@ -511,98 +525,54 @@ class Response extends Version implements LabelResponse {
 	 * @param Object $response - DHL-Response
 	 */
 	private function loadResponse_v2($response) {
-		// Set Status-Values first
-		if(
-			! isset($response->CreationState->LabelData->Status->statusCode) &&
-			! isset($response->LabelData->Status->statusCode) &&
-			! isset($response->ExportDocData->Status->statusCode) &&
-			! isset($response->ValidationState->Status->statusCode)
-		) {
-			// Set fault Status-Code | Set short responses
-			$this->setStatusCode((int) $response->Status->statusCode);
-			$this->setStatusText($response->Status->statusText);
-			$this->setStatusMessage($response->Status->statusMessage);
+		// Set global Status-Values first
+		if(isset($response->Status)) {
+			if(isset($response->Status->statusCode))
+				$this->setStatusCode((int) $response->Status->statusCode);
+			if(isset($response->Status->statusText)) {
+				if(is_array($response->Status->statusText))
+					$this->setStatusText(implode(';', $response->Status->statusText));
+				else
+					$this->setStatusText($response->Status->statusText);
+			}
+			if(isset($response->Status->statusMessage)) {
+				if(is_array($response->Status->statusMessage))
+					$this->setStatusMessage(implode(';', $response->Status->statusMessage));
+				else
+					$this->setStatusMessage($response->Status->statusMessage);
+			}
 
-			if(isset($response->manifestData))
-				$this->setManifestData($response->manifestData);
+			$this->validateStatusCode();
+		}
+
+		// Set Manifest if exists (getManifest)
+		if(isset($response->manifestData)) {
+			$this->setManifestData($response->manifestData);
 
 			return;
 		}
 
-		if(isset($response->CreationState->LabelData->Status->statusCode)) {
-			$this->setStatusCode((int) $response->CreationState->LabelData->Status->statusCode);
-			$this->setStatusText($response->CreationState->LabelData->Status->statusText);
-			$this->setStatusMessage($response->CreationState->LabelData->Status->statusMessage);
-		} else if(isset($response->LabelData->Status->statusCode)) {
-			$this->setStatusCode((int) $response->LabelData->Status->statusCode);
-			$this->setStatusText($response->LabelData->Status->statusText);
-			$this->setStatusMessage($response->LabelData->Status->statusMessage);
-		} else if(isset($response->ExportDocData->Status->statusCode)) {
-			// Export-Doc
-			$this->setStatusCode((int) $response->ExportDocData->Status->statusCode);
-			$this->setStatusText($response->ExportDocData->Status->statusText);
-			$this->setStatusMessage($response->ExportDocData->Status->statusMessage);
-		} else {
-			// Validate Shipment
-			$this->setStatusCode((int) $response->ValidationState->Status->statusCode);
-			$this->setStatusText($response->Status->statusText);
-			if(is_array($response->Status->statusMessage))
-				$this->setStatusMessage(implode(';', $response->Status->statusMessage));
-			else
-				$this->setStatusMessage($response->Status->statusMessage);
-		}
-
-		// Set Shipment-Number if exists
-		if(isset($response->CreationState->LabelData->shipmentNumber))
-			$this->setShipmentNumber((string) $response->CreationState->LabelData->shipmentNumber);
-		else if(isset($response->LabelData->shipmentNumber))
-			$this->setShipmentNumber($response->LabelData->shipmentNumber);
-		else if(isset($response->ExportDocData->shipmentNumber))
-			$this->setShipmentNumber($response->ExportDocData->shipmentNumber);
-
-		// Set Label if exists
-		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
-			if(isset($response->CreationState->LabelData->labelData))
-				$this->setLabel($response->CreationState->LabelData->labelData);
-			else if(isset($response->LabelData->labelData))
-				$this->setLabel($response->LabelData->labelData);
-		} else {
-			if(isset($response->CreationState->LabelData->labelUrl))
-				$this->setLabel($response->CreationState->LabelData->labelUrl);
-			else if(isset($response->LabelData->labelUrl))
-				$this->setLabel($response->LabelData->labelUrl);
-		}
-
-		// Set Return Label if exists
-		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
-			if(isset($response->CreationState->LabelData->returnLabelData))
-				$this->setReturnLabel($response->CreationState->LabelData->returnLabelData);
-			else if(isset($response->LabelData->returnLabelData))
-				$this->setReturnLabel($response->LabelData->returnLabelData);
-		} else {
-			if(isset($response->CreationState->LabelData->returnLabelUrl))
-				$this->setReturnLabel($response->CreationState->LabelData->returnLabelUrl);
-			else if(isset($response->LabelData->returnLabelUrl))
-				$this->setReturnLabel($response->LabelData->returnLabelUrl);
-		}
-
-		// Set Export Label if exists
-		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
-			if(isset($response->CreationState->LabelData->exportLabelData))
-				$this->setExportDoc($response->CreationState->LabelData->exportLabelData);
-			else if(isset($response->ExportDocData->exportDocData))
-				$this->setExportDoc($response->ExportDocData->exportDocData);
-		} else {
-			if(isset($response->CreationState->LabelData->exportLabelUrl))
-				$this->setExportDoc($response->CreationState->LabelData->exportLabelUrl);
-			else if(isset($response->ExportDocData->exportDocURL))
-				$this->setExportDoc($response->ExportDocData->exportDocURL);
-		}
-
-		// Set all other System values
-		if(isset($response->CreationState->sequenceNumber))
-			$this->setSequenceNumber((string) $response->CreationState->sequenceNumber);
-		else if(isset($response->ValidationState->sequenceNumber))
-			$this->setSequenceNumber((string) $response->ValidationState->sequenceNumber);
+		/*
+		 * Handle Shipment(s) | Calls on:
+		 * 1 -> createShipmentOrder
+		 * 2 -> deleteShipmentOrder
+		 * 3 -> updateShipmentOrder [Only Single]
+		 * 3 -> getLabel
+		 * 4 -> validateShipment
+		 * 5 -> getExportDoc
+		 * 6 -> doManifest
+		 */
+		if(isset($response->CreationState)) // 1
+			$this->handleMultiShipments($response->CreationState);
+		else if(isset($response->DeletionState)) // 2
+			$this->handleMultiShipments($response->DeletionState);
+		else if(isset($response->LabelData)) // 3
+			$this->handleMultiShipments($response->LabelData);
+		else if(isset($response->ValidationState)) // 4
+			$this->handleMultiShipments($response->ValidationState);
+		else if(isset($response->ExportDocData)) // 5
+			$this->handleMultiShipments($response->ExportDocData);
+		else if(isset($response->ManifestState)) // 6
+			$this->handleMultiShipments($response->ManifestState);
 	}
 }
