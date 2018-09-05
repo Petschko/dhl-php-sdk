@@ -75,7 +75,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Contains the error array
 	 *
-	 * @var array $errors - Error-Array
+	 * @var string[] $errors - Error-Array
 	 */
 	private $errors = array();
 
@@ -349,7 +349,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Get Error-Array
 	 *
-	 * @return array - Error-Array
+	 * @return string[] - Error-Array
 	 */
 	public function getErrors() {
 		return $this->errors;
@@ -358,7 +358,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Set Error-Array
 	 *
-	 * @param array $errors - Error-Array
+	 * @param string[] $errors - Error-Array
 	 */
 	public function setErrors($errors) {
 		$this->errors = $errors;

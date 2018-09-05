@@ -28,7 +28,7 @@ class ProductInfo {
 	/**
 	 * Names for Services
 	 *
-	 * @var array $serviceNames - Service-Names
+	 * @var string[] $serviceNames - Service-Names
 	 */
 	public static $serviceNames = array(
 		'preferredNeighbourEnabled' => 'Wunschnachbar',

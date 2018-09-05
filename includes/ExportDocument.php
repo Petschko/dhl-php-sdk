@@ -154,7 +154,7 @@ class ExportDocument {
 	 *
 	 * Note: Optional
 	 *
-	 * @var ExportDocPosition|array|null $exportDocPosition - ExportDocPosition-Class or an array with ExportDocPosition-Objects or null if not needed
+	 * @var ExportDocPosition|ExportDocPosition[]|null $exportDocPosition - ExportDocPosition-Class or an array with ExportDocPosition-Objects or null if not needed
 	 */
 	private $exportDocPosition = null;
 
