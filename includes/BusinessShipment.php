@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 05.09.2018
- * Version: 1.5.2
+ * Version: 1.6.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -58,6 +58,11 @@ class BusinessShipment extends Version {
 	 * Response-Type Base64
 	 */
 	const RESPONSE_TYPE_B64 = 'B64';
+
+	/**
+	 * Maximum requests to DHL in one call
+	 */
+	const MAX_DHL_REQUESTS = 30;
 
 	// System-Fields
 	/**
@@ -877,6 +882,21 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Check if the request-Array is to long
+	 *
+	 * @param array $array - Array to check
+	 * @param string $action - Action of the request
+	 * @param int $maxReq - Maximum-Requests - Default: self::MAX_DHL_REQUESTS
+	 */
+	private function checkRequestCount($array, $action, $maxReq = self::MAX_DHL_REQUESTS) {
+		$count = count($array);
+
+		if($count > self::MAX_DHL_REQUESTS)
+			$this->addError('There are only ' . $maxReq . ' Request/s for one call allowed for the action "'
+				. $action . '"! You tried to request ' . $count . ' ones');
+	}
+
+	/**
 	 * Add the Message to the Log if enabled
 	 *
 	 * @param string|array|object $message - Message to add to Log
@@ -1014,17 +1034,17 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the doManifest-Request
 	 *
-	 * @param string $shipmentNumber - Shipment-Number for Manifest
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for Manifest (up to 30 Numbers)
 	 * @return bool|Response - false on error or DHL-Response Object
 	 */
-	public function doManifest($shipmentNumber) {
+	public function doManifest($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->createDoManifestClass_v1($shipmentNumber);
+				$data = $this->createDoManifestClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->createDoManifestClass_v2($shipmentNumber);
+				$data = $this->createDoManifestClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1046,12 +1066,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for Manifest
 	 *
-	 * @param string $shipmentNumber - Shipment-Number for the Manifest
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for the Manifest (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function createDoManifestClass_v1($shipmentNumber) {
+	private function createDoManifestClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1063,14 +1083,21 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for Manifest
 	 *
-	 * @param string $shipmentNumber - Shipment-Number for the Manifest
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for the Manifest (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function createDoManifestClass_v2($shipmentNumber) {
+	private function createDoManifestClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'doManifest');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
 
 		return $data;
 	}
@@ -1132,6 +1159,9 @@ class BusinessShipment extends Version {
 	 */
 	private function createGetManifestClass_v2($manifestDate) {
 		$data = new StdClass;
+
+		if(is_array($manifestDate))
+			$this->addError('You can only request 1 date on getManifest - multiple requests in 1 call are not allowed here');
 
 		$data->Version = $this->getVersionClass();
 		$data->manifestDate = $manifestDate;
@@ -1225,6 +1255,8 @@ class BusinessShipment extends Version {
 	 */
 	private function createShipmentClass_v2() {
 		$shipmentOrders = $this->getShipmentOrders();
+
+		$this->checkRequestCount($shipmentOrders, 'createShipmentClass');
 
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
@@ -1331,17 +1363,17 @@ class BusinessShipment extends Version {
 	/**
 	 * Deletes a Shipment
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return bool|Response - Response
 	 */
-	public function deleteShipment($shipmentNumber) {
+	public function deleteShipment($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->createDeleteClass_v1($shipmentNumber);
+				$data = $this->createDeleteClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->createDeleteClass_v2($shipmentNumber);
+				$data = $this->createDeleteClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1363,12 +1395,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Deletion
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function createDeleteClass_v1($shipmentNumber) {
+	private function createDeleteClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1380,14 +1412,21 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Deletion
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function createDeleteClass_v2($shipmentNumber) {
+	private function createDeleteClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'deleteShipmentOrder');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
 
 		return $data;
 	}
@@ -1411,17 +1450,17 @@ class BusinessShipment extends Version {
 	/**
 	 * Requests a Shipment-Label again
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Label
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Label(s) (up to 30 Numbers)
 	 * @return bool|Response - Response or false on error
 	 */
-	public function getShipmentLabel($shipmentNumber) {
+	public function getShipmentLabel($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->getLabelClass_v1($shipmentNumber);
+				$data = $this->getLabelClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->getLabelClass_v2($shipmentNumber);
+				$data = $this->getLabelClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1443,12 +1482,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Label-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function getLabelClass_v1($shipmentNumber) {
+	private function getLabelClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1460,14 +1499,22 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Label-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function getLabelClass_v2($shipmentNumber) {
+	private function getLabelClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'getLabel');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
+
 		if($this->getLabelResponseType() !== null)
 			$data->labelResponseType = $this->getLabelResponseType();
 
@@ -1493,17 +1540,17 @@ class BusinessShipment extends Version {
 	/**
 	 * Requests a Export-Document again
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Export-Document
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Export-Document(s) (up to 30 Numbers)
 	 * @return bool|Response - Response or false on error
 	 */
-	public function getExportDoc($shipmentNumber) {
+	public function getExportDoc($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->getExportDocClass_v1($shipmentNumber);
+				$data = $this->getExportDocClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->getExportDocClass_v2($shipmentNumber);
+				$data = $this->getExportDocClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1525,12 +1572,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Export-Document-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function getExportDocClass_v1($shipmentNumber) {
+	private function getExportDocClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1542,14 +1589,22 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Export-Document-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function getExportDocClass_v2($shipmentNumber) {
+	private function getExportDocClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'getExportDoc');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
+
 		if($this->getLabelResponseType() !== null)
 			$data->exportDocResponseType = $this->getLabelResponseType();
 
