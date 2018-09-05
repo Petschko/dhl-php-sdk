@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 05.09.2018
- * Version: 1.6.1
+ * Version: 1.6.2
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -1229,7 +1229,7 @@ class BusinessShipment extends Version {
 
 			return false;
 		} else
-			return new Response($this->getVersion(), $response, $this->getLabelResponseType());
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**
@@ -1488,7 +1488,7 @@ class BusinessShipment extends Version {
 
 			return false;
 		} else
-			return new Response($this->getVersion(), $response, $this->getLabelResponseType());
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**

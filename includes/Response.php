@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 18.11.2016
  * Time: 16:00
  * Update: 05.09.2018
- * Version: 1.3.2
+ * Version: 1.3.3
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -41,62 +41,11 @@ class Response extends Version implements LabelResponse {
 	const DHL_ERROR_UNKNOWN_SHIPMENT_NUMBER = 2000;
 
 	/**
-	 * Shipment-Number
-	 *
-	 * @var null|string $shipmentNumber - Shipment-Number | null if not set
-	 */
-	private $shipmentNumber = null;
-
-	/**
-	 * Note: Just used in v1
-	 *
-	 * @var null|string $pieceNumber - pieceNumber or null if not set
-	 *
-	 * @deprecated - DHL-API-Version 1 Field
-	 */
-	private $pieceNumber = null;
-
-	/**
-	 * Label URL/Base64-Data - Can also have the return label in one
-	 *
-	 * @var null|string $label - Label-URL or Base64-Label-Data | null if not set
-	 */
-	private $label = null;
-
-	/**
-	 * Return Label URL/Base64-Data
-	 *
-	 * @var null|string $returnLabel - Return Label-URL/Base64-Label-Data or null if not requested
-	 */
-	private $returnLabel = null;
-
-	/**
-	 * Export-Document-Label-URL/Base64-Data
-	 *
-	 * @var null|string $exportDoc - Export-Document Label-URL/Base64-Label-Data or null if not requested
-	 */
-	private $exportDoc = null;
-
-	/**
 	 * Manifest PDF-Data as Base64-String
 	 *
 	 * @var null|string $manifestData - Manifest PDF-Data as Base64 String or null if not requested
 	 */
 	private $manifestData = null;
-
-	/**
-	 * Label-Response-Type (Base64 or URL)
-	 *
-	 * @var null|string $labelType - Label-Response-Type (Base64 or URL) | null for default
-	 */
-	private $labelType;
-
-	/**
-	 * Sequence-Number (Useful for AJAX-Requests)
-	 *
-	 * @var string|null $sequenceNumber - Sequence-Number of the Request | null for none
-	 */
-	private $sequenceNumber = null;
 
 	/**
 	 * Contains the Status-Code
@@ -142,17 +91,14 @@ class Response extends Version implements LabelResponse {
 	 *
 	 * @param string $version - Current DHL-Version
 	 * @param null|Object $response - DHL-Response or null for none
-	 * @param null|string $labelType - Label-Response-Type (Base64 or URL) or null for default (URL)
 	 */
-	public function __construct($version, $response = null, $labelType = null) {
+	public function __construct($version, $response = null) {
 		parent::__construct($version);
-
-		$this->setLabelType($labelType);
 
 		if($response !== null) {
 			switch($this->getMayor()) {
 				case 1:
-					$this->loadResponse_v1($response);
+					trigger_error('[DHL-PHP-SDK]: Called Version 1 Method ' .__CLASS__ . '->' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 					break;
 				case 2:
 				default:
@@ -166,14 +112,7 @@ class Response extends Version implements LabelResponse {
 	 */
 	public function __destruct() {
 		parent::__destruct();
-		unset($this->shipmentNumber);
-		unset($this->pieceNumber);
-		unset($this->label);
-		unset($this->returnLabel);
-		unset($this->exportDoc);
 		unset($this->manifestData);
-		unset($this->labelType);
-		unset($this->sequenceNumber);
 		unset($this->statusCode);
 		unset($this->statusText);
 		unset($this->statusMessage);
@@ -186,16 +125,10 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Shipment-Number or null if not set
 	 */
 	public function getShipmentNumber() {
-		return $this->shipmentNumber;
-	}
+		if($this->countLabelData() > 0)
+			return $this->getLabelData(0)->getShipmentNumber();
 
-	/**
-	 * Setter for Shipment-Number
-	 *
-	 * @param null|string $shipment_number - Shipment-Number or null for not set
-	 */
-	private function setShipmentNumber($shipment_number) {
-		$this->shipmentNumber = $shipment_number;
+		return null;
 	}
 
 	/**
@@ -208,20 +141,7 @@ class Response extends Version implements LabelResponse {
 	public function getPieceNumber() {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 
-		return $this->pieceNumber;
-	}
-
-	/**
-	 * Setter for pieceNumber
-	 *
-	 * @param null|string $pieceNumber - null for not set else pieceNumber (just used in API-Version 1)
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	private function setPieceNumber($pieceNumber) {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		$this->pieceNumber = $pieceNumber;
+		return null;
 	}
 
 	/**
@@ -230,19 +150,10 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Label URL/Base64-Data (Can also contain the return label) or null if not set
 	 */
 	public function getLabel() {
-		if($this->label === null && $this->countLabelData() > 0)
+		if($this->countLabelData() > 0)
 			return $this->getLabelData(0)->getLabel();
 
-		return $this->label;
-	}
-
-	/**
-	 * Setter for Label
-	 *
-	 * @param null|string $label - Label URL/Base64-Data (Can also contain the return label) or null for not set
-	 */
-	private function setLabel($label) {
-		$this->label = $label;
+		return null;
 	}
 
 	/**
@@ -251,19 +162,10 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Return Label-URL/Base64-Label-Data or null if not requested/set
 	 */
 	public function getReturnLabel() {
-		if($this->returnLabel === null && $this->countLabelData() > 0)
+		if($this->countLabelData() > 0)
 			return $this->getLabelData(0)->getReturnLabel();
 
-		return $this->returnLabel;
-	}
-
-	/**
-	 * Setter for ReturnLabel
-	 *
-	 * @param null|string $returnLabel - Return Label-URL/Base64-Label-Data or null for not requested/set
-	 */
-	private function setReturnLabel($returnLabel) {
-		$this->returnLabel = $returnLabel;
+		return null;
 	}
 
 	/**
@@ -272,19 +174,10 @@ class Response extends Version implements LabelResponse {
 	 * @return null|string - Export-Document Label-URL/Base64-Label-Data or null if not requested/set
 	 */
 	public function getExportDoc() {
-		if($this->exportDoc === null && $this->countLabelData() > 0)
+		if($this->countLabelData() > 0)
 			return $this->getLabelData(0)->getExportDoc();
 
-		return $this->exportDoc;
-	}
-
-	/**
-	 * Setter for Export-Document
-	 *
-	 * @param null|string $exportDoc - Export-Document Label-URL/Base64-Label-Data or null for not requested/set
-	 */
-	private function setExportDoc($exportDoc) {
-		$this->exportDoc = $exportDoc;
+		return null;
 	}
 
 	/**
@@ -306,42 +199,15 @@ class Response extends Version implements LabelResponse {
 	}
 
 	/**
-	 * Getter for Label-Response-Type
-	 *
-	 * @return null|string - Label-Response-Type (Base64 or URL) or null for default (URL)
-	 */
-	private function getLabelType() {
-		return $this->labelType;
-	}
-
-	/**
-	 * Setter for Label-Response-Type
-	 *
-	 * @param null|string $labelType - Label-Response-Type (Base64 or URL) or null for default (URL)
-	 */
-	private function setLabelType($labelType) {
-		$this->labelType = $labelType;
-	}
-
-	/**
 	 * Getter for Sequence-Number
 	 *
 	 * @return string|null - Sequence-Number of the Request or null if not set
 	 */
 	public function getSequenceNumber() {
-		if($this->sequenceNumber === null && $this->countLabelData() > 0)
+		if($this->countLabelData() > 0)
 			return $this->getLabelData(0)->getSequenceNumber();
 
-		return $this->sequenceNumber;
-	}
-
-	/**
-	 * Setter for Sequence-Number
-	 *
-	 * @param string|null $sequenceNumber - Sequence-Number of the Request or null for not set
-	 */
-	private function setSequenceNumber($sequenceNumber) {
-		$this->sequenceNumber = $sequenceNumber;
+		return null;
 	}
 
 	/**
@@ -430,15 +296,6 @@ class Response extends Version implements LabelResponse {
 	}
 
 	/**
-	 * Setter for all LabelData-Objects
-	 *
-	 * @param LabelData[] $labelData - LabelData-Object-Array
-	 */
-	private function setLabelData($labelData) {
-		$this->labelData = $labelData;
-	}
-
-	/**
 	 * Adds a LabelData-Object to the LabelData-Object-Array
 	 *
 	 * @param LabelData $labelData - LabelData-Object to add
@@ -489,34 +346,6 @@ class Response extends Version implements LabelResponse {
 				$this->addLabelData(new LabelData($this->getVersion(), $singleLabel));
 		} else
 			$this->addLabelData(new LabelData($this->getVersion(), $possibleMultiLabelObject));
-	}
-
-	/**
-	 * Loads a DHL-Response into this Object
-	 *
-	 * @param Object $response - DHL-Response
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	private function loadResponse_v1($response) {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		// Set Shipment-Number if exists
-		if(isset($response->CreationState->ShipmentNumber->shipmentNumber))
-			$this->setShipmentNumber((string) $response->CreationState->ShipmentNumber->shipmentNumber);
-
-		if(isset($response->CreationState->PieceInformation->PieceNumber->licensePlate))
-			$this->setPieceNumber((string) $response->CreationState->PieceInformation->PieceNumber->licensePlate);
-
-		// Set Label if exists
-		if($this->getLabelType() === BusinessShipment::RESPONSE_TYPE_B64) {
-			if(isset($response->CreationState->Labeldata))
-				$this->setLabel($response->CreationState->Labeldata);
-		} else if(isset($response->CreationState->Labelurl))
-			$this->setLabel($response->CreationState->Labelurl);
-
-		$this->setStatusCode((int) $response->status->StatusCode);
-		$this->setStatusMessage($response->status->StatusMessage);
 	}
 
 	/**
