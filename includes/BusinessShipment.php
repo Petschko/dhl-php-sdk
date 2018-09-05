@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 02.09.2018
- * Version: 1.5.1
+ * Update: 05.09.2018
+ * Version: 1.5.2
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -934,12 +934,20 @@ class BusinessShipment extends Version {
 	 * Gets the current (local)-Version or Request it via SOAP from DHL
 	 *
 	 * @param bool $viaSOAP - Request the Version from DHL (Default: false - get local-version as string)
-	 * @param bool $getBuildNumber - Return the Build number as well (String look then like this: 2.2.12) - Default false
-	 * @return bool|Response|string - Returns the Version as String or false on error
+	 * @param bool $getBuildNumber - Return the Build number as well (String look then like this: 2.2.12) Only possible via SOAP - Default false
+	 * @param bool $returnAsArray - Return the Version as Array - Default: false
+	 * @return bool|array|string - Returns the Version as String|array or false on error
 	 */
-	public function getVersion($viaSOAP = false, $getBuildNumber = false) {
-		if(! $viaSOAP)
-			return parent::getVersion();
+	public function getVersion($viaSOAP = false, $getBuildNumber = false, $returnAsArray = false) {
+		if(! $viaSOAP) {
+			if($returnAsArray)
+				return array(
+					'mayor' => parent::getMayor(),
+					'minor' => parent::getMinor()
+				);
+			else
+				return parent::getVersion();
+		}
 
 		switch($this->getMayor()) {
 			case 1:
@@ -964,9 +972,17 @@ class BusinessShipment extends Version {
 			$this->addError($response->faultstring);
 
 			return false;
-		} else
-			return $response->Version->majorRelease . '.' . $response->Version->minorRelease .
-				(($getBuildNumber) ? '.' . $response->Version->build : '');
+		} else {
+			if($returnAsArray)
+				return array(
+					'mayor' => $response->Version->majorRelease,
+					'minor' => $response->Version->minorRelease,
+					'build' => $response->Version->build
+				);
+			else
+				return $response->Version->majorRelease . '.' . $response->Version->minorRelease .
+					(($getBuildNumber) ? '.' . $response->Version->build : '');
+		}
 	}
 
 	/**
