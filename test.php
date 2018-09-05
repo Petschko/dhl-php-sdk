@@ -12,17 +12,18 @@ use Petschko\DHL\Service;
 use Petschko\DHL\ShipmentOrder;
 use Petschko\DHL\ShipmentDetails;
 
-$testMode = true;
-$version = '2.2';
+$testMode = Credentials::DHL_BUSINESS_TEST_USER; // Uses the normal test user
+//$testMode = Credentials::DHL_BUSINESS_TEST_USER_THERMO; // Uses the thermo-printer test user
+$version = '2.2'; // Can be specified or just left out (uses newest by default)
 $reference = '1'; // You can use anything here (max 35 chars)
 
 // Set this to true then you can skip set the "User", "Signature" and "EKP" (Just for test-Mode) else false or empty
 $credentials = new Credentials($testMode);
 
 if(! $testMode) {
-	$credentials->setUser('Your-DHL-Account');	// Don't needed if initialed with true - Test-Mode
-	$credentials->setSignature('Your-DHL-Account-Password'); // Don't needed if initialed with true - Test-Mode
-	$credentials->setEkp('EKP-Account-Number');	// Don't needed if initialed with true - Test-Mode
+	$credentials->setUser('Your-DHL-Account');	// Don't needed if initialed with Test-Mode
+	$credentials->setSignature('Your-DHL-Account-Password'); // Don't needed if initialed with Test-Mode
+	$credentials->setEkp('EKP-Account-Number');	// Don't needed if initialed with Test-Mode
 }
 
 // Set your API-Login
@@ -35,8 +36,8 @@ $service = new Service();
 
 // Set Shipment Details
 $shipmentDetails = new ShipmentDetails($credentials->getEkp(10) . '0101'); // Create a Shipment-Details with the first 10 digits of your EKP-Number and 0101 (?)
-$shipmentDetails->setShipmentDate('2017-01-30'); // Optional: Need to be in the future and NOT on a sunday | null or drop it, to use today
-$shipmentDetails->setNotificationEmail('peter-91@hotmail.de'); // Needed if you want inform the receiver via mail
+$shipmentDetails->setShipmentDate('2018-09-20'); // Optional: Need to be in the future and NOT on a sunday | null or drop it, to use today
+$shipmentDetails->setNotificationEmail('mail@inform.me'); // Needed if you want inform the receiver via mail
 //$shipmentDetails->setReturnAccountNumber($credentials->getEkp(10) . '0701'); // Needed if you want to print a return label
 //$shipmentDetails->setReturnReference($reference); // Only needed if you want to print a return label
 $shipmentDetails->setService($service); // Optional, just needed if you add some services
@@ -76,7 +77,7 @@ $dhl = new BusinessShipment($credentials, /*Optional*/$testMode, /*Optional*/$ve
 
 // Don't forget to assign the created objects to the ShipmentOrder Object!
 $shipmentOrder = new ShipmentOrder();
-$shipmentOrder->setSequenceNumber($reference); // Just needed for ajax or such stuff can dynamic an other value
+$shipmentOrder->setSequenceNumber($reference); // Just needed to identify the shipment if you do multiple
 $shipmentOrder->setSender($sender);
 $shipmentOrder->setReceiver($receiver); // You can set these Object-Types here: DHL_Filial, DHL_Receiver & DHL_PackStation
 //$shipmentOrder->setReturnReceiver($returnReceiver); // Needed if you want print a return label
@@ -91,15 +92,18 @@ $response = $dhl->createShipment(); // Creates the request
 // For deletion you just need the shipment number and credentials
 // $dhlDel = new BusinessShipment($credentials, $testMode, $version);
 // $response_del = $dhlDel->deleteShipment('shipment_number'); // Deletes a Shipment
+// $response_del = $dhlDel->deleteShipment(array('shipment_number1', 'shipment_number2')); // Deletes multiple Shipments (up to 30)
 
 // To re-get the Label you can use the getShipmentLabel method - the shipment must be created with createShipment before
 //$dhlReGetLabel = new BusinessShipment($credentials, $testMode, $version);
 //$dhlReGetLabel->setLabelResponseType(DHL_BusinessShipment::RESPONSE_TYPE_B64); // Optional: Set the Label-Response-Type
-//$reGetLabelResponse = $dhlReGetLabel->getShipmentLabel('shipmentNumber'); // ReGet Label
+//$reGetLabelResponse = $dhlReGetLabel->getLabel('shipment_number'); // ReGet a single Label
+//$reGetLabelResponse = $dhlReGetLabel->getLabel(array('shipment_number1', 'shipment_number2')); // ReGet multiple Labels (up to 30)
 
 // To do a Manifest-Request you can use the doManifest method - you have to provide a Shipment-Number
 //$manifestDHL = new BusinessShipment($credentials, $testMode, $version);
-//$manifestResponse = $manifestDHL->doManifest('shipmentNumber');
+//$manifestResponse = $manifestDHL->doManifest('shipment_number'); // Does Manifest on a Shipment
+//$manifestResponse = $manifestDHL->doManifest(array('shipment_number1', 'shipment_number2')); // Does Manifest on multiple Shipments (up to 30)
 
 // To do a Manifest-Request you can use the doManifest method - you have to provide a Shipment-Number
 //$getManifestDHL = new BusinessShipment($credentials, $testMode, $version);
