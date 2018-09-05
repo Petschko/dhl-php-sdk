@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 02.09.2018
- * Version: 1.3.0
+ * Update: 05.09.2018
+ * Version: 1.3.1
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -470,7 +470,7 @@ class Response extends Version implements LabelResponse {
 	 *
 	 * @return null|string - Cod-Label-URL/Base64-Data or null if not requested/set
 	 */
-	function getCodLabel() {
+	public function getCodLabel() {
 		if($this->countLabelData() > 0)
 			return $this->getLabelData(0)->getCodLabel();
 
