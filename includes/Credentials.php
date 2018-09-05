@@ -191,7 +191,7 @@ class Credentials {
 	}
 
 	/**
-	 * Get the first 10 Digits of the EKP
+	 * Get the (x first Digits of the) EKP
 	 *
 	 * @param null|int $len - Max-Chars to get from this String or null for all
 	 * @return string - EKP-Number with x Chars
