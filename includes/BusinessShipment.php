@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 05.09.2018
- * Version: 1.6.0
+ * Version: 1.6.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -1448,12 +1448,24 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Alias for getLabel
+	 *
 	 * Requests a Shipment-Label again
 	 *
 	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Label(s) (up to 30 Numbers)
 	 * @return bool|Response - Response or false on error
 	 */
 	public function getShipmentLabel($shipmentNumbers) {
+		return $this->getLabel($shipmentNumbers);
+	}
+
+	/**
+	 * Requests a Shipment-Label again
+	 *
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Label(s) (up to 30 Numbers)
+	 * @return bool|Response - Response or false on error
+	 */
+	public function getLabel($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
 				$data = $this->getLabelClass_v1($shipmentNumbers);
