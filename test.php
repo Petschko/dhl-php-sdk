@@ -12,7 +12,7 @@ use Petschko\DHL\Service;
 use Petschko\DHL\ShipmentOrder;
 use Petschko\DHL\ShipmentDetails;
 
-$testMode = Credentials::DHL_BUSINESS_TEST_USER; // Uses the normal test user
+$testMode = Credentials::TEST_NORMAL; // Uses the normal test user
 //$testMode = Credentials::DHL_BUSINESS_TEST_USER_THERMO; // Uses the thermo-printer test user
 $version = '2.2'; // Can be specified or just left out (uses newest by default)
 $reference = '1'; // You can use anything here (max 35 chars)
