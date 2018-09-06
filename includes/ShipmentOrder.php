@@ -85,8 +85,8 @@ class ShipmentOrder {
 	 *
 	 * Note: Optional
 	 * Values:
-	 * RESPONSE_TYPE_URL -> Url
-	 * RESPONSE_TYPE_B64 -> Base64
+	 * BusinessShipment::RESPONSE_TYPE_URL -> Url
+	 * BusinessShipment::RESPONSE_TYPE_B64 -> Base64
 	 *
 	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's) (null uses default)
 	 */
@@ -118,7 +118,7 @@ class ShipmentOrder {
 	/**
 	 * Set the Sequence-Number
 	 *
-	 * @param string $sequenceNumber - sequence-Number
+	 * @param string $sequenceNumber - Sequence-Number
 	 */
 	public function setSequenceNumber($sequenceNumber) {
 		$this->sequenceNumber = $sequenceNumber;
