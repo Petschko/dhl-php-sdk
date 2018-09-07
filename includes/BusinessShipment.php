@@ -1196,11 +1196,22 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Alias for createShipmentOrder
+	 *
 	 * Creates the Shipment-Request
 	 *
 	 * @return bool|Response - false on error or DHL-Response Object
 	 */
 	public function createShipment() {
+		return $this->createShipmentOrder();
+	}
+
+	/**
+	 * Creates the Shipment-Request
+	 *
+	 * @return bool|Response - false on error or DHL-Response Object
+	 */
+	public function createShipmentOrder() {
 		switch($this->getMayor()) {
 			case 1:
 				$data = $this->createShipmentClass_v1();
@@ -1361,12 +1372,24 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Alias for deleteShipmentOrder
+	 *
 	 * Deletes a Shipment
 	 *
 	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return bool|Response - Response
 	 */
 	public function deleteShipment($shipmentNumbers) {
+		return $this->deleteShipmentOrder($shipmentNumbers);
+	}
+
+	/**
+	 * Deletes a Shipment
+	 *
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
+	 * @return bool|Response - Response
+	 */
+	public function deleteShipmentOrder($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
 				$data = $this->createDeleteClass_v1($shipmentNumbers);
