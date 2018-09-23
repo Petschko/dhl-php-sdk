@@ -15,6 +15,8 @@ namespace Petschko\DHL;
 
 /**
  * Class Address
+ *
+ * @package Petschko\DHL
  */
 abstract class Address {
 	/**

@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 01.08.2018
- * Version: 1.4.0
+ * Update: 05.09.2018
+ * Version: 1.6.2
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -20,6 +20,8 @@ use stdClass;
 
 /**
  * Class BusinessShipment
+ *
+ * @package Petschko\DHL
  */
 class BusinessShipment extends Version {
 	/**
@@ -57,6 +59,11 @@ class BusinessShipment extends Version {
 	 */
 	const RESPONSE_TYPE_B64 = 'B64';
 
+	/**
+	 * Maximum requests to DHL in one call
+	 */
+	const MAX_DHL_REQUESTS = 30;
+
 	// System-Fields
 	/**
 	 * Contains the Soap Client
@@ -68,7 +75,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Contains the error array
 	 *
-	 * @var array $errors - Error-Array
+	 * @var string[] $errors - Error-Array
 	 */
 	private $errors = array();
 
@@ -101,6 +108,8 @@ class BusinessShipment extends Version {
 	 * Contains the Shipment Details
 	 *
 	 * @var ShipmentDetails $shipmentDetails - Shipment Details Object
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	private $shipmentDetails;
 
@@ -110,6 +119,8 @@ class BusinessShipment extends Version {
 	 * Note: Optional
 	 *
 	 * @var Service|null $service - Service Object | null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	private $service = null;
 
@@ -119,22 +130,28 @@ class BusinessShipment extends Version {
 	 * Note: Optional
 	 *
 	 * @var BankData|null $bank - Bank-Object | null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	private $bank = null;
 
 	/**
 	 * Contains the Sender-Object
 	 *
-	 * @var Sender $sender - Sender Object
+	 * @var Sender|null $sender - Sender Object
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
-	private $sender;
+	private $sender = null;
 
 	/**
 	 * Contains the Receiver-Object
 	 *
-	 * @var Receiver|PackStation|Filial $receiver - Receiver Object
+	 * @var Receiver|PackStation|Filial|null $receiver - Receiver Object
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
-	private $receiver;
+	private $receiver = null;
 
 	/**
 	 * Contains the Return Receiver Object
@@ -142,6 +159,8 @@ class BusinessShipment extends Version {
 	 * Note: Optional
 	 *
 	 * @var ReturnReceiver|null $returnReceiver - Return Receiver Object | null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	private $returnReceiver = null;
 
@@ -151,6 +170,8 @@ class BusinessShipment extends Version {
 	 * Note: Optional
 	 *
 	 * @var ExportDocument|null $exportDocument - Export-Document-Settings Object | null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	private $exportDocument = null;
 
@@ -162,6 +183,8 @@ class BusinessShipment extends Version {
 	 * Max-Len: 30
 	 *
 	 * @var string $sequenceNumber - Sequence-Number
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	private $sequenceNumber = '1';
 
@@ -184,6 +207,8 @@ class BusinessShipment extends Version {
 	 * Note: Optional
 	 *
 	 * @var bool|null $printOnlyIfReceiverIsValid - true will only print if receiver address is valid else false (null uses default)
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	private $printOnlyIfReceiverIsValid = null;
 
@@ -200,6 +225,15 @@ class BusinessShipment extends Version {
 	private $labelResponseType = null;
 
 	/**
+	 * Contains all Shipment-Orders
+	 *
+	 * Note: Can be up to 30 Shipment-Orders
+	 *
+	 * @var ShipmentOrder[] $shipmentOrders - Contains ShipmentOrder Objects
+	 */
+	private $shipmentOrders = array();
+
+	/**
 	 * Custom-WSDL-File URL
 	 *
 	 * @var null|string $customAPIURL - Custom-API URL (null uses default from DHL)
@@ -210,22 +244,25 @@ class BusinessShipment extends Version {
 	 * BusinessShipment constructor.
 	 *
 	 * @param Credentials $credentials - DHL-Credentials-Object
-	 * @param bool $testModus - Uses the Sandbox-Modus or Live (True uses test-Modus)
+	 * @param bool|string $testMode - Use a specific Sandbox-Mode or Production-Mode
+	 * 					Test-Mode (Normal): Credentials::TEST_NORMAL, 'test', true
+	 * 					Test-Mode (Thermo-Printer): Credentials::TEST_THERMO_PRINTER, 'thermo'
+	 * 					Live (No-Test-Mode): false - default
 	 * @param null|string $version - Version to use or null for the newest
 	 */
-	public function __construct($credentials, $testModus = false, $version = null) {
+	public function __construct($credentials, $testMode = false, $version = null) {
 		// Set Version
 		if($version === null)
 			$version = self::NEWEST_VERSION;
 
 		parent::__construct($version);
 
-		// Set Test-Modus
-		$this->setTest($testModus);
+		// Set Test-Mode
+		$this->setTest((($testMode) ? true : false));
 
 		// Set Credentials
 		if($this->isTest()) {
-			$c = new Credentials(true);
+			$c = new Credentials($testMode);
 			$c->setApiUser($credentials->getApiUser());
 			$c->setApiPassword($credentials->getApiPassword());
 
@@ -234,8 +271,8 @@ class BusinessShipment extends Version {
 
 		$this->setCredentials($credentials);
 
-		// Set Shipment-Class
-		$this->setShipmentDetails(new ShipmentDetails($credentials->getEkp(10) . '0101'));
+		// @deprecated Set Shipment-Class for Backward-Compatibility todo remove in newer versions
+		$this->shipmentDetails = new ShipmentDetails($credentials->getEkp(10) . '0101');
 	}
 
 	/**
@@ -259,6 +296,7 @@ class BusinessShipment extends Version {
 		unset($this->receiverEmail);
 		unset($this->printOnlyIfReceiverIsValid);
 		unset($this->labelResponseType);
+		unset($this->shipmentOrders);
 		unset($this->customAPIURL);
 	}
 
@@ -311,7 +349,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Get Error-Array
 	 *
-	 * @return array - Error-Array
+	 * @return string[] - Error-Array
 	 */
 	public function getErrors() {
 		return $this->errors;
@@ -320,7 +358,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Set Error-Array
 	 *
-	 * @param array $errors - Error-Array
+	 * @param string[] $errors - Error-Array
 	 */
 	public function setErrors($errors) {
 		$this->errors = $errors;
@@ -393,8 +431,17 @@ class BusinessShipment extends Version {
 	 * Get Shipment-Details-Object
 	 *
 	 * @return ShipmentDetails - Shipment-Details-Object
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getShipmentDetails() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->shipmentDetails;
 	}
 
@@ -402,8 +449,17 @@ class BusinessShipment extends Version {
 	 * Set Shipment-Details-Object
 	 *
 	 * @param ShipmentDetails $shipmentDetails - Shipment-Details-Object
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setShipmentDetails($shipmentDetails) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->shipmentDetails = $shipmentDetails;
 	}
 
@@ -411,8 +467,18 @@ class BusinessShipment extends Version {
 	 * Get the Service-Object
 	 *
 	 * @return Service|null - Service-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function getService() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
+			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
+			' on the Shipment instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->service;
 	}
 
@@ -420,8 +486,18 @@ class BusinessShipment extends Version {
 	 * Set the Service-Object
 	 *
 	 * @param Service|null $service - Service-Object or null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function setService($service) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
+			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
+			' on the Shipment instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->service = $service;
 	}
 
@@ -429,8 +505,18 @@ class BusinessShipment extends Version {
 	 * Get the Bank-Object
 	 *
 	 * @return BankData|null - Bank-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function getBank() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
+			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
+			' on the Shipment instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->bank;
 	}
 
@@ -438,44 +524,90 @@ class BusinessShipment extends Version {
 	 * Set the Bank-Object
 	 *
 	 * @param BankData|null $bank - Bank-Object or null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function setBank($bank) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
+			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
+			' on the Shipment instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->bank = $bank;
 	}
 
 	/**
 	 * Get the Sender-Object
 	 *
-	 * @return Sender - sender-Object
+	 * @return Sender|null - Sender-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getSender() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->sender;
 	}
 
 	/**
 	 * Set the Sender-Object
 	 *
-	 * @param Sender $sender - Sender-Object
+	 * @param Sender|null $sender - Sender-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setSender($sender) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->sender = $sender;
 	}
 
 	/**
 	 * Get the Receiver-Object
 	 *
-	 * @return Receiver|PackStation|Filial - Receiver-Object
+	 * @return Receiver|PackStation|Filial|null - Receiver-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getReceiver() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->receiver;
 	}
 
 	/**
 	 * Set the Receiver-Object
 	 *
-	 * @param Receiver|PackStation|Filial $receiver - Receiver-Object
+	 * @param Receiver|PackStation|Filial|null $receiver - Receiver-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setReceiver($receiver) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->receiver = $receiver;
 	}
 
@@ -485,8 +617,17 @@ class BusinessShipment extends Version {
 	 * Usually only used for Re-Tour (In most cases the same Address like the Sender)
 	 *
 	 * @return ReturnReceiver|null - ReturnReceiver-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getReturnReceiver() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->returnReceiver;
 	}
 
@@ -496,8 +637,17 @@ class BusinessShipment extends Version {
 	 * Usually only used for Re-Tour (In most cases the same Address like the Sender)
 	 *
 	 * @param ReturnReceiver|null $returnReceiver - ReturnReceiver-Object or null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setReturnReceiver($returnReceiver) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->returnReceiver = $returnReceiver;
 	}
 
@@ -505,8 +655,17 @@ class BusinessShipment extends Version {
 	 * Get the ExportDocument-Object
 	 *
 	 * @return ExportDocument|null - ExportDocument-Object or null if none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getExportDocument() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->exportDocument;
 	}
 
@@ -514,8 +673,17 @@ class BusinessShipment extends Version {
 	 * Set the ExportDocument-Object
 	 *
 	 * @param ExportDocument|null $exportDocument - ExportDocument-Object or null for none
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setExportDocument($exportDocument) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->exportDocument = $exportDocument;
 	}
 
@@ -523,8 +691,17 @@ class BusinessShipment extends Version {
 	 * Get the Sequence-Number
 	 *
 	 * @return string - Sequence-Number
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getSequenceNumber() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->sequenceNumber;
 	}
 
@@ -532,8 +709,17 @@ class BusinessShipment extends Version {
 	 * Set the Sequence-Number
 	 *
 	 * @param string $sequenceNumber - sequence-Number
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setSequenceNumber($sequenceNumber) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->sequenceNumber = $sequenceNumber;
 	}
 
@@ -571,8 +757,17 @@ class BusinessShipment extends Version {
 	 * Get if the label should only printed if the Receiver-Address is valid
 	 *
 	 * @return bool|null - Should the label only printed on a valid Address | null means DHL-Default
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getPrintOnlyIfReceiverIsValid() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		return $this->printOnlyIfReceiverIsValid;
 	}
 
@@ -582,8 +777,17 @@ class BusinessShipment extends Version {
 	 * WARNING: The Address-Validation can fail sometimes also on existing Addresses (for example new streets) use with care!
 	 *
 	 * @param bool|null $printOnlyIfReceiverIsValid - Should the label only printed on a valid Address | null uses default from DHL
+	 *
+	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setPrintOnlyIfReceiverIsValid($printOnlyIfReceiverIsValid) {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
+			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
+			E_USER_DEPRECATED
+		);
+
 		$this->printOnlyIfReceiverIsValid = $printOnlyIfReceiverIsValid;
 	}
 
@@ -606,6 +810,60 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Get the list with all Shipment-Orders Objects
+	 *
+	 * @return ShipmentOrder[] - List with all Shipment-Orders Objects
+	 */
+	public function getShipmentOrders() {
+		return $this->shipmentOrders;
+	}
+
+	/**
+	 * Set the list with all Shipment-Orders Objects
+	 *
+	 * @param ShipmentOrder[]|ShipmentOrder $shipmentOrders - Shipment-Order Object-Array or a Single Shipment-Order Object
+	 */
+	public function setShipmentOrders($shipmentOrders) {
+		if(! is_array($shipmentOrders)) {
+			trigger_error(
+				'[DHL-PHP-SDK]: The type of $shipmentOrders is NOT an array, but is required to set as array! Called method ' .
+				__METHOD__ . ' in class ' . __CLASS__,
+				E_USER_ERROR
+			);
+			$this->addError(__METHOD__ . ': Non-Array value given');
+
+			return;
+		}
+
+		$this->shipmentOrders = $shipmentOrders;
+	}
+
+	/**
+	 * Adds a Shipment-Order to the List
+	 *
+	 * @param ShipmentOrder $shipmentOrder - Shipment-Order to add
+	 */
+	public function addShipmentOrder($shipmentOrder) {
+		$this->shipmentOrders[] = $shipmentOrder;
+	}
+
+	/**
+	 * Clears the Shipment-Order list
+	 */
+	public function clearShipmentOrders() {
+		$this->setShipmentOrders(array());
+	}
+
+	/**
+	 * Returns how many Shipment-Orders are in this List
+	 *
+	 * @return int - ShipmentOrder Count
+	 */
+	public function countShipmentOrders() {
+		return count($this->getShipmentOrders());
+	}
+
+	/**
 	 * Get the Custom-API-URL
 	 *
 	 * @return null|string - Custom-API-URL or null for none
@@ -621,6 +879,21 @@ class BusinessShipment extends Version {
 	 */
 	public function setCustomAPIURL($customAPIURL) {
 		$this->customAPIURL = $customAPIURL;
+	}
+
+	/**
+	 * Check if the request-Array is to long
+	 *
+	 * @param array $array - Array to check
+	 * @param string $action - Action of the request
+	 * @param int $maxReq - Maximum-Requests - Default: self::MAX_DHL_REQUESTS
+	 */
+	private function checkRequestCount($array, $action, $maxReq = self::MAX_DHL_REQUESTS) {
+		$count = count($array);
+
+		if($count > self::MAX_DHL_REQUESTS)
+			$this->addError('There are only ' . $maxReq . ' Request/s for one call allowed for the action "'
+				. $action . '"! You tried to request ' . $count . ' ones');
 	}
 
 	/**
@@ -681,12 +954,20 @@ class BusinessShipment extends Version {
 	 * Gets the current (local)-Version or Request it via SOAP from DHL
 	 *
 	 * @param bool $viaSOAP - Request the Version from DHL (Default: false - get local-version as string)
-	 * @param bool $getBuildNumber - Return the Build number as well (String look then like this: 2.2.12) - Default false
-	 * @return bool|Response|string - Returns the Version as String or false on error
+	 * @param bool $getBuildNumber - Return the Build number as well (String look then like this: 2.2.12) Only possible via SOAP - Default false
+	 * @param bool $returnAsArray - Return the Version as Array - Default: false
+	 * @return bool|array|string - Returns the Version as String|array or false on error
 	 */
-	public function getVersion($viaSOAP = false, $getBuildNumber = false) {
-		if(! $viaSOAP)
-			return parent::getVersion();
+	public function getVersion($viaSOAP = false, $getBuildNumber = false, $returnAsArray = false) {
+		if(! $viaSOAP) {
+			if($returnAsArray)
+				return array(
+					'mayor' => parent::getMayor(),
+					'minor' => parent::getMinor()
+				);
+			else
+				return parent::getVersion();
+		}
 
 		switch($this->getMayor()) {
 			case 1:
@@ -711,9 +992,17 @@ class BusinessShipment extends Version {
 			$this->addError($response->faultstring);
 
 			return false;
-		} else
-			return $response->Version->majorRelease . '.' . $response->Version->minorRelease .
-				(($getBuildNumber) ? '.' . $response->Version->build : '');
+		} else {
+			if($returnAsArray)
+				return array(
+					'mayor' => $response->Version->majorRelease,
+					'minor' => $response->Version->minorRelease,
+					'build' => $response->Version->build
+				);
+			else
+				return $response->Version->majorRelease . '.' . $response->Version->minorRelease .
+					(($getBuildNumber) ? '.' . $response->Version->build : '');
+		}
 	}
 
 	/**
@@ -745,17 +1034,17 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the doManifest-Request
 	 *
-	 * @param string $shipmentNumber - Shipment-Number for Manifest
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for Manifest (up to 30 Numbers)
 	 * @return bool|Response - false on error or DHL-Response Object
 	 */
-	public function doManifest($shipmentNumber) {
+	public function doManifest($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->createDoManifestClass_v1($shipmentNumber);
+				$data = $this->createDoManifestClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->createDoManifestClass_v2($shipmentNumber);
+				$data = $this->createDoManifestClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -777,12 +1066,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for Manifest
 	 *
-	 * @param string $shipmentNumber - Shipment-Number for the Manifest
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for the Manifest (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function createDoManifestClass_v1($shipmentNumber) {
+	private function createDoManifestClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -794,14 +1083,21 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for Manifest
 	 *
-	 * @param string $shipmentNumber - Shipment-Number for the Manifest
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for the Manifest (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function createDoManifestClass_v2($shipmentNumber) {
+	private function createDoManifestClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'doManifest');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
 
 		return $data;
 	}
@@ -864,6 +1160,9 @@ class BusinessShipment extends Version {
 	private function createGetManifestClass_v2($manifestDate) {
 		$data = new StdClass;
 
+		if(is_array($manifestDate))
+			$this->addError('You can only request 1 date on getManifest - multiple requests in 1 call are not allowed here');
+
 		$data->Version = $this->getVersionClass();
 		$data->manifestDate = $manifestDate;
 
@@ -897,18 +1196,32 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Alias for createShipmentOrder
+	 *
 	 * Creates the Shipment-Request
 	 *
 	 * @return bool|Response - false on error or DHL-Response Object
 	 */
 	public function createShipment() {
+		return $this->createShipmentOrder();
+	}
+
+	/**
+	 * Creates the Shipment-Request
+	 *
+	 * @return bool|Response - false on error or DHL-Response Object
+	 */
+	public function createShipmentOrder() {
 		switch($this->getMayor()) {
 			case 1:
 				$data = $this->createShipmentClass_v1();
 				break;
 			case 2:
 			default:
-				$data = $this->createShipmentClass_v2();
+				if($this->countShipmentOrders() < 1)
+					$data = $this->createShipmentClass_v2_legacy();
+				else
+					$data = $this->createShipmentClass_v2();
 		}
 
 		$response = null;
@@ -927,7 +1240,7 @@ class BusinessShipment extends Version {
 
 			return false;
 		} else
-			return new Response($this->getVersion(), $response, $this->getLabelResponseType());
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**
@@ -952,6 +1265,47 @@ class BusinessShipment extends Version {
 	 * @return StdClass - Data-Object
 	 */
 	private function createShipmentClass_v2() {
+		$shipmentOrders = $this->getShipmentOrders();
+
+		$this->checkRequestCount($shipmentOrders, 'createShipmentClass');
+
+		$data = new StdClass;
+		$data->Version = $this->getVersionClass();
+
+		foreach($shipmentOrders as $key => &$shipmentOrder) {
+			/**
+			 * @var ShipmentOrder $shipmentOrder
+			 */
+			// Set global response-type if none is defined in shipment
+			if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null)
+				$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
+
+			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2(); // todo test
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Creates the Data-Object for the Request
+	 *
+	 * @return StdClass - Data-Object
+	 *
+	 * @deprecated - Old Shipment creation class (Supports only 1 Shipment)
+	 */
+	private function createShipmentClass_v2_legacy() {
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
+			' This method was called for Backward-Compatibility, please create `ShipmentOrder` Objects' .
+			' and assign them with `addShipmentOrder($shipmentOrder)` on this instance.',
+			E_USER_DEPRECATED
+		);
+
+		// Set old values
+		$this->getShipmentDetails()->setService($this->getService());
+		$this->getShipmentDetails()->setBank($this->getBank());
+
+		// Create class
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
 		$data->ShipmentOrder = new StdClass;
@@ -961,25 +1315,15 @@ class BusinessShipment extends Version {
 		$data->ShipmentOrder->Shipment = new StdClass;
 		$data->ShipmentOrder->Shipment->ShipmentDetails = $this->getShipmentDetails()->getShipmentDetailsClass_v2();
 
-		// Service
-		if($this->getService() !== null)
-			$data->ShipmentOrder->Shipment->ShipmentDetails->Service = $this->getService()->getServiceClass_v2($this->getShipmentDetails()->getProduct());
-
 		// Notification
 		$email = null; // Check for backward compatibility
-		if($this->getShipmentDetails()->getNotificationEmail() !== null)
-			$email = $this->getShipmentDetails()->getNotificationEmail();
-		else if($this->receiverEmail !== null)
+		if($this->getShipmentDetails()->getNotificationEmail() === null && $this->receiverEmail !== null)
 			$email = $this->getReceiverEmail(); // Use old E-Mail implementation for BC
 
 		if($email !== null) {
 			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification = new StdClass;
 			$data->ShipmentOrder->Shipment->ShipmentDetails->Notification->recipientEmailAddress = $email;
 		}
-
-		// Bank-Data
-		if($this->getBank() !== null)
-			$data->ShipmentOrder->Shipment->ShipmentDetails->BankData = $this->getBank()->getBankClass_v2();
 
 		// Shipper
 		$data->ShipmentOrder->Shipment->Shipper = $this->getSender()->getClass_v2();
@@ -1028,19 +1372,31 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Alias for deleteShipmentOrder
+	 *
 	 * Deletes a Shipment
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return bool|Response - Response
 	 */
-	public function deleteShipment($shipmentNumber) {
+	public function deleteShipment($shipmentNumbers) {
+		return $this->deleteShipmentOrder($shipmentNumbers);
+	}
+
+	/**
+	 * Deletes a Shipment
+	 *
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
+	 * @return bool|Response - Response
+	 */
+	public function deleteShipmentOrder($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->createDeleteClass_v1($shipmentNumber);
+				$data = $this->createDeleteClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->createDeleteClass_v2($shipmentNumber);
+				$data = $this->createDeleteClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1062,12 +1418,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Deletion
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function createDeleteClass_v1($shipmentNumber) {
+	private function createDeleteClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1079,14 +1435,21 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Deletion
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Shipment to delete
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function createDeleteClass_v2($shipmentNumber) {
+	private function createDeleteClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'deleteShipmentOrder');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
 
 		return $data;
 	}
@@ -1108,19 +1471,31 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Alias for getLabel
+	 *
 	 * Requests a Shipment-Label again
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Label
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Label(s) (up to 30 Numbers)
 	 * @return bool|Response - Response or false on error
 	 */
-	public function getShipmentLabel($shipmentNumber) {
+	public function getShipmentLabel($shipmentNumbers) {
+		return $this->getLabel($shipmentNumbers);
+	}
+
+	/**
+	 * Requests a Shipment-Label again
+	 *
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Label(s) (up to 30 Numbers)
+	 * @return bool|Response - Response or false on error
+	 */
+	public function getLabel($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->getLabelClass_v1($shipmentNumber);
+				$data = $this->getLabelClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->getLabelClass_v2($shipmentNumber);
+				$data = $this->getLabelClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1136,18 +1511,18 @@ class BusinessShipment extends Version {
 
 			return false;
 		} else
-			return new Response($this->getVersion(), $response, $this->getLabelResponseType());
+			return new Response($this->getVersion(), $response);
 	}
 
 	/**
 	 * Creates Data-Object for Label-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function getLabelClass_v1($shipmentNumber) {
+	private function getLabelClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1159,14 +1534,22 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Label-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function getLabelClass_v2($shipmentNumber) {
+	private function getLabelClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'getLabel');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
+
 		if($this->getLabelResponseType() !== null)
 			$data->labelResponseType = $this->getLabelResponseType();
 
@@ -1192,17 +1575,17 @@ class BusinessShipment extends Version {
 	/**
 	 * Requests a Export-Document again
 	 *
-	 * @param string $shipmentNumber - Shipment-Number of the Export-Document
+	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Export-Document(s) (up to 30 Numbers)
 	 * @return bool|Response - Response or false on error
 	 */
-	public function getExportDoc($shipmentNumber) {
+	public function getExportDoc($shipmentNumbers) {
 		switch($this->getMayor()) {
 			case 1:
-				$data = $this->getExportDocClass_v1($shipmentNumber);
+				$data = $this->getExportDocClass_v1($shipmentNumbers);
 				break;
 			case 2:
 			default:
-				$data = $this->getExportDocClass_v2($shipmentNumber);
+				$data = $this->getExportDocClass_v2($shipmentNumbers);
 		}
 
 		try {
@@ -1224,12 +1607,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Export-Document-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - DHL-API-Version 1 Method
 	 */
-	private function getExportDocClass_v1($shipmentNumber) {
+	private function getExportDocClass_v1($shipmentNumbers) {
 		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
 		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 
@@ -1241,14 +1624,22 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates Data-Object for Export-Document-Request
 	 *
-	 * @param string $shipmentNumber - Number of the Shipment
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
 	 */
-	private function getExportDocClass_v2($shipmentNumber) {
+	private function getExportDocClass_v2($shipmentNumbers) {
 		$data = new StdClass;
 
 		$data->Version = $this->getVersionClass();
-		$data->shipmentNumber = $shipmentNumber;
+
+		if(is_array($shipmentNumbers)) {
+			$this->checkRequestCount($shipmentNumbers, 'getExportDoc');
+
+			foreach($shipmentNumbers as $key => &$number)
+				$data->shipmentNumber[$key] = $number;
+		} else
+			$data->shipmentNumber = $shipmentNumbers;
+
 		if($this->getLabelResponseType() !== null)
 			$data->exportDocResponseType = $this->getLabelResponseType();
 

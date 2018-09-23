@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class ShipmentDetails
+ *
+ * @package Petschko\DHL
  */
 class ShipmentDetails {
 	/**
@@ -179,6 +181,15 @@ class ShipmentDetails {
 	private $height = null;
 
 	/**
+	 * Contains the Service Object (Many settings for the Shipment)
+	 *
+	 * Note: Optional
+	 *
+	 * @var Service|null $service - Service Object | null for none
+	 */
+	private $service = null;
+
+	/**
 	 * Type of the Package
 	 *
 	 * Note: Optional
@@ -203,6 +214,15 @@ class ShipmentDetails {
 	private $notificationEmail = null;
 
 	/**
+	 * Contains the Bank-Object
+	 *
+	 * Note: Optional
+	 *
+	 * @var BankData|null $bank - Bank-Object | null for none
+	 */
+	private $bank = null;
+
+	/**
 	 * ShipmentDetails constructor.
 	 *
 	 * @param string $accountNumber - Account-Number
@@ -225,8 +245,10 @@ class ShipmentDetails {
 		unset($this->length);
 		unset($this->width);
 		unset($this->height);
+		unset($this->service);
 		unset($this->packageType);
 		unset($this->notificationEmail);
+		unset($this->bank);
 	}
 
 	/**
@@ -456,6 +478,24 @@ class ShipmentDetails {
 	}
 
 	/**
+	 * Get the Service-Object
+	 *
+	 * @return Service|null - Service-Object or null if none
+	 */
+	public function getService() {
+		return $this->service;
+	}
+
+	/**
+	 * Set the Service-Object
+	 *
+	 * @param Service|null $service - Service-Object or null for none
+	 */
+	public function setService($service) {
+		$this->service = $service;
+	}
+
+	/**
 	 * Get the Type of the Package
 	 *
 	 * Return values:
@@ -508,6 +548,24 @@ class ShipmentDetails {
 	}
 
 	/**
+	 * Get the Bank-Object
+	 *
+	 * @return BankData|null - Bank-Object or null if none
+	 */
+	public function getBank() {
+		return $this->bank;
+	}
+
+	/**
+	 * Set the Bank-Object
+	 *
+	 * @param BankData|null $bank - Bank-Object or null for none
+	 */
+	public function setBank($bank) {
+		$this->bank = $bank;
+	}
+
+	/**
 	 * Creates a Default Shipment-Date (Today or if Sunday the next Day)
 	 *
 	 * @return string - Default-Date as ISO-Date String
@@ -539,7 +597,7 @@ class ShipmentDetails {
 	/**
 	 * Returns an DHL-Class of this Object for DHL-Shipment Details
 	 *
-	 * @return StdClass - ShipmentDetailsClass
+	 * @return StdClass - DHL-ShipmentDetails-Class
 	 */
 	public function getShipmentDetailsClass_v2() {
 		$class = new StdClass;
@@ -553,6 +611,7 @@ class ShipmentDetails {
 			$class->returnShipmentAccountNumber = $this->getReturnAccountNumber();
 		if($this->getReturnReference() !== null)
 			$class->returnShipmentReference = $this->getReturnReference();
+
 		$class->ShipmentItem = new StdClass;
 		$class->ShipmentItem->weightInKG = $this->getWeight();
 		if($this->getLength() !== null)
@@ -562,10 +621,16 @@ class ShipmentDetails {
 		if($this->getHeight() !== null)
 			$class->ShipmentItem->heightInCM = $this->getHeight();
 
+		if($this->getService() !== null)
+			$class->Service = $this->getService()->getServiceClass_v2($this->getProduct());
+
 		if($this->getNotificationEmail() !== null) {
 			$class->Notification = new StdClass;
 			$class->Notification->recipientEmailAddress = $this->getNotificationEmail();
 		}
+
+		if($this->getBank() !== null)
+			$class->BankData = $this->getBank()->getBankClass_v2();
 
 		return $class;
 	}

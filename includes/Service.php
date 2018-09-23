@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class Service
+ *
+ * @package Petschko\DHL
  */
 class Service {
 	/**

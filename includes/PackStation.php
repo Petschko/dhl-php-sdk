@@ -17,6 +17,8 @@ use stdClass;
 
 /**
  * Class PackStation
+ *
+ * @package Petschko\DHL
  */
 class PackStation extends Receiver {
 	/**

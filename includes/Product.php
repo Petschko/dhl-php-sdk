@@ -13,6 +13,8 @@ namespace Petschko\DHL;
 
 /**
  * Class Product
+ *
+ * @package Petschko\DHL
  */
 class Product {
 	/**
@@ -88,7 +90,7 @@ class Product {
 	/**
 	 * Contains all Services for this Product
 	 *
-	 * @var array $services - All Services for this Product
+	 * @var string[] $services - All Services for this Product
 	 */
 	private $services = array();
 
@@ -301,7 +303,7 @@ class Product {
 	/**
 	 * Get the Services
 	 *
-	 * @return array - Services
+	 * @return string[] - Services
 	 */
 	public function getServices() {
 		return $this->services;
@@ -310,7 +312,7 @@ class Product {
 	/**
 	 * Set Services
 	 *
-	 * @param array $services - Services
+	 * @param string[] $services - Services
 	 */
 	public function setServices($services) {
 		$this->services = $services;

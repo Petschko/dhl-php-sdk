@@ -7,20 +7,39 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 15.09.2016
  * Time: 14:26
- * Update: 16.07.2018
- * Version: 0.0.5
+ * Update: 14.08.2018
+ * Version: 0.1.0
  *
  * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
  */
 
 /**
  * Class Credentials
+ *
+ * @package Petschko\DHL
  */
 class Credentials {
+	// Test-Type Constants
 	/**
-	 * DHL Business-API Test-User
+	 * DHL-Test-Mode (Normal)
+	 */
+	const TEST_NORMAL = 'test';
+
+	/**
+	 * DHL-Test-Mode (Thermo-Printer)
+	 */
+	const TEST_THERMO_PRINTER = 'thermo';
+
+	// Test-User Value Constants
+	/**
+	 * DHL Business-API Test-User (Normal)
 	 */
 	const DHL_BUSINESS_TEST_USER = '2222222222_01';
+
+	/**
+	 * DHL Business-API Test-User (Thermo)
+	 */
+	const DHL_BUSINESS_TEST_USER_THERMO = '2222222222_03';
 
 	/**
 	 * DHL Business-API Test-User-Password
@@ -102,11 +121,23 @@ class Credentials {
 	 *
 	 * If Test-Modus is true it will set Test-User, Test-Signature, Test-EKP for you!
 	 *
-	 * @param bool $useTest - Use Test-Modus or Live Modus (true = test | false = live)
+	 * @param bool|string $testMode - Use a specific Test-Mode or Live Mode
+	 * 					Test-Mode (Normal): Credentials::TEST_NORMAL, 'test', true
+	 * 					Test-Mode (Thermo-Printer): Credentials::TEST_THERMO_PRINTER, 'thermo'
+	 * 					Live (No-Test-Mode): false - default
 	 */
-	public function __construct($useTest = false) {
-		if($useTest) {
-			$this->setUser(self::DHL_BUSINESS_TEST_USER);
+	public function __construct($testMode = false) {
+		if($testMode) {
+			switch($testMode) {
+				case self::TEST_THERMO_PRINTER:
+					$this->setUser(self::DHL_BUSINESS_TEST_USER_THERMO);
+					break;
+				case self::TEST_NORMAL:
+				case true:
+				default:
+					$this->setUser(self::DHL_BUSINESS_TEST_USER);
+			}
+
 			$this->setSignature(self::DHL_BUSINESS_TEST_USER_PASSWORD);
 			$this->setEkp(self::DHL_BUSINESS_TEST_EKP);
 		}
@@ -160,7 +191,7 @@ class Credentials {
 	}
 
 	/**
-	 * Get the first 10 Digits of the EKP
+	 * Get the (x first Digits of the) EKP
 	 *
 	 * @param null|int $len - Max-Chars to get from this String or null for all
 	 * @return string - EKP-Number with x Chars
