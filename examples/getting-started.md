@@ -30,8 +30,8 @@ First you need to setup your DHL-Credentials:
 **TEST**-Credentials:
 ```php
 // You can initial the Credentials-Object with one of the pre-set Test-Accounts
-$credentials = new \Petschko\DHL\Credentials(/* Optional: Test-Modus */ Credentials::TEST_NORMAL); // Normal-Testuser
-$credentials = new \Petschko\DHL\Credentials(/* Optional: Test-Modus */ Credentials::TEST_THERMO_PRINTER); // Thermo-Printer-Testuser
+$credentials = new \Petschko\DHL\Credentials(/* Optional: Test-Modus */ \Petschko\DHL\Credentials::TEST_NORMAL); // Normal-Testuser
+$credentials = new \Petschko\DHL\Credentials(/* Optional: Test-Modus */ \Petschko\DHL\Credentials::TEST_THERMO_PRINTER); // Thermo-Printer-Testuser
 
 // Now you just need to set your DHL-Developer-Data to it
 $credentials->setApiUser('myuser'); // Set the USERNAME (not E-Mail!) of your DHL-Dev-Account
