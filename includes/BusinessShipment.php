@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 05.09.2018
- * Version: 1.6.2
+ * Version: 1.7.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -1703,6 +1703,60 @@ class BusinessShipment extends Version {
 			case 2:
 			default:
 				return $this->getSoapClient()->validateShipment($data);
+		}
+	}
+
+	/**
+	 * Updates the Shipment-Request
+	 *
+	 * @return bool|Response - false on error or DHL-Response Object
+	 */
+	public function updateShipmentOrder() {
+		switch($this->getMayor()) {
+			case 1:
+				$data = null;
+				break;
+			case 2:
+			default:
+				if($this->countShipmentOrders() < 1)
+					$data = $this->createShipmentClass_v2_legacy();
+				else
+					$data = $this->createShipmentClass_v2();
+		}
+
+		$response = null;
+
+		// Create Shipment
+		try {
+			$response = $this->sendUpdateRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Requests the Update of a Shipment via SOAP
+	 *
+	 * @param Object|array $data - Shipment-Data
+	 * @return Object - DHL-Response
+	 * @throws Exception - Method doesn't exists for Version
+	 */
+	private function sendUpdateRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				throw new Exception(__FUNCTION__ . ': Method doesn\'t exists for Version 1!');
+			case 2:
+			default:
+				return $this->getSoapClient()->updateShipmentOrder($data);
 		}
 	}
 }
