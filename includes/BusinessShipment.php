@@ -1292,7 +1292,7 @@ class BusinessShipment extends Version {
 			if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null)
 				$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
 
-			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2(); // todo test
+			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
 		}
 
 		return $data;
