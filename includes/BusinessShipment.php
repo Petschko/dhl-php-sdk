@@ -338,6 +338,18 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Returns the last XML-Response from DHL or null
+	 *
+	 * @return null|string - Last XML-Response from DHL or null if none
+	 */
+	public function getLastDhlXMLResponse() {
+		if($this->soapClient === null)
+			return null;
+
+		return $this->getSoapClient()->__getLastResponse();
+	}
+
+	/**
 	 * Set the Soap-Client
 	 *
 	 * @param null|SoapClient $soapClient - Soap-Client
