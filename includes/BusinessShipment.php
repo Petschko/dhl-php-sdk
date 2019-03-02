@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 26.01.2017
  * Time: 15:37
  * Update: 05.09.2018
- * Version: 1.6.2
+ * Version: 1.7.0
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -335,6 +335,18 @@ class BusinessShipment extends Version {
 			return null;
 
 		return $this->getSoapClient()->__getLastRequest();
+	}
+
+	/**
+	 * Returns the last XML-Response from DHL or null
+	 *
+	 * @return null|string - Last XML-Response from DHL or null if none
+	 */
+	public function getLastDhlXMLResponse() {
+		if($this->soapClient === null)
+			return null;
+
+		return $this->getSoapClient()->__getLastResponse();
 	}
 
 	/**
@@ -1262,15 +1274,19 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for the Request
 	 *
+	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
 	 */
-	private function createShipmentClass_v2() {
+	private function createShipmentClass_v2($shipmentNumber = null) {
 		$shipmentOrders = $this->getShipmentOrders();
 
 		$this->checkRequestCount($shipmentOrders, 'createShipmentClass');
 
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
+
+		if($shipmentNumber !== null)
+			$data->shipmentNumber = (string) $shipmentNumber;
 
 		foreach($shipmentOrders as $key => &$shipmentOrder) {
 			/**
@@ -1280,7 +1296,7 @@ class BusinessShipment extends Version {
 			if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null)
 				$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
 
-			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2(); // todo test
+			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
 		}
 
 		return $data;
@@ -1289,11 +1305,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for the Request
 	 *
+	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - Old Shipment creation class (Supports only 1 Shipment)
 	 */
-	private function createShipmentClass_v2_legacy() {
+	private function createShipmentClass_v2_legacy($shipmentNumber = null) {
 		trigger_error(
 			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
 			' This method was called for Backward-Compatibility, please create `ShipmentOrder` Objects' .
@@ -1308,6 +1325,10 @@ class BusinessShipment extends Version {
 		// Create class
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
+
+		if($shipmentNumber !== null)
+			$data->shipmentNumber = (string) $shipmentNumber;
+
 		$data->ShipmentOrder = new StdClass;
 		$data->ShipmentOrder->sequenceNumber = $this->getSequenceNumber();
 
@@ -1691,6 +1712,67 @@ class BusinessShipment extends Version {
 			case 2:
 			default:
 				return $this->getSoapClient()->validateShipment($data);
+		}
+	}
+
+	/**
+	 * Updates the Shipment-Request
+	 *
+	 * @param string $shipmentNumber - Number of the Shipment, which should be updated
+	 * @return bool|Response - false on error or DHL-Response Object
+	 */
+	public function updateShipmentOrder($shipmentNumber) {
+		if(is_array($shipmentNumber) || $this->countShipmentOrders() > 1) {
+			$this->addError(__FUNCTION__ . ': Updating Shipments is a Single-Operation only!');
+
+			return false;
+		}
+
+		switch($this->getMayor()) {
+			case 1:
+				$data = null;
+				break;
+			case 2:
+			default:
+				if($this->countShipmentOrders() < 1)
+					$data = $this->createShipmentClass_v2_legacy($shipmentNumber);
+				else
+					$data = $this->createShipmentClass_v2($shipmentNumber);
+		}
+
+		$response = null;
+
+		// Create Shipment
+		try {
+			$response = $this->sendUpdateRequest($data);
+		} catch(Exception $e) {
+			$this->addError($e->getMessage());
+
+			return false;
+		}
+
+		if(is_soap_fault($response)) {
+			$this->addError($response->faultstring);
+
+			return false;
+		} else
+			return new Response($this->getVersion(), $response);
+	}
+
+	/**
+	 * Requests the Update of a Shipment via SOAP
+	 *
+	 * @param Object|array $data - Shipment-Data
+	 * @return Object - DHL-Response
+	 * @throws Exception - Method doesn't exists for Version
+	 */
+	private function sendUpdateRequest($data) {
+		switch($this->getMayor()) {
+			case 1:
+				throw new Exception(__FUNCTION__ . ': Method doesn\'t exists for Version 1!');
+			case 2:
+			default:
+				return $this->getSoapClient()->updateShipmentOrder($data);
 		}
 	}
 }

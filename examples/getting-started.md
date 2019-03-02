@@ -345,6 +345,15 @@ if($response === false) {
 You can get several Information from the `\Petschko\DHL\Response` Object. Please have a look down where I describe the `\Petschko\DHL\Response` Class.
 
 
+### Update a Shipment
+
+It works the same like creating a Shipment, but you need to specify the Shipment number, you want to update! You call this 
+request via `$dhl->updateShipmentOrder($shipmentNumber)`.
+```php
+	$dhl->updateShipmentOrder((string) $shipmentNumber)
+```
+
+
 ### Delete one or multiple Shipment(s)
 
 _Please note, that you need the `\Petschko\DHL\Credentials` Object with Valid Login-Information for that._
@@ -553,5 +562,29 @@ const \Petschko\DHL\Response::ERROR_AUTH_FAILED = 1001;
 const \Petschko\DHL\Response::ERROR_HARD_VAL_ERROR = 1101;
 const \Petschko\DHL\Response::ERROR_UNKNOWN_SHIPMENT_NUMBER = 2000;
 ```
+
+## Important helper functions
+
+It can happen that you want to see the XML-Code, which was created from your request, there is a function, which can show this to you! Sometimes you need this to debug or send this code to the DHL-Support, when you have issues.
+
+```php
+$dhl = new \Petschko\DHL\BusinessShipment($credentials);
+
+// (...) Code to call an DHL-Action
+
+$dhl->getLastXML(); // You get a string with the XML-Code from this function, you can save it to a file or display it
+```
+
+There is also a function, which shows you the Response-XML from DHL. Can be helpful for debug or when the DHL-Support ask for it.
+
+```php
+$dhl = new \Petschko\DHL\BusinessShipment($credentials);
+
+// (...) Code to call an DHL-Action
+
+$dhl->getLastDhlXMLResponse(); // You get a string with the XML-Code from this function, you can save it to a file or display it
+```
+
+You get `null` as response, when you didn't called any DHL Action
 
 That's all so far
