@@ -1274,15 +1274,19 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for the Request
 	 *
+	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
 	 */
-	private function createShipmentClass_v2() {
+	private function createShipmentClass_v2($shipmentNumber = null) {
 		$shipmentOrders = $this->getShipmentOrders();
 
 		$this->checkRequestCount($shipmentOrders, 'createShipmentClass');
 
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
+
+		if($shipmentNumber !== null)
+			$data->shipmentNumber = (string) $shipmentNumber;
 
 		foreach($shipmentOrders as $key => &$shipmentOrder) {
 			/**
@@ -1301,11 +1305,12 @@ class BusinessShipment extends Version {
 	/**
 	 * Creates the Data-Object for the Request
 	 *
+	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
 	 *
 	 * @deprecated - Old Shipment creation class (Supports only 1 Shipment)
 	 */
-	private function createShipmentClass_v2_legacy() {
+	private function createShipmentClass_v2_legacy($shipmentNumber = null) {
 		trigger_error(
 			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
 			' This method was called for Backward-Compatibility, please create `ShipmentOrder` Objects' .
@@ -1320,6 +1325,10 @@ class BusinessShipment extends Version {
 		// Create class
 		$data = new StdClass;
 		$data->Version = $this->getVersionClass();
+
+		if($shipmentNumber !== null)
+			$data->shipmentNumber = (string) $shipmentNumber;
+
 		$data->ShipmentOrder = new StdClass;
 		$data->ShipmentOrder->sequenceNumber = $this->getSequenceNumber();
 
@@ -1709,9 +1718,16 @@ class BusinessShipment extends Version {
 	/**
 	 * Updates the Shipment-Request
 	 *
+	 * @param string $shipmentNumber - Number of the Shipment, which should be updated
 	 * @return bool|Response - false on error or DHL-Response Object
 	 */
-	public function updateShipmentOrder() {
+	public function updateShipmentOrder($shipmentNumber) {
+		if(is_array($shipmentNumber) || $this->countShipmentOrders() > 1) {
+			$this->addError(__FUNCTION__ . ': Updating Shipments is a Single-Operation only!');
+
+			return false;
+		}
+
 		switch($this->getMayor()) {
 			case 1:
 				$data = null;
@@ -1719,9 +1735,9 @@ class BusinessShipment extends Version {
 			case 2:
 			default:
 				if($this->countShipmentOrders() < 1)
-					$data = $this->createShipmentClass_v2_legacy();
+					$data = $this->createShipmentClass_v2_legacy($shipmentNumber);
 				else
-					$data = $this->createShipmentClass_v2();
+					$data = $this->createShipmentClass_v2($shipmentNumber);
 		}
 
 		$response = null;
