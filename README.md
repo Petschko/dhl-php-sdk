@@ -34,6 +34,12 @@ require_once(__DIR__ . '/includes/_nonComposerLoader.php');
 
 This Project is written for the DHL-SOAP-API **Version 2 or higher**.
 
+### API Version 3.0
+
+This Project is **currently** not available for Version 3.0+, I plan to update it soon! Please don't send me any E-Mails about this! If you want to talk about Version 3.0, please use the Issue for it: https://github.com/Petschko/dhl-php-sdk/issues/64
+
+### Version 1
+
 Version 1 Methods are marked as deprecated and will removed soon. Please upgrade to the API-Version 2 as soon as possible.
 
 ## Usage / Getting started
@@ -69,6 +75,7 @@ All these Persons helped to create this SDK for the DHL-API:
 ## Contact
 
 - You can E-Mail me if you have Questions or whatever (No Bug-Reporting please!): peter@petschko.org
+- You can Chat with me in Telegram `@petschkoo`
 - You can Report Bugs here in the "[Issue](https://github.com/Petschko/dhl-php-sdk/issues)"-Section of the Project.
 	- Of course you can also ask any stuff there, feel free for that!
 	- If you want to use German, you can do it. Please keep in mind that not everybody can speak German, so it's better to use english =)
