@@ -67,7 +67,6 @@ All these Persons helped to create this SDK for the DHL-API:
 - [aschempp](https://github.com/aschempp) - For the help with the Notification E-Mail
 - [cedricziel](https://github.com/cedricziel) - For turning this Project into a [Composer](https://getcomposer.org/)-Package
 - [Dakror](https://github.com/Dakror) - For the `ProductInfo`-Class
-- [Magellanth](https://github.com/Magellanth) - For helping to solve the "Weak-Warning" issue
 - [octlabs](https://github.com/octlabs) - For adding some missing Documentation
 - [Petschko](https://github.com/Petschko) - Initially created this Project and decided to share it for free
 - [tobias-redmann](https://github.com/tobias-redmann) - For the `setFullStreet` method and the PHP-DHL-Example-Project for Version 1 _(This helped a lot to understand how the API works)_

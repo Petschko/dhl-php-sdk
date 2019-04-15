@@ -8,7 +8,7 @@ namespace Petschko\DHL;
  * Date: 18.11.2016
  * Time: 16:00
  * Update: 15.04.2019
- * Version: 1.3.4
+ * Version: 1.3.5
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -321,8 +321,31 @@ class Response extends Version implements LabelResponse {
 			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
 
 		// Fix the DHL-Error Weak-Warning-Bug
-		if($this->getStatusCode() === self::DHL_ERROR_WEAK_WARNING && $this->getStatusMessage() === 'ok;Der Webservice wurde ohne Fehler ausgeführt.')
-			$this->setStatusCode(self::DHL_ERROR_NO_ERROR);
+		if($this->countLabelData() === 1) {
+			// ALWAYS uses the Shipment-Response when only 1
+			$this->setStatusCode($this->getLabelData(0)->getStatusCode());
+			$this->setStatusText($this->getLabelData(0)->getStatusText());
+			$this->setStatusMessage($this->getLabelData(0)->getStatusMessage());
+		} else if($this->getStatusCode() === self::DHL_ERROR_WEAK_WARNING) {
+			$noError = true;
+
+			// Search in all shipments if an error/warning exists
+			foreach($this->getLabelData() as &$labelData) {
+				/**
+				 * @var LabelData $labelData
+				 */
+				if($labelData->getStatusCode() !== self::DHL_ERROR_NO_ERROR) {
+					$noError = false;
+					break;
+				}
+			}
+
+			if($noError) {
+				$this->setStatusCode(self::DHL_ERROR_NO_ERROR);
+				$this->setStatusText('ok');
+				$this->setStatusMessage('Der Webservice wurde ohne Fehler ausgeführt.');
+			}
+		}
 	}
 
 	/**
@@ -374,8 +397,6 @@ class Response extends Version implements LabelResponse {
 				else
 					$this->setStatusMessage($response->Status->statusMessage);
 			}
-
-			$this->validateStatusCode();
 		}
 
 		// Set Manifest if exists (getManifest)
@@ -407,5 +428,9 @@ class Response extends Version implements LabelResponse {
 			$this->handleMultiShipments($response->ExportDocData);
 		else if(isset($response->ManifestState)) // 6
 			$this->handleMultiShipments($response->ManifestState);
+
+		// Validate the status to fix errors on the Main-Status and show weak-warnings
+		if($this->getStatusCode() !== self::DHL_ERROR_NOT_SET)
+			$this->validateStatusCode();
 	}
 }
