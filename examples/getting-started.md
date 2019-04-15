@@ -306,9 +306,6 @@ $dhl->addShipmentOrder($shipmentOrder2); // You can add multiple shipments in on
 Now you can set how the Label should get returned and some other stuff:
 
 ```php
-// You can enable Logging if you want
-$dhl->setLog((bool) true); // Default: false -> Off
-
 /*
 * You can set a Global response-type, which aplies to all ShipmentOrders (Response-Types defined in Shipments have more prio than this)
 * Possible Values:
