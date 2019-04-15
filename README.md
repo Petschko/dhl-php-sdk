@@ -72,6 +72,10 @@ All these Persons helped to create this SDK for the DHL-API:
 - [tobias-redmann](https://github.com/tobias-redmann) - For the `setFullStreet` method and the PHP-DHL-Example-Project for Version 1 _(This helped a lot to understand how the API works)_
 
 
+## Donate
+
+If you like this Project may consider to [Donate](https://www.paypal.me/petschko). I usually do this Project in my spare time and it's completely free. So I appreciate anything, which helps the Project (Pull-Requests, Bug Report etc), these are more worth than Donations but I'm happy for every amount as well. ^.^
+
 ## Contact
 
 - You can E-Mail me if you have Questions or whatever (No Bug-Reporting please!): peter@petschko.org

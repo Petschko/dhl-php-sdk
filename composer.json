@@ -6,11 +6,19 @@
     "authors": [
         {
             "name": "Peter Dragicevic",
-            "email": "peter@petschko.org"
+            "email": "peter@petschko.org",
+            "homepage": "http://petschko.org/",
+            "role": "developer"
         }
     ],
+    "support": {
+        "email": "peter@petschko.org",
+        "issues": "https://github.com/Petschko/dhl-php-sdk/issues",
+        "source": "https://github.com/Petschko/dhl-php-sdk",
+        "docs": "http://docs.petschko.org/dhl-php-sdk/index.html"
+    },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.2.0",
         "ext-soap": "*",
         "ext-mbstring": "*"
     },

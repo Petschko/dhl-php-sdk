@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 05.09.2018
- * Version: 1.7.0
+ * Update: 15.04.2019
+ * Version: 1.7.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  */
@@ -86,13 +86,6 @@ class BusinessShipment extends Version {
 	 * @var bool $test - Is Sandbox-Mode
 	 */
 	private $test;
-
-	/**
-	 * Contains if Log is enabled
-	 *
-	 * @var bool $log - Is Logging enabled
-	 */
-	private $log = false;
 
 	// Object-Fields
 	/**
@@ -283,7 +276,6 @@ class BusinessShipment extends Version {
 		unset($this->soapClient);
 		unset($this->errors);
 		unset($this->test);
-		unset($this->log);
 		unset($this->credentials);
 		unset($this->shipmentDetails);
 		unset($this->service);
@@ -407,18 +399,30 @@ class BusinessShipment extends Version {
 	 * Returns if log is enabled
 	 *
 	 * @return bool - Log enabled
+	 *
+	 * @deprecated - Removed Log-Function
 	 */
 	public function isLog() {
-		return $this->log;
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ . ' Logging has been removed',
+			E_USER_DEPRECATED
+		);
+
+		return false;
 	}
 
 	/**
 	 * Set if log enabled
 	 *
 	 * @param bool $log - Enable log
+	 *
+	 * @deprecated - Removed Log-Function
 	 */
 	public function setLog($log) {
-		$this->log = $log;
+		trigger_error(
+			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ . ' Logging has been removed',
+			E_USER_DEPRECATED
+		);
 	}
 
 	/**
@@ -909,21 +913,6 @@ class BusinessShipment extends Version {
 	}
 
 	/**
-	 * Add the Message to the Log if enabled
-	 *
-	 * @param string|array|object $message - Message to add to Log
-	 * @param int $errorLevel - PHP-Error-Level (Default E_USER_NOTICE) | See: http://php.net/manual/en/errorfunc.configuration.php#ini.error-reporting
-	 */
-	private function log($message, $errorLevel = E_USER_NOTICE) {
-		if($this->isLog()) {
-			if(is_array($message) || is_object($message))
-				error_log(print_r($message, true), $errorLevel);
-			else
-				error_log($message, $errorLevel);
-		}
-	}
-
-	/**
 	 * Build SOAP-Auth-Header
 	 *
 	 * @return SoapHeader - Soap-Auth-Header
@@ -956,10 +945,8 @@ class BusinessShipment extends Version {
 			'trace' => 1
 		);
 
-		$this->log($auth_params);
 		$this->setSoapClient(new SoapClient($this->getAPIUrl(), $auth_params));
 		$this->getSoapClient()->__setSoapHeaders($header);
-		$this->log($this->getSoapClient());
 	}
 
 	/**
