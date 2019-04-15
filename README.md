@@ -5,7 +5,7 @@ This *unofficial* library is wrapping some functions of the DHL SOAP API in orde
 ## Requirements
 
 - You need a [DHL developer Account](https://entwickler.dhl.de/) and - as long as you want to use the API in production systems - a DHL Intraship Account.
-- PHP-Version 5.4 or higher _(It may work on older Versions, but I don't offer Support for these)_
+- PHP-Version 7.2 or higher _(It may work on older Versions, but I don't offer Support for these)_
 - PHP-SOAP-Client installed + enabled on your Server. [More information on php.net](http://php.net/manual/en/soap.setup.php)
 
 ## Installation
