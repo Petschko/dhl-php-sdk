@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 26.01.2017
  * Time: 18:18
- * Update: 05.08.2018
- * Version: 0.1.2
+ * Update: 15.04.2019
+ * Version: 0.1.3
  *
  * Notes: Contains the Service Class
  */
@@ -1566,13 +1566,13 @@ class Service {
 			$class->CashOnDelivery = new StdClass;
 			$class->CashOnDelivery->active = (int) $this->getCashOnDeliveryEnabled();
 			if($this->getCashOnDeliveryAddFee() !== null)
-				$class->CashOnDelivery->addFee = $this->getCashOnDeliveryAddFee();
-			$class->CashOnDelivery->codAmount = $this->getCashOnDeliveryAmount();
+				$class->CashOnDelivery->addFee = (int) $this->getCashOnDeliveryAddFee();
+			$class->CashOnDelivery->codAmount = (float) $this->getCashOnDeliveryAmount();
 		}
 		if($this->getAdditionalInsuranceEnabled() !== null) {
 			$class->AdditionalInsurance = new StdClass;
 			$class->AdditionalInsurance->active = (int) $this->getAdditionalInsuranceEnabled();
-			$class->AdditionalInsurance->insuranceAmount = $this->getAdditionalInsuranceAmount();
+			$class->AdditionalInsurance->insuranceAmount = (float) $this->getAdditionalInsuranceAmount();
 		}
 		if($this->getBulkyGoods() !== null) {
 			$class->BulkyGoods = new StdClass;
