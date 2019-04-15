@@ -7,8 +7,8 @@ namespace Petschko\DHL;
  * Authors-Website: http://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 05.09.2018
- * Version: 1.3.3
+ * Update: 15.04.2019
+ * Version: 1.3.4
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */
@@ -317,8 +317,12 @@ class Response extends Version implements LabelResponse {
 	 * Check if the current Status-Code is correct and set the correct one if not
 	 */
 	private function validateStatusCode() {
-		if($this->getStatusCode() === 0 && $this->getStatusText() !== 'ok')
+		if($this->getStatusCode() === self::DHL_ERROR_NO_ERROR && $this->getStatusText() !== 'ok')
 			$this->setStatusCode(self::DHL_ERROR_WEAK_WARNING);
+
+		// Fix the DHL-Error Weak-Warning-Bug
+		if($this->getStatusCode() === self::DHL_ERROR_WEAK_WARNING && $this->getStatusMessage() === 'ok;Der Webservice wurde ohne Fehler ausgeführt.')
+			$this->setStatusCode(self::DHL_ERROR_NO_ERROR);
 	}
 
 	/**
