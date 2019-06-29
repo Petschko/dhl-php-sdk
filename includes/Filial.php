@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 20.03.2017
  * Time: 13:23
- * Update: 16.07.2018
- * Version: 0.0.4
  *
  * Notes: Contains the Filial Class
  */

@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 02.09.2018
  * Time: 14:55
- * Update: -
- * Version: 0.0.1
  *
  * Notes: Interface for Response and LabelData
  */

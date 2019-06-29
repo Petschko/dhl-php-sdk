@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 18.11.2016
  * Time: 16:00
- * Update: 15.04.2019
- * Version: 1.3.5
  *
  * Notes: Contains the DHL-Response Class, which manages the response that you get with simple getters
  */

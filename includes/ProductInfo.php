@@ -7,7 +7,6 @@ namespace Petschko\DHL;
  * Authors-Website: http://dakror.de/
  * Date: 02.09.2018
  * Time: 13:17
- * Version: 1.0.2
  *
  * Notes: Contains the ProductInfo Class
  */

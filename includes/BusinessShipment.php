@@ -4,13 +4,13 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 26.01.2017
  * Time: 15:37
- * Update: 15.04.2019
- * Version: 1.7.1
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
+ *
+ * Checkout the repo which inspired me to improve this: https://github.com/tobias-redmann/dhl-php-sdk
  */
 
 use Exception;

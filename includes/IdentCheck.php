@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 26.01.2017
  * Time: 18:06
- * Update: 17.07.2018
- * Version: 0.0.3
  *
  * Notes: Contains all stuff for Ident-Check
  */

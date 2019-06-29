@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 28.01.2017
  * Time: 19:17
- * Update: 14.07.2018
- * Version: 1.0.2
  *
  * Notes: Contains the Receiver class
  */

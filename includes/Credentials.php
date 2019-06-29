@@ -4,13 +4,11 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 15.09.2016
  * Time: 14:26
- * Update: 14.08.2018
- * Version: 0.1.0
  *
- * Notes: Contains the Credentials class - Checkout the original repo: https://github.com/tobias-redmann/dhl-php-sdk
+ * Notes: Contains the Credentials class
  */
 
 /**

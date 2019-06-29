@@ -1,7 +1,7 @@
 <?php
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 13.07.2017
  * Time: 21:17
  *

@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 10.04.2017
  * Time: 12:48
- * Update: 06.08.2018
- * Version: 0.0.5
  *
  * Notes: Contains the ExportDocPosition class
  */

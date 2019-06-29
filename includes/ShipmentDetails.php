@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 18.11.2016
  * Time: 13:07
- * Update: 05.08.2018
- * Version: 0.1.2
  *
  * Notes: Details for a Shipment (Like size/Weight etc)
  */

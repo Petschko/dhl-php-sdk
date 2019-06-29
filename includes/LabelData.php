@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 02.09.2018
  * Time: 13:13
- * Update: 05.09.2018
- * Version: 1.0.0
  *
  * Notes: Contains the LabelData Class
  */

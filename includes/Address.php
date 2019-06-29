@@ -4,11 +4,9 @@ namespace Petschko\DHL;
 
 /**
  * Author: Peter Dragicevic [peter@petschko.org]
- * Authors-Website: http://petschko.org/
+ * Authors-Website: https://petschko.org/
  * Date: 15.09.2016
  * Time: 15:23
- * Update: 16.07.2018
- * Version: 0.0.5
  *
  * Notes: Contains the DHL-Address Class
  */
