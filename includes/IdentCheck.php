@@ -22,12 +22,18 @@ class IdentCheck {
 	/**
 	 * Contains the Last-Name of the Person
 	 *
+	 * Min-Len: 0
+	 * Max-Len: 255
+	 *
 	 * @var string $lastName - Last-Name
 	 */
 	private $lastName;
 
 	/**
 	 * Contains the First-Name of the Person
+	 *
+	 * Min-Len: 0
+	 * Max-Len: 255
 	 *
 	 * @var string $firstName - First-Name
 	 */
@@ -38,12 +44,18 @@ class IdentCheck {
 	 *
 	 * Note: ISO-Date-Format (YYYY-MM-DD)
 	 *
+	 * Min-Len: 10
+	 * Max-Len: 10
+	 *
 	 * @var string $birthday - Birthday
 	 */
 	private $birthday;
 
 	/**
 	 * Contains the "minimum age of the person for ident check"
+	 *
+	 * Min-Len: 1
+	 * Max-Len: 3
 	 *
 	 * @var int $minimumAge - "minimum age of the person for ident check"
 	 */
