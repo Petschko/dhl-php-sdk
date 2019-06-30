@@ -106,18 +106,14 @@ class Filial extends Receiver {
 	 * Returns a Class for the DHL-SendPerson
 	 *
 	 * @return StdClass - DHL-SendPerson-class
+	 * @since 2.0
 	 */
 	public function getClass_v2() {
 		$class = new StdClass;
 		$class->name1 = $this->getName();
 
-		$class->Communication = new StdClass;
-		if($this->getPhone() !== null)
-			$class->Communication->phone = $this->getPhone();
-		if($this->getEmail() !== null)
-			$class->Communication->email = $this->getEmail();
-		if($this->getContactPerson() !== null)
-			$class->Communication->contactPerson = $this->getContactPerson();
+		if($this->getPhone() !== null || $this->getEmail() !== null || $this->getContactPerson() !== null)
+			$class->Communication = $this->getCommunicationClass_v2();
 
 		$class->Postfiliale = new StdClass;
 		$class->Postfiliale->postfilialNumber = $this->getFilialNumber();
@@ -125,18 +121,19 @@ class Filial extends Receiver {
 		$class->Postfiliale->zip = $this->getZip();
 		$class->Postfiliale->city = $this->getLocation();
 
-		if($this->getCountryISOCode() !== null) {
-			$class->Postfiliale->Origin = new StdClass;
-
-			if($this->getCountry() !== null)
-				$class->Postfiliale->Origin->country = $this->getCountry();
-
-			$class->Postfiliale->Origin->countryISOCode = $this->getCountryISOCode();
-
-			if($this->getState() !== null)
-				$class->Postfiliale->Origin->state = $this->getState();
-		}
+		if($this->getCountryISOCode() !== null)
+			$class->Postfiliale->Origin = $this->getOriginClass_v2();
 
 		return $class;
+	}
+
+	/**
+	 * Returns a Class for the DHL-SendPerson
+	 *
+	 * @return StdClass - DHL-SendPerson-class
+	 * @since 3.0
+	 */
+	public function getClass_v3() {
+		return $this->getClass_v2();
 	}
 }

@@ -99,8 +99,11 @@ class Response extends Version implements LabelResponse {
 					trigger_error('[DHL-PHP-SDK]: Called Version 1 Method ' .__CLASS__ . '->' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 					break;
 				case 2:
-				default:
 					$this->loadResponse_v2($response);
+					break;
+				case 3:
+				default:
+					$this->loadResponse_v3($response);
 			}
 		}
 	}
@@ -365,9 +368,7 @@ class Response extends Version implements LabelResponse {
 	 */
 	private function handleMultiShipments($possibleMultiLabelObject) {
 		if(is_array($possibleMultiLabelObject)) {
-			$multiLabelArray = $possibleMultiLabelObject;
-
-			foreach($multiLabelArray as &$singleLabel)
+			foreach($possibleMultiLabelObject as &$singleLabel)
 				$this->addLabelData(new LabelData($this->getVersion(), $singleLabel));
 		} else
 			$this->addLabelData(new LabelData($this->getVersion(), $possibleMultiLabelObject));
@@ -377,6 +378,7 @@ class Response extends Version implements LabelResponse {
 	 * Loads a DHL-Response into this Object
 	 *
 	 * @param Object $response - DHL-Response
+	 * @since 2.0
 	 */
 	private function loadResponse_v2($response) {
 		// Set global Status-Values first
@@ -430,5 +432,16 @@ class Response extends Version implements LabelResponse {
 		// Validate the status to fix errors on the Main-Status and show weak-warnings
 		if($this->getStatusCode() !== self::DHL_ERROR_NOT_SET)
 			$this->validateStatusCode();
+	}
+
+	/**
+	 * Loads a DHL-Response into this Object
+	 *
+	 * @param Object $response - DHL-Response
+	 * @since 3.0
+	 */
+	private function loadResponse_v3($response) {
+		$this->loadResponse_v2($response);
+		// todo maybe write own method
 	}
 }

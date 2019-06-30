@@ -176,6 +176,7 @@ class IdentCheck {
 	 * Get the Ident-DHL-Class
 	 *
 	 * @return StdClass - Ident-DHL-Class
+	 * @since 2.0
 	 */
 	public function getIdentClass_v2() {
 		$class = new StdClass;
@@ -185,5 +186,15 @@ class IdentCheck {
 		$class->minimumAge = $this->getMinimumAge();
 
 		return $class;
+	}
+
+	/**
+	 * Get the Ident-DHL-Class
+	 *
+	 * @return StdClass - Ident-DHL-Class
+	 * @since 3.0
+	 */
+	public function getIdentClass_v3() {
+		return $this->getIdentClass_v2();
 	}
 }

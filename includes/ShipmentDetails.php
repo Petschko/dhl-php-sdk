@@ -121,6 +121,19 @@ class ShipmentDetails {
 	private $shipmentDate = null;
 
 	/**
+	 * Name of a cost center
+	 *
+	 * Note: Optional
+	 *
+	 * Min-Len: -
+	 * Max-Len: 50
+	 *
+	 * @var null|string $costCentre - Name of a Cost-Center or null for none
+	 * @since 3.0
+	 */
+	private $costCentre = null;
+
+	/**
 	 * Contains the Return-Account-Number (EKP)
 	 *
 	 * Note: Optional
@@ -237,6 +250,7 @@ class ShipmentDetails {
 		unset($this->accountNumber);
 		unset($this->customerReference);
 		unset($this->shipmentDate);
+		unset($this->costCentre);
 		unset($this->returnAccountNumber);
 		unset($this->returnReference);
 		unset($this->weight);
@@ -365,6 +379,26 @@ class ShipmentDetails {
 		}
 
 		$this->shipmentDate = $shipmentDate;
+	}
+
+	/**
+	 * get the name of a Cost center
+	 *
+	 * @return string|null - Name of a Cost center or null for none
+	 * @since 3.0
+	 */
+	public function getCostCentre(): ?string {
+		return $this->costCentre;
+	}
+
+	/**
+	 * Set the Name of a Cost center or null for none
+	 *
+	 * @param string|null $costCentre - Name of a Cost center or null for none
+	 * @since 3.0
+	 */
+	public function setCostCentre(?string $costCentre): void {
+		$this->costCentre = $costCentre;
 	}
 
 	/**
@@ -596,6 +630,7 @@ class ShipmentDetails {
 	 * Returns an DHL-Class of this Object for DHL-Shipment Details
 	 *
 	 * @return StdClass - DHL-ShipmentDetails-Class
+	 * @since 2.0
 	 */
 	public function getShipmentDetailsClass_v2() {
 		$class = new StdClass;
@@ -621,6 +656,50 @@ class ShipmentDetails {
 
 		if($this->getService() !== null)
 			$class->Service = $this->getService()->getServiceClass_v2($this->getProduct());
+
+		if($this->getNotificationEmail() !== null) {
+			$class->Notification = new StdClass;
+			$class->Notification->recipientEmailAddress = $this->getNotificationEmail();
+		}
+
+		if($this->getBank() !== null)
+			$class->BankData = $this->getBank()->getBankClass_v2();
+
+		return $class;
+	}
+
+	/**
+	 * Returns an DHL-Class of this Object for DHL-Shipment Details
+	 *
+	 * @return StdClass - DHL-ShipmentDetails-Class
+	 * @since 3.0
+	 */
+	public function getShipmentDetailsClass_v3() {
+		$class = new StdClass;
+
+		$class->product = $this->getProduct();
+		$class->accountNumber = $this->getAccountNumber();
+		if($this->getCustomerReference() !== null)
+			$class->customerReference = $this->getCustomerReference();
+		$class->shipmentDate = $this->getShipmentDate();
+		if($this->getCostCentre() !== null)
+			$class->costCentre = $this->getCostCentre();
+		if($this->getReturnAccountNumber() !== null)
+			$class->returnShipmentAccountNumber = $this->getReturnAccountNumber();
+		if($this->getReturnReference() !== null)
+			$class->returnShipmentReference = $this->getReturnReference();
+
+		$class->ShipmentItem = new StdClass;
+		$class->ShipmentItem->weightInKG = $this->getWeight();
+		if($this->getLength() !== null)
+			$class->ShipmentItem->lengthInCM = $this->getLength();
+		if($this->getWidth() !== null)
+			$class->ShipmentItem->widthInCM = $this->getWidth();
+		if($this->getHeight() !== null)
+			$class->ShipmentItem->heightInCM = $this->getHeight();
+
+		if($this->getService() !== null)
+			$class->Service = $this->getService()->getServiceClass_v3($this->getProduct());
 
 		if($this->getNotificationEmail() !== null) {
 			$class->Notification = new StdClass;

@@ -239,6 +239,7 @@ class ExportDocPosition {
 	 * Returns a Class for ExportDocPosition
 	 *
 	 * @return StdClass - DHL-ExportDocPosition-Class
+	 * @since 2.0
 	 */
 	public function getExportDocPositionClass_v2() {
 		$class = new StdClass;
@@ -251,5 +252,15 @@ class ExportDocPosition {
 		$class->customsValue = $this->getCustomsValue();
 
 		return $class;
+	}
+
+	/**
+	 * Returns a Class for ExportDocPosition
+	 *
+	 * @return StdClass - DHL-ExportDocPosition-Class
+	 * @since 3.0
+	 */
+	public function getExportDocPositionClass_v3() {
+		return $this->getExportDocPositionClass_v2();
 	}
 }

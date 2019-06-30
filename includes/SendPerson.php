@@ -33,6 +33,7 @@ abstract class SendPerson extends Address {
 	 * Name of SendPerson (Part 2)
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 50
 	 *
@@ -44,6 +45,7 @@ abstract class SendPerson extends Address {
 	 * Name of SendPerson (Part 3)
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 50
 	 *
@@ -55,6 +57,7 @@ abstract class SendPerson extends Address {
 	 * Phone-Number of the SendPerson
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 20
 	 *
@@ -66,8 +69,10 @@ abstract class SendPerson extends Address {
 	 * E-Mail of the SendPerson
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 70
+	 * Max-Len: 50 (since 3.0)
 	 *
 	 * @var string|null $email - E-Mail-Address | null for none
 	 */
@@ -77,6 +82,7 @@ abstract class SendPerson extends Address {
 	 * Contact Person of the SendPerson (Mostly used in Companies)
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 50
 	 *
@@ -205,6 +211,34 @@ abstract class SendPerson extends Address {
 		$this->contactPerson = $contactPerson;
 	}
 
+	/**
+	 * Returns the Communication Class
+	 *
+	 * @return StdClass - Communication Class
+	 * @since 2.0
+	 */
+	protected function getCommunicationClass_v2() {
+		$class = new StdClass;
+
+		if($this->getPhone() !== null)
+			$class->phone = $this->getPhone();
+		if($this->getEmail() !== null)
+			$class->email = $this->getEmail();
+		if($this->getContactPerson() !== null)
+			$class->contactPerson = $this->getContactPerson();
+
+		return $class;
+	}
+
+	/**
+	 * Returns the Communication Class
+	 *
+	 * @return StdClass - Communication Class
+	 * @since 3.0
+	 */
+	protected function getCommunicationClass_v3() {
+		return $this->getCommunicationClass_v2();
+	}
 
 	/**
 	 * Returns a Class for the DHL-SendPerson
@@ -224,6 +258,15 @@ abstract class SendPerson extends Address {
 	 * Returns a Class for the DHL-SendPerson
 	 *
 	 * @return StdClass - DHL-SendPerson-class
+	 * @since 2.0
 	 */
 	abstract public function getClass_v2();
+
+	/**
+	 * Returns a Class for the DHL-SendPerson
+	 *
+	 * @return StdClass - DHL-SendPerson-class
+	 * @since 3.0
+	 */
+	abstract public function getClass_v3();
 }

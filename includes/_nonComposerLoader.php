@@ -33,6 +33,7 @@ require_once('ExportDocPosition.php');
 require_once('ExportDocument.php');
 require_once('IdentCheck.php');
 require_once('LabelData.php');
+require_once('LabelFormat.php');
 require_once('Product.php');
 require_once('ProductInfo.php');
 require_once('Response.php');

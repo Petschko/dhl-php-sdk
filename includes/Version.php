@@ -123,7 +123,7 @@ abstract class Version {
 	 *
 	 * @return StdClass - Version DHL-Class
 	 */
-	protected function getVersionClass() {
+	public function getVersionClass() {
 		$class = new StdClass;
 
 		$class->majorRelease = $this->getMayor();

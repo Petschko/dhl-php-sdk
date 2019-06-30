@@ -53,6 +53,7 @@ class BankData {
 	 * Purpose of bank information
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
@@ -64,6 +65,7 @@ class BankData {
 	 * Purpose of more bank information
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
@@ -75,6 +77,7 @@ class BankData {
 	 * Bank-Information-Code (BankCCL) of bank account.
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 11
 	 *
@@ -86,6 +89,7 @@ class BankData {
 	 * Account reference to customer profile
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 35
 	 *
@@ -257,6 +261,7 @@ class BankData {
 	 * Returns a DHL-Bank-Class for API v2
 	 *
 	 * @return StdClass - DHL-Bank-Class
+	 * @since 2.0
 	 */
 	public function getBankClass_v2() {
 		$class = new StdClass;
@@ -274,5 +279,15 @@ class BankData {
 			$class->accountreference = $this->getAccountReference();
 
 		return $class;
+	}
+
+	/**
+	 * Returns a DHL-Bank-Class for API v3
+	 *
+	 * @return StdClass - DHL-Bank-Class
+	 * @since 3.0
+	 */
+	public function getBankClass_v3() {
+		return $this->getBankClass_v2();
 	}
 }

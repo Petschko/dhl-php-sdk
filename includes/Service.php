@@ -476,6 +476,29 @@ class Service {
 	private $identCheckObj = null;
 
 	/**
+	 * Contains if ParcelOutletRouting is enabled
+	 *
+	 * Note: Optional
+	 *
+	 * @var bool|null $parcelOutletRoutingEnabled - Is ParcelOutletRouting enabled | null uses default
+	 * @since 3.0
+	 */
+	private $parcelOutletRoutingEnabled = null;
+
+	/**
+	 * Contains the details for ParcelOutletRouting
+	 *
+	 * Note: Optional
+	 *
+	 * Min-Len: 1
+	 * Max-Len: 100
+	 *
+	 * @var string|null $parcelOutletRoutingDetails - Details of the ParcelOutletRouting | null for none
+	 * @since 3.0
+	 */
+	private $parcelOutletRoutingDetails = null;
+
+	/**
 	 * Clears Memory
 	 */
 	public function __destruct() {
@@ -517,6 +540,8 @@ class Service {
 		unset($this->bulkyGoods);
 		unset($this->identCheckEnabled);
 		unset($this->identCheckObj);
+		unset($this->parcelOutletRoutingEnabled);
+		unset($this->parcelOutletRoutingDetails);
 	}
 
 	/**
@@ -1426,6 +1451,46 @@ class Service {
 	}
 
 	/**
+	 * Get if the ParcelOutletRouting is enabled
+	 *
+	 * @return bool|null - Is ParcelOutletRouting enabled or null for default
+	 * @since 3.0
+	 */
+	public function getParcelOutletRoutingEnabled(): ?bool {
+		return $this->parcelOutletRoutingEnabled;
+	}
+
+	/**
+	 * Set if ParcelOutletRouting is enabled
+	 *
+	 * @param bool|null $parcelOutletRoutingEnabled - Is ParcelOutletRouting enabled or null for default
+	 * @since 3.0
+	 */
+	public function setParcelOutletRoutingEnabled(?bool $parcelOutletRoutingEnabled): void {
+		$this->parcelOutletRoutingEnabled = $parcelOutletRoutingEnabled;
+	}
+
+	/**
+	 * Get the ParcelOutletRouting details
+	 *
+	 * @return string|null - ParcelOutletRouting details or null for none
+	 * @since 3.0
+	 */
+	public function getParcelOutletRoutingDetails(): ?string {
+		return $this->parcelOutletRoutingDetails;
+	}
+
+	/**
+	 * Set the ParcelOutletRouting details
+	 *
+	 * @param string|null $parcelOutletRoutingDetails - ParcelOutletRouting details or null for none
+	 * @since 3.0
+	 */
+	public function setParcelOutletRoutingDetails(?string $parcelOutletRoutingDetails): void {
+		$this->parcelOutletRoutingDetails = $parcelOutletRoutingDetails;
+	}
+
+	/**
 	 * Get the Class of this Service-Object
 	 *
 	 * @param string $productType - Type of the Product
@@ -1445,6 +1510,7 @@ class Service {
 	 *
 	 * @param string $productType - Type of the Product
 	 * @return StdClass - Service-DHL-Class
+	 * @since 2.0
 	 */
 	public function getServiceClass_v2($productType) {
 		$class = new StdClass;
@@ -1580,6 +1646,27 @@ class Service {
 			$class->IdentCheck = new StdClass;
 			$class->IdentCheck->active = (int) $this->getIdentCheckEnabled();
 			$class->IdentCheck->Ident = $this->getIdentCheckObj()->getIdentClass_v2();
+		}
+
+		return $class;
+	}
+
+	/**
+	 * Get the Class of this Service-Object
+	 *
+	 * @param string $productType - Type of the Product
+	 * @return StdClass - Service-DHL-Class
+	 * @since 3.0
+	 */
+	public function getServiceClass_v3(string $productType) {
+		$class = $this->getServiceClass_v2($productType);
+
+		if($this->getParcelOutletRoutingEnabled() !== null) {
+			$class->ParcelOutletRouting = new StdClass;
+			$class->ParcelOutletRouting->active = (int) $this->getParcelOutletRoutingEnabled();
+
+			if($this->getParcelOutletRoutingDetails() !== null)
+				$class->ParcelOutletRouting->details = $this->getParcelOutletRoutingDetails();
 		}
 
 		return $class;

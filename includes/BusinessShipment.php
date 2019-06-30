@@ -47,7 +47,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Newest-Version
 	 */
-	const NEWEST_VERSION = '2.2';
+	const NEWEST_VERSION = '3.0';
 
 	/**
 	 * Response-Type URL
@@ -58,6 +58,16 @@ class BusinessShipment extends Version {
 	 * Response-Type Base64
 	 */
 	const RESPONSE_TYPE_B64 = 'B64';
+
+	/**
+	 * Response-Type XML
+	 */
+	const RESPONSE_TYPE_XML = 'XML';
+
+	/**
+	 * Response-Type ZPL2
+	 */
+	const RESPONSE_TYPE_ZPL2 = 'ZPL2';
 
 	/**
 	 * Maximum requests to DHL in one call
@@ -185,6 +195,7 @@ class BusinessShipment extends Version {
 	 * Contains the Receiver-E-Mail (Used for Notification to the Receiver)
 	 *
 	 * Note: Optional
+	 *
 	 * Min-Len: -
 	 * Max-Len: 70
 	 *
@@ -209,11 +220,14 @@ class BusinessShipment extends Version {
 	 * Contains if how the Label-Response-Type will be
 	 *
 	 * Note: Optional
+	 *
 	 * Values:
 	 * RESPONSE_TYPE_URL -> Url
 	 * RESPONSE_TYPE_B64 -> Base64
+	 * RESPONSE_TYPE_XML -> XML (since 3.0)
+	 * RESPONSE_TYPE_ZPL2 -> ZPL2 (since 3.0)
 	 *
-	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's) (null uses default)
+	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's) (null uses default - Url|GUI - since 3.0)
 	 */
 	private $labelResponseType = null;
 
@@ -225,6 +239,17 @@ class BusinessShipment extends Version {
 	 * @var ShipmentOrder[] $shipmentOrders - Contains ShipmentOrder Objects
 	 */
 	private $shipmentOrders = array();
+
+
+	/**
+	 * Contains the Label-Format
+	 *
+	 * Note: Optional
+	 *
+	 * @var LabelFormat|null $labelFormat - Label-Format (null for DHL-Default)
+	 * @since 3.0
+	 */
+	private $labelFormat = null;
 
 	/**
 	 * Custom-WSDL-File URL
@@ -289,6 +314,7 @@ class BusinessShipment extends Version {
 		unset($this->printOnlyIfReceiverIsValid);
 		unset($this->labelResponseType);
 		unset($this->shipmentOrders);
+		unset($this->labelFormat);
 		unset($this->customAPIURL);
 	}
 
@@ -880,6 +906,26 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Get the Label-Format
+	 *
+	 * @return LabelFormat|null - Label-Format or null for DHL-Default
+	 * @since 3.0
+	 */
+	public function getLabelFormat(): ?LabelFormat {
+		return $this->labelFormat;
+	}
+
+	/**
+	 * Set the Label-Format
+	 *
+	 * @param LabelFormat|null $labelFormat - Label-Format or null for DHL-Default
+	 * @since 3.0
+	 */
+	public function setLabelFormat(?LabelFormat $labelFormat): void {
+		$this->labelFormat = $labelFormat;
+	}
+
+	/**
 	 * Get the Custom-API-URL
 	 *
 	 * @return null|string - Custom-API-URL or null for none
@@ -975,6 +1021,7 @@ class BusinessShipment extends Version {
 
 				return false;
 			case 2:
+			case 3:
 			default:
 				$data = $this->getVersionClass();
 		}
@@ -1025,6 +1072,7 @@ class BusinessShipment extends Version {
 			case 1:
 				return $this->getSoapClient()->DoManifestTD($data);
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->doManifest($data);
 		}
@@ -1042,6 +1090,7 @@ class BusinessShipment extends Version {
 				$data = $this->createDoManifestClass_v1($shipmentNumbers);
 				break;
 			case 2:
+			case 3:
 			default:
 				$data = $this->createDoManifestClass_v2($shipmentNumbers);
 		}
@@ -1084,6 +1133,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) for the Manifest (up to 30 Numbers)
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 */
 	private function createDoManifestClass_v2($shipmentNumbers) {
 		$data = new StdClass;
@@ -1130,6 +1180,7 @@ class BusinessShipment extends Version {
 
 				return false;
 			case 2:
+			case 3:
 			default:
 				$data = $this->createGetManifestClass_v2($manifestDate);
 		}
@@ -1155,6 +1206,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string $manifestDate - Manifest Date (String-Format: YYYY-MM-DD)
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 */
 	private function createGetManifestClass_v2($manifestDate) {
 		$data = new StdClass;
@@ -1189,6 +1241,7 @@ class BusinessShipment extends Version {
 			case 1:
 				return $this->getSoapClient()->CreateShipmentDD($data);
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->createShipmentOrder($data);
 		}
@@ -1216,8 +1269,9 @@ class BusinessShipment extends Version {
 				$data = $this->createShipmentClass_v1();
 				break;
 			case 2:
+			case 3:
 			default:
-				if($this->countShipmentOrders() < 1)
+				if($this->countShipmentOrders() < 1 && $this->getMayor() === 2)
 					$data = $this->createShipmentClass_v2_legacy();
 				else
 					$data = $this->createShipmentClass_v2();
@@ -1263,6 +1317,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 */
 	private function createShipmentClass_v2($shipmentNumber = null) {
 		$shipmentOrders = $this->getShipmentOrders();
@@ -1279,11 +1334,22 @@ class BusinessShipment extends Version {
 			/**
 			 * @var ShipmentOrder $shipmentOrder
 			 */
-			// Set global response-type if none is defined in shipment
-			if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null)
-				$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
+			switch($this->getMayor()) {
+				case 2:
+					// Set global response-type if none is defined in shipment
+					if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null) {
+						if(in_array($this->getLabelResponseType(), array(self::RESPONSE_TYPE_URL, self::RESPONSE_TYPE_B64)))
+							$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
+						else
+							$this->addError('Response-Type' . $this->getLabelResponseType() . ' is not allowed in Version 2.x. Using default instead');
+					}
 
-			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
+					$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
+					break;
+				case 3:
+				default:
+					$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v3();
+			}
 		}
 
 		return $data;
@@ -1294,6 +1360,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 *
 	 * @deprecated - Old Shipment creation class (Supports only 1 Shipment)
 	 */
@@ -1357,8 +1424,11 @@ class BusinessShipment extends Version {
 			$data->ShipmentOrder->PrintOnlyIfCodeable = new StdClass;
 			$data->ShipmentOrder->PrintOnlyIfCodeable->active = (int) $this->getPrintOnlyIfReceiverIsValid();
 		}
-		if($this->getLabelResponseType() !== null)
+
+		if($this->getLabelResponseType() !== null && in_array($this->getLabelResponseType(), array(self::RESPONSE_TYPE_URL, self::RESPONSE_TYPE_B64)))
 			$data->ShipmentOrder->labelResponseType = $this->getLabelResponseType();
+		else if($this->getLabelResponseType() !== null)
+			$this->addError('Response-Type' . $this->getLabelResponseType() . ' is not allowed in Version 2.x. Using default instead');
 
 		return $data;
 	}
@@ -1374,6 +1444,7 @@ class BusinessShipment extends Version {
 			case 1:
 				return $this->getSoapClient()->DeleteShipmentDD($data);
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->deleteShipmentOrder($data);
 		}
@@ -1403,6 +1474,7 @@ class BusinessShipment extends Version {
 				$data = $this->createDeleteClass_v1($shipmentNumbers);
 				break;
 			case 2:
+			case 3:
 			default:
 				$data = $this->createDeleteClass_v2($shipmentNumbers);
 		}
@@ -1445,6 +1517,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string|string[] $shipmentNumbers - Shipment-Number(s) of the Shipment(s) to delete (up to 30 Numbers)
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 */
 	private function createDeleteClass_v2($shipmentNumbers) {
 		$data = new StdClass;
@@ -1473,6 +1546,7 @@ class BusinessShipment extends Version {
 			case 1:
 				return $this->getSoapClient()->getLabelDD($data);
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->getLabel($data);
 		}
@@ -1502,8 +1576,11 @@ class BusinessShipment extends Version {
 				$data = $this->getLabelClass_v1($shipmentNumbers);
 				break;
 			case 2:
-			default:
 				$data = $this->getLabelClass_v2($shipmentNumbers);
+				break;
+			case 3:
+			default:
+				$data = $this->getLabelClass_v3($shipmentNumbers);
 		}
 
 		try {
@@ -1544,6 +1621,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 */
 	private function getLabelClass_v2($shipmentNumbers) {
 		$data = new StdClass;
@@ -1565,6 +1643,22 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Creates Data-Object for Label-Request
+	 *
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
+	 * @return StdClass - Data-Object
+	 * @since 3.0
+	 */
+	private function getLabelClass_v3($shipmentNumbers) {
+		$data = $this->getLabelClass_v2($shipmentNumbers);
+
+		if($this->getLabelFormat() !== null)
+			$data = $this->getLabelFormat()->addLabelFormatClass_v3($data);
+
+		return $data;
+	}
+
+	/**
 	 * Requests the Export-Document again via SOAP
 	 *
 	 * @param Object $data - Export-Doc-Data
@@ -1575,6 +1669,7 @@ class BusinessShipment extends Version {
 			case 1:
 				return $this->getSoapClient()->getExportDocDD($data);
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->getExportDoc($data);
 		}
@@ -1592,8 +1687,11 @@ class BusinessShipment extends Version {
 				$data = $this->getExportDocClass_v1($shipmentNumbers);
 				break;
 			case 2:
-			default:
 				$data = $this->getExportDocClass_v2($shipmentNumbers);
+				break;
+			case 3:
+			default:
+				$data = $this->getExportDocClass_v3($shipmentNumbers);
 		}
 
 		try {
@@ -1634,6 +1732,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
 	 * @return StdClass - Data-Object
+	 * @since 2.0
 	 */
 	private function getExportDocClass_v2($shipmentNumbers) {
 		$data = new StdClass;
@@ -1655,6 +1754,22 @@ class BusinessShipment extends Version {
 	}
 
 	/**
+	 * Creates Data-Object for Export-Document-Request
+	 *
+	 * @param string|string[] $shipmentNumbers - Number(s) of the Shipment(s) (up to 30 Numbers)
+	 * @return StdClass - Data-Object
+	 * @since 3.0
+	 */
+	private function getExportDocClass_v3($shipmentNumbers) {
+		$data = $this->getExportDocClass_v2($shipmentNumbers);
+
+		if($this->getLabelFormat() !== null)
+			$data = $this->getLabelFormat()->addLabelFormatClass_v3($data);
+
+		return $data;
+	}
+
+	/**
 	 * Validates a Shipment
 	 *
 	 * @return bool|Response - Response or false on error
@@ -1665,6 +1780,7 @@ class BusinessShipment extends Version {
 				$data = null;
 				break;
 			case 2:
+			case 3:
 			default:
 				$data = $this->createShipmentClass_v2();
 		}
@@ -1697,6 +1813,7 @@ class BusinessShipment extends Version {
 			case 1:
 				throw new Exception(__FUNCTION__ . ': Method doesn\'t exists for Version 1!');
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->validateShipment($data);
 		}
@@ -1720,8 +1837,9 @@ class BusinessShipment extends Version {
 				$data = null;
 				break;
 			case 2:
+			case 3:
 			default:
-				if($this->countShipmentOrders() < 1)
+				if($this->countShipmentOrders() < 1 && $this->getMayor() === 2)
 					$data = $this->createShipmentClass_v2_legacy($shipmentNumber);
 				else
 					$data = $this->createShipmentClass_v2($shipmentNumber);
@@ -1758,6 +1876,7 @@ class BusinessShipment extends Version {
 			case 1:
 				throw new Exception(__FUNCTION__ . ': Method doesn\'t exists for Version 1!');
 			case 2:
+			case 3:
 			default:
 				return $this->getSoapClient()->updateShipmentOrder($data);
 		}
