@@ -40,9 +40,11 @@ class ShipmentOrder {
 	/**
 	 * Contains the Sender-Object
 	 *
-	 * @var Sender $sender - Sender Object
+	 * Note: Optional IF ShipperReference is given (Since 3.0)
+	 *
+	 * @var Sender|null $sender - Sender Object or null if use sender reference
 	 */
-	private $sender;
+	private $sender = null;
 
 	/**
 	 * Contains the Receiver-Object
@@ -72,10 +74,12 @@ class ShipmentOrder {
 	/**
 	 * Contains a reference to the Shipper data configured in GKP
 	 *
-	 * @var string $shipperReference - Shipper Reference
+	 * Note: Optional but required if sender is not given
+	 *
+	 * @var string|null $shipperReference - Shipper Reference or null for none
 	 * @since 3.0
 	 */
-	private $shipperReference;
+	private $shipperReference = null;
 
 	/**
 	 * Contains if the label will be only be printable, if the receiver address is valid.
@@ -162,7 +166,7 @@ class ShipmentOrder {
 	/**
 	 * Get the Sender-Object
 	 *
-	 * @return Sender - Sender-Object
+	 * @return Sender|null - Sender-Object or null if use sender reference
 	 */
 	public function getSender() {
 		return $this->sender;
@@ -171,7 +175,7 @@ class ShipmentOrder {
 	/**
 	 * Set the Sender-Object
 	 *
-	 * @param Sender $sender - Sender-Object
+	 * @param Sender|null $sender - Sender-Object or null if use sender reference
 	 */
 	public function setSender($sender) {
 		$this->sender = $sender;
@@ -238,20 +242,20 @@ class ShipmentOrder {
 	/**
 	 * Get the Shipper-Reference
 	 *
-	 * @return string - Shipper-Reference
+	 * @return string|null - Shipper-Reference or null for none
 	 * @since 3.0
 	 */
-	public function getShipperReference(): string {
+	public function getShipperReference(): ?string {
 		return $this->shipperReference;
 	}
 
 	/**
-	 * set the Shipper-Reference
+	 * Set the Shipper-Reference
 	 *
-	 * @param string $shipperReference - Shipper-Reference
+	 * @param string|null $shipperReference - Shipper-Reference or null for none
 	 * @since 3.0
 	 */
-	public function setShipperReference(string $shipperReference): void {
+	public function setShipperReference(?string $shipperReference): void {
 		$this->shipperReference = $shipperReference;
 	}
 
@@ -388,8 +392,10 @@ class ShipmentOrder {
 		}
 
 		// Shipper
-		$class->Shipment->Shipper = $this->getSender()->getClass_v3();
-		$class->Shipment->ShipperReference = $this->getShipperReference();
+		if($this->getSender() !== null)
+			$class->Shipment->Shipper = $this->getSender()->getClass_v3();
+		else
+			$class->Shipment->ShipperReference = $this->getShipperReference();
 
 		// Other Settings
 		if($this->getPrintOnlyIfReceiverIsValid() !== null) {
