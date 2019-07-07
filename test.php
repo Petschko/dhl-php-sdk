@@ -5,6 +5,7 @@ require_once __DIR__.'/vendor/autoload.php';
 // Require the Main-Class (other classes will included by this file)
 use Petschko\DHL\BusinessShipment;
 use Petschko\DHL\Credentials;
+use Petschko\DHL\LabelFormat;
 use Petschko\DHL\Receiver;
 use Petschko\DHL\ReturnReceiver;
 use Petschko\DHL\Sender;
@@ -14,7 +15,7 @@ use Petschko\DHL\ShipmentDetails;
 
 $testMode = Credentials::TEST_NORMAL; // Uses the normal test user
 //$testMode = Credentials::DHL_BUSINESS_TEST_USER_THERMO; // Uses the thermo-printer test user
-$version = '2.2'; // Can be specified or just left out (uses newest by default)
+$version = '3.0'; // Can be specified or just left out (uses newest by default)
 $reference = '1'; // You can use anything here (max 35 chars)
 
 // Set this to true then you can skip set the "User", "Signature" and "EKP" (Just for test-Mode) else false or empty
@@ -50,6 +51,7 @@ $sender->setStreetName('Test Straße');
 $sender->setStreetNumber('12a');
 $sender->setZip('21037');
 $sender->setCity('Hamburg');
+// $sender->setProvince('Province'); // You can set a Province here whenever you need it (since 3.0)
 $sender->setCountry('Germany');
 $sender->setCountryISOCode('DE');
 // $sender->setEmail('peter@petschko.org'); // These are super optional, it will printed on the label, can set under receiver as well
@@ -63,11 +65,30 @@ $receiver->setStreetName('Test Straße');
 $receiver->setStreetNumber('23b');
 $receiver->setZip('21037');
 $receiver->setCity('Hamburg');
+// $sender->setProvince('Province'); // You can set a Province here whenever you need it (since 3.0)
 $receiver->setCountry('Germany');
 $receiver->setCountryISOCode('DE');
 
 $returnReceiver = new ReturnReceiver(); // Needed if you want to print an return label
 // If want to use it, please set Address etc of the return receiver to!
+
+// If you want to specify the Label-Format you can add this optional Object here: (since 3.0)
+$labelFormat = new LabelFormat();
+// Everything is optional in that object, you can overwrite default values by setting them
+// Label & LabelRetoure Format can be any of the se values:
+/* A4 OR LabelFormat::FORMAT_A4
+ * 910-300-700 OR LabelFormat::FORMAT_910_300_700
+ * 910-300-700-oZ OR LabelFormat::FORMAT_910_300_700_OZ
+ * 910-300-600 OR LabelFormat::FORMAT_910_300_600
+ * 910-300-610 OR LabelFormat::FORMAT_910_300_610
+ * 910-300-710 OR LabelFormat::FORMAT_910_300_710
+ *
+ * or null/'GUI'/LabelFormat::FORMAT_DEFAULT for DHL-Default
+ */
+$labelFormat->setLabelFormat(null);
+$labelFormat->setLabelFormatRetoure(null);
+$labelFormat->setCombinedPrinting(true); // Here you can set if all labels should printed together (if you have multiple)
+$labelFormat->setGroupProfileName('groupProfileName'); // here you can set the group profile name if needed
 
 // Required just Credentials also accept Test-Mode and Version
 $dhl = new BusinessShipment($credentials, /*Optional*/$testMode, /*Optional*/$version);
@@ -83,6 +104,9 @@ $shipmentOrder->setReceiver($receiver); // You can set these Object-Types here: 
 //$shipmentOrder->setReturnReceiver($returnReceiver); // Needed if you want print a return label
 $shipmentOrder->setShipmentDetails($shipmentDetails);
 $shipmentOrder->setLabelResponseType(BusinessShipment::RESPONSE_TYPE_URL);
+
+// You can also add the Label-Format if you have that object: (else it uses default - since 3.0)
+$shipmentOrder->setLabelFormat($labelFormat);
 
 // Add the ShipmentOrder to the BusinessShipment Object, you can add up to 30 ShipmentOrder Objects in 1 call
 $dhl->addShipmentOrder($shipmentOrder);
