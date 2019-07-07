@@ -112,8 +112,7 @@ class Filial extends Receiver {
 		$class = new StdClass;
 		$class->name1 = $this->getName();
 
-		if($this->getPhone() !== null || $this->getEmail() !== null || $this->getContactPerson() !== null)
-			$class->Communication = $this->getCommunicationClass_v2();
+		$class->Communication = $this->getCommunicationClass_v2();
 
 		$class->Postfiliale = new StdClass;
 		$class->Postfiliale->postfilialNumber = $this->getFilialNumber();

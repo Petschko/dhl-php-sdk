@@ -52,8 +52,7 @@ class Sender extends SendPerson {
 			$class->Address->Origin = $this->getOriginClass_v2();
 
 		// Communication
-		if($this->getPhone() !== null || $this->getEmail() !== null || $this->getContactPerson() !== null)
-			$class->Communication = $this->getCommunicationClass_v2();
+		$class->Communication = $this->getCommunicationClass_v2();
 
 		return $class;
 	}
@@ -93,8 +92,7 @@ class Sender extends SendPerson {
 			$class->Address->Origin = $this->getOriginClass_v3();
 
 		// Communication
-		if($this->getPhone() !== null || $this->getEmail() !== null || $this->getContactPerson() !== null)
-			$class->Communication = $this->getCommunicationClass_v3();
+		$class->Communication = $this->getCommunicationClass_v3();
 
 		return $class;
 	}

@@ -31,8 +31,7 @@ class Receiver extends SendPerson {
 		$class->name1 = $this->getName();
 
 		// Communication
-		if($this->getPhone() !== null || $this->getEmail() !== null || $this->getContactPerson() !== null)
-			$class->Communication = $this->getCommunicationClass_v2();
+		$class->Communication = $this->getCommunicationClass_v2();
 
 		// Address
 		$class->Address = new StdClass;
@@ -68,8 +67,7 @@ class Receiver extends SendPerson {
 		$class->name1 = $this->getName();
 
 		// Communication
-		if($this->getPhone() !== null || $this->getEmail() !== null || $this->getContactPerson() !== null)
-			$class->Communication = $this->getCommunicationClass_v3();
+		$class->Communication = $this->getCommunicationClass_v3();
 
 		// Address
 		$class->Address = new StdClass;

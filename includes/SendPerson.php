@@ -227,6 +227,10 @@ abstract class SendPerson extends Address {
 		if($this->getContactPerson() !== null)
 			$class->contactPerson = $this->getContactPerson();
 
+		// Just set a Contact-Person (The name) if nothing else if given since this is a required element but every element is optional...
+		if($this->getPhone() === null && $this->getEmail() === null && $this->getContactPerson() === null)
+			$class->contactPerson = $this->getName();
+
 		return $class;
 	}
 
