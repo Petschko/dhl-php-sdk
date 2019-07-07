@@ -94,7 +94,6 @@ class ShipmentOrder {
 	 * BusinessShipment::RESPONSE_TYPE_URL -> Url
 	 * BusinessShipment::RESPONSE_TYPE_B64 -> Base64
 	 * BusinessShipment::RESPONSE_TYPE_XML -> XML (since 3.0)
-	 * BusinessShipment::RESPONSE_TYPE_ZPL2 -> ZPL2 (since 3.0)
 	 *
 	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's) (null uses default)
 	 */

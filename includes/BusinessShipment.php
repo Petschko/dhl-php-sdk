@@ -65,11 +65,6 @@ class BusinessShipment extends Version {
 	const RESPONSE_TYPE_XML = 'XML';
 
 	/**
-	 * Response-Type ZPL2
-	 */
-	const RESPONSE_TYPE_ZPL2 = 'ZPL2';
-
-	/**
 	 * Maximum requests to DHL in one call
 	 */
 	const MAX_DHL_REQUESTS = 30;
@@ -225,7 +220,6 @@ class BusinessShipment extends Version {
 	 * RESPONSE_TYPE_URL -> Url
 	 * RESPONSE_TYPE_B64 -> Base64
 	 * RESPONSE_TYPE_XML -> XML (since 3.0)
-	 * RESPONSE_TYPE_ZPL2 -> ZPL2 (since 3.0)
 	 *
 	 * @var string|null $labelResponseType - Label-Response-Type (Can use class constance's) (null uses default - Url|GUI - since 3.0)
 	 */
