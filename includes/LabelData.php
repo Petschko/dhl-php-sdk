@@ -331,7 +331,13 @@ class LabelData extends Version implements LabelResponse {
 			$this->setSequenceNumber((string) $response->sequenceNumber);
 		else if(isset($labelResponse->sequenceNumber))
 			$this->setSequenceNumber((string) $labelResponse->sequenceNumber);
-
+		
+		// Get Shipment-Number
+		if(isset($response->shipmentNumber))
+			$this->setShipmentNumber((string) $response->shipmentNumber);
+		else if(isset($labelResponse->shipmentNumber))
+			$this->setShipmentNumber((string) $labelResponse->shipmentNumber);
+		
 		// Get Status
 		if(isset($labelResponse->Status)) {
 			if(isset($labelResponse->Status->statusCode))
@@ -351,10 +357,6 @@ class LabelData extends Version implements LabelResponse {
 
 			$this->validateStatusCode();
 		}
-
-		// Get Shipment-Number
-		if(isset($labelResponse->shipmentNumber))
-			$this->setShipmentNumber((string) $labelResponse->shipmentNumber);
 
 		// Get Label-Data
 		if(isset($labelResponse->labelUrl))
