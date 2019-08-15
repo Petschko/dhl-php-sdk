@@ -353,7 +353,9 @@ class LabelData extends Version implements LabelResponse {
 		}
 
 		// Get Shipment-Number
-		if(isset($labelResponse->shipmentNumber))
+		if(isset($response->shipmentNumber))
+			$this->setShipmentNumber((string) $response->shipmentNumber);
+		else if(isset($labelResponse->shipmentNumber))
 			$this->setShipmentNumber((string) $labelResponse->shipmentNumber);
 
 		// Get Label-Data
