@@ -310,7 +310,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @return null|SoapClient - SoapClient or null on error
 	 */
-	private function getSoapClient() {
+	protected function getSoapClient() {
 		if($this->soapClient === null)
 			$this->buildSoapClient();
 
@@ -346,7 +346,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param null|SoapClient $soapClient - Soap-Client
 	 */
-	private function setSoapClient($soapClient) {
+	protected function setSoapClient($soapClient) {
 		$this->soapClient = $soapClient;
 	}
 
@@ -382,7 +382,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @return bool - Runs in Test-Mode / Sandbox-Mode
 	 */
-	private function isTest() {
+	protected function isTest() {
 		return $this->test;
 	}
 
@@ -430,7 +430,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @return Credentials - Credentials-Object
 	 */
-	private function getCredentials() {
+	protected function getCredentials() {
 		return $this->credentials;
 	}
 
@@ -917,7 +917,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @return SoapHeader - Soap-Auth-Header
 	 */
-	private function buildAuthHeader() {
+	protected function buildAuthHeader() {
 		$auth_params = array(
 			'user' => $this->getCredentials()->getUser(),
 			'signature' => $this->getCredentials()->getSignature(),
@@ -930,7 +930,7 @@ class BusinessShipment extends Version {
 	/**
 	 * Builds the Soap-Client
 	 */
-	private function buildSoapClient() {
+	protected function buildSoapClient() {
 		$header = $this->buildAuthHeader();
 
 		if($this->isTest())
