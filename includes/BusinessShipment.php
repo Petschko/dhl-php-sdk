@@ -1262,8 +1262,10 @@ class BusinessShipment extends Version {
 			case 1:
 				$data = $this->createShipmentClass_v1();
 				break;
-			case 2:
 			case 3:
+				$data = $this->createShipmentClass_v3();
+				break;
+			case 2:
 			default:
 				if($this->countShipmentOrders() < 1 && $this->getMayor() === 2)
 					$data = $this->createShipmentClass_v2_legacy();
@@ -1328,23 +1330,44 @@ class BusinessShipment extends Version {
 			/**
 			 * @var ShipmentOrder $shipmentOrder
 			 */
-			switch($this->getMayor()) {
-				case 2:
-					// Set global response-type if none is defined in shipment
-					if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null) {
-						if(in_array($this->getLabelResponseType(), array(self::RESPONSE_TYPE_URL, self::RESPONSE_TYPE_B64)))
-							$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
-						else
-							$this->addError('Response-Type' . $this->getLabelResponseType() . ' is not allowed in Version 2.x. Using default instead');
-					}
-
-					$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
-					break;
-				case 3:
-				default:
-					$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v3();
+			if($shipmentOrder->getLabelResponseType() === null && $this->getLabelResponseType() !== null) {
+				if(in_array($this->getLabelResponseType(), array(self::RESPONSE_TYPE_URL, self::RESPONSE_TYPE_B64)))
+					$shipmentOrder->setLabelResponseType($this->getLabelResponseType());
+				else
+					$this->addError('Response-Type' . $this->getLabelResponseType() . ' is not allowed in Version 2.x. Using default instead');
 			}
+			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
 		}
+		$data->labelResponseType = $this->getLabelResponseType();
+		return $data;
+	}
+
+	/**
+	 * Creates the Data-Object for the Request
+	 *
+	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
+	 * @return StdClass - Data-Object
+	 * @since 2.0
+	 */
+	private function createShipmentClass_v3($shipmentNumber = null) {
+		$shipmentOrders = $this->getShipmentOrders();
+
+		$this->checkRequestCount($shipmentOrders, 'createShipmentClass');
+
+		$data = new StdClass;
+		$data->Version = $this->getVersionClass();
+
+		if($shipmentNumber !== null)
+			$data->shipmentNumber = (string) $shipmentNumber;
+
+		foreach($shipmentOrders as $key => &$shipmentOrder) {
+			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v3();
+		}
+
+		$data->labelResponseType 	= $this->getLabelResponseType();
+		$data->labelFormat 			= $this->labelFormat->getLabelFormat();
+		$data->labelFormatRetoure 	= $this->labelFormat->getLabelFormatRetoure();
+		$data->combinedPrinting 	= $this->labelFormat->getCombinedPrinting();
 
 		return $data;
 	}
@@ -1773,10 +1796,14 @@ class BusinessShipment extends Version {
 			case 1:
 				$data = null;
 				break;
-			case 2:
 			case 3:
+				$data = $this->createShipmentClass_v3();
+				break;
+			case 2:
 			default:
-				$data = $this->createShipmentClass_v2();
+				$this->createShipmentClass_v2();
+				break;
+
 		}
 
 		try {
@@ -1830,8 +1857,10 @@ class BusinessShipment extends Version {
 			case 1:
 				$data = null;
 				break;
-			case 2:
 			case 3:
+				$data = $this->createShipmentClass_v3($shipmentNumber);
+				break;
+			case 2:
 			default:
 				if($this->countShipmentOrders() < 1 && $this->getMayor() === 2)
 					$data = $this->createShipmentClass_v2_legacy($shipmentNumber);
