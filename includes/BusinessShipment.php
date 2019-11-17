@@ -234,7 +234,6 @@ class BusinessShipment extends Version {
 	 */
 	private $shipmentOrders = array();
 
-
 	/**
 	 * Contains the Label-Format
 	 *
@@ -1262,15 +1261,15 @@ class BusinessShipment extends Version {
 			case 1:
 				$data = $this->createShipmentClass_v1();
 				break;
-			case 3:
-				$data = $this->createShipmentClass_v3();
-				break;
 			case 2:
-			default:
 				if($this->countShipmentOrders() < 1 && $this->getMayor() === 2)
 					$data = $this->createShipmentClass_v2_legacy();
 				else
 					$data = $this->createShipmentClass_v2();
+				break;
+			case 3:
+			default:
+				$data = $this->createShipmentClass_v3();
 		}
 
 		$response = null;
@@ -1339,6 +1338,7 @@ class BusinessShipment extends Version {
 			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v2();
 		}
 		$data->labelResponseType = $this->getLabelResponseType();
+
 		return $data;
 	}
 
@@ -1347,7 +1347,7 @@ class BusinessShipment extends Version {
 	 *
 	 * @param null|string $shipmentNumber - Shipment Number which should be included or null for none
 	 * @return StdClass - Data-Object
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	private function createShipmentClass_v3($shipmentNumber = null) {
 		$shipmentOrders = $this->getShipmentOrders();
@@ -1364,10 +1364,10 @@ class BusinessShipment extends Version {
 			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v3();
 		}
 
-		$data->labelResponseType 	= $this->getLabelResponseType();
-		$data->labelFormat 			= $this->labelFormat->getLabelFormat();
-		$data->labelFormatRetoure 	= $this->labelFormat->getLabelFormatRetoure();
-		$data->combinedPrinting 	= $this->labelFormat->getCombinedPrinting();
+		$data->labelResponseType = $this->getLabelResponseType();
+		$data->labelFormat = $this->labelFormat->getLabelFormat();
+		$data->labelFormatRetoure = $this->labelFormat->getLabelFormatRetoure();
+		$data->combinedPrinting = $this->labelFormat->getCombinedPrinting();
 
 		return $data;
 	}
@@ -1796,13 +1796,12 @@ class BusinessShipment extends Version {
 			case 1:
 				$data = null;
 				break;
-			case 3:
-				$data = $this->createShipmentClass_v3();
-				break;
 			case 2:
-			default:
 				$this->createShipmentClass_v2();
 				break;
+			case 3:
+			default:
+				$data = $this->createShipmentClass_v3();
 
 		}
 
@@ -1857,15 +1856,15 @@ class BusinessShipment extends Version {
 			case 1:
 				$data = null;
 				break;
-			case 3:
-				$data = $this->createShipmentClass_v3($shipmentNumber);
-				break;
 			case 2:
-			default:
 				if($this->countShipmentOrders() < 1 && $this->getMayor() === 2)
 					$data = $this->createShipmentClass_v2_legacy($shipmentNumber);
 				else
 					$data = $this->createShipmentClass_v2($shipmentNumber);
+				break;
+			case 3:
+			default:
+			$data = $this->createShipmentClass_v3($shipmentNumber);
 		}
 
 		$response = null;
