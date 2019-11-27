@@ -1360,11 +1360,11 @@ class BusinessShipment extends Version {
 		if($shipmentNumber !== null)
 			$data->shipmentNumber = (string) $shipmentNumber;
 
-		foreach($shipmentOrders as $key => &$shipmentOrder)
+		foreach($shipmentOrders as $key => &$shipmentOrder) {
 			$data->ShipmentOrder[$key] = $shipmentOrder->getShipmentOrderClass_v3();
+		}
 
-		if($this->getLabelResponseType() !== null)
-			$data->labelResponseType = $this->getLabelResponseType();
+		$data->labelResponseType = $this->getLabelResponseType();
 
 		if($this->getLabelFormat() !== null)
 			$data->labelFormat = $this->getLabelFormat()->getLabelFormat();
