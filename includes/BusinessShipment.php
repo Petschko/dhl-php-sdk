@@ -1365,9 +1365,15 @@ class BusinessShipment extends Version {
 		}
 
 		$data->labelResponseType = $this->getLabelResponseType();
-		$data->labelFormat = $this->labelFormat->getLabelFormat();
-		$data->labelFormatRetoure = $this->labelFormat->getLabelFormatRetoure();
-		$data->combinedPrinting = $this->labelFormat->getCombinedPrinting();
+
+		if($this->getLabelFormat() !== null)
+			$data->labelFormat = $this->getLabelFormat()->getLabelFormat();
+
+		if($this->getLabelFormat() !== null)
+			$data->labelFormatRetoure = $this->getLabelFormat()->getLabelFormatRetoure(); // todo check if correct (can it always be set?)
+
+		if($this->getLabelFormat() !== null)
+			$data->combinedPrinting = $this->getLabelFormat()->getCombinedPrinting();
 
 		return $data;
 	}
