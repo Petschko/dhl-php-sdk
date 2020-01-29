@@ -1871,6 +1871,9 @@ class BusinessShipment extends Version {
 			case 3:
 			default:
 			$data = $this->createShipmentClass_v3($shipmentNumber);
+			
+			//hotfix for shipmentorder update, no array accepted because single operation only
+            $data->ShipmentOrder = $data->ShipmentOrder[0];
 		}
 
 		$response = null;
