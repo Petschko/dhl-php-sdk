@@ -132,19 +132,6 @@ class Response extends Version implements LabelResponse {
 	}
 
 	/**
-	 * Getter for pieceNumber
-	 *
-	 * @return null|string - null if not set else pieceNumber (just used in API-Version 1)
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getPieceNumber() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		return null;
-	}
-
-	/**
 	 * Getter for Label
 	 *
 	 * @return null|string - Label URL/Base64-Data (Can also contain the return label) or null if not set
