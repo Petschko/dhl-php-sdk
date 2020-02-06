@@ -382,22 +382,6 @@ class ExportDocument {
 	 * Returns a Class for Export-Document
 	 *
 	 * @return StdClass - DHL-ExportDocument-Class
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getExportDocumentClass_v1() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
-
-		$class = new StdClass;
-
-		return $class;
-	}
-
-	/**
-	 * Returns a Class for Export-Document
-	 *
-	 * @return StdClass - DHL-ExportDocument-Class
 	 * @throws Exception - Invalid Data-Exception
 	 * @since 2.0
 	 */

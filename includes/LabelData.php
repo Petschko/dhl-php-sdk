@@ -101,7 +101,6 @@ class LabelData extends Version implements LabelResponse {
 		if($labelData !== null) {
 			switch($this->getMayor()) {
 				case 1:
-					trigger_error('[DHL-PHP-SDK]: Called Version 1 Method ' .__CLASS__ . '->' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 					break;
 				case 2:
 					$this->loadLabelData_v2($labelData);

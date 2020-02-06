@@ -20,20 +20,6 @@ use stdClass;
  */
 class ShipmentDetails {
 	/**
-	 * DHL-Package-Type "Palette"
-	 *
-	 * @deprecated - DHL-API-Version 1 Constant
-	 */
-	const PALETTE = 'PL';
-
-	/**
-	 * DHL-Package-Type "Package"
-	 *
-	 * @deprecated - DHL-API-Version 1 Constant
-	 */
-	const PACKAGE = 'PK';
-
-	/**
 	 * Product-Type Values:
 	 *
 	 * - ShipmentDetails::PRODUCT_TYPE_NATIONAL_PACKAGE -> National-Package
@@ -201,21 +187,6 @@ class ShipmentDetails {
 	private $service = null;
 
 	/**
-	 * Type of the Package
-	 *
-	 * Note: Optional
-	 *
-	 * Allowed values:
-	 * 	'PK' or ShipmentDetails::PACKAGE -> DHL-Package-Type "Package"
-	 * 	'PL' or ShipmentDetails::PALETTE -> DHL-Package-Type "Palette"
-	 *
-	 * @var string $packageType - Package-Type
-	 *
-	 * @deprecated - DHL-API-Version 1 Field
-	 */
-	private $packageType = self::PACKAGE;
-
-	/**
 	 * E-mail address for shipping notification
 	 *
 	 * Note: Optional
@@ -258,7 +229,6 @@ class ShipmentDetails {
 		unset($this->width);
 		unset($this->height);
 		unset($this->service);
-		unset($this->packageType);
 		unset($this->notificationEmail);
 		unset($this->bank);
 	}
@@ -528,40 +498,6 @@ class ShipmentDetails {
 	}
 
 	/**
-	 * Get the Type of the Package
-	 *
-	 * Return values:
-	 * 	'PK' or ShipmentDetails::PACKAGE -> DHL-Package-Type "Package"
-	 * 	'PL' or ShipmentDetails::PALETTE -> DHL-Package-Type "Palette"
-	 *
-	 * @return string - Type of the Package
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getPackageType() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		return $this->packageType;
-	}
-
-	/**
-	 * Set the Type of the Package
-	 *
-	 * Allowed values:
-	 * 	'PK' or ShipmentDetails::PACKAGE -> DHL-Package-Type "Package"
-	 * 	'PL' or ShipmentDetails::PALETTE -> DHL-Package-Type "Palette"
-	 *
-	 * @param string $packageType - Type of the Package
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function setPackageType($packageType) {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		$this->packageType = $packageType;
-	}
-
-	/**
 	 * Get the Notification E-Mail
 	 *
 	 * @return string|null - Notification E-Mail or null for none
@@ -610,20 +546,6 @@ class ShipmentDetails {
 			$now += 86400; // Increase Day by 1 if Sunday
 
 		return date('Y-m-d', $now);
-	}
-
-	/**
-	 * Returns an DHL-Class of this Object for DHL-Shipment Details
-	 *
-	 * @return StdClass - ShipmentDetailsClass
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getShipmentDetailsClass_v1() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
-
-		return new StdClass;
 	}
 
 	/**

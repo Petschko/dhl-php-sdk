@@ -96,7 +96,6 @@ class Response extends Version implements LabelResponse {
 		if($response !== null) {
 			switch($this->getMayor()) {
 				case 1:
-					trigger_error('[DHL-PHP-SDK]: Called Version 1 Method ' .__CLASS__ . '->' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
 					break;
 				case 2:
 					$this->loadResponse_v2($response);

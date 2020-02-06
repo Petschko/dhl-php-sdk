@@ -328,17 +328,6 @@ class Service {
 	private $preferredDayText = null;
 
 	/**
-	 * Contains if GoGreen is enabled
-	 *
-	 * Note: Optional|Version 1 ONLY
-	 *
-	 * @var bool|null $goGreen - Is this enabled | null uses default
-	 *
-	 * @deprecated - DHL-API-Version 1 Field
-	 */
-	private $goGreen = null;
-
-	/**
 	 * Contains if deliver Perishables
 	 *
 	 * Note: Optional
@@ -346,17 +335,6 @@ class Service {
 	 * @var bool|null $perishables - Is this enabled | null uses default
 	 */
 	private $perishables = null;
-
-	/**
-	 * Contains if personal handover is enabled
-	 *
-	 * Note: Optional
-	 *
-	 * @var bool|null $personalHandover - Is this enabled | null uses default
-	 *
-	 * @deprecated - DHL-API-Version 1 Field
-	 */
-	private $personalHandover = null;
 
 	/**
 	 * Contains if Neighbour delivery is disabled
@@ -525,9 +503,7 @@ class Service {
 		unset($this->preferredNeighbourText);
 		unset($this->preferredDayEnabled);
 		unset($this->preferredDayText);
-		unset($this->goGreen);
 		unset($this->perishables);
-		unset($this->personalHandover);
 		unset($this->disableNeighbourDelivery);
 		unset($this->namedPersonOnly);
 		unset($this->returnReceipt);
@@ -802,7 +778,7 @@ class Service {
 	 * Alias for $this->getReturnImmediatelyIfShipmentFailed()
 	 *
 	 * @return bool|null - Should Package return immediately when the shipping has failed or null for default
-	 * 
+	 *
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getReturnImmediatlyIfShipmentFailed() {
@@ -810,7 +786,7 @@ class Service {
 			'Called deprecated method ' . __METHOD__ . ': Use getReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!',
 			E_USER_DEPRECATED
 		);
-		
+
 		return $this->getReturnImmediatelyIfShipmentFailed();
 	}
 
@@ -818,7 +794,7 @@ class Service {
 	 * Alias for $this->setReturnImmediatelyIfShipmentFailed()
 	 *
 	 * @param bool|null $returnImmediatelyIfShipmentFailed - Should Package return immediately when the shipping has failed or null for default
-	 * 
+	 *
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setReturnImmediatlyIfShipmentFailed($returnImmediatelyIfShipmentFailed) {
@@ -826,13 +802,13 @@ class Service {
 			'Called deprecated method ' . __METHOD__ . ': Use setReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!',
 			E_USER_DEPRECATED
 		);
-		
+
 		$this->setReturnImmediatelyIfShipmentFailed($returnImmediatelyIfShipmentFailed);
 	}
-	
+
 	/**
 	 * Get if the Package should return immediately when the shipping has failed
-	 * 
+	 *
 	 * @return bool|null - Should Package return immediately when the shipping has failed or null for default
 	 */
 	public function getReturnImmediatelyIfShipmentFailed() {
@@ -841,7 +817,7 @@ class Service {
 
 	/**
 	 * Set if the Package should return immediately when the shipping has failed
-	 * 
+	 *
 	 * @param bool|null $returnImmediatelyIfShipmentFailed - Should Package return immediately when the shipping has failed or null for default
 	 */
 	public function setReturnImmediatelyIfShipmentFailed($returnImmediatelyIfShipmentFailed) {
@@ -1157,32 +1133,6 @@ class Service {
 	}
 
 	/**
-	 * Get if the Service "GoGreen" is enabled
-	 *
-	 * @return bool|null - Is the Service "GoGreen" enabled or null for default
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getGoGreen() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		return $this->goGreen;
-	}
-
-	/**
-	 * Set if the Service "GoGreen" is enabled
-	 *
-	 * @param bool|null $goGreen - Is the Service "GoGreen" enabled or null for default
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function setGoGreen($goGreen) {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-
-		$this->goGreen = $goGreen;
-	}
-
-	/**
 	 * Get if deliver Perishables
 	 *
 	 * @return bool|null - Deliver Perishables or null for default
@@ -1198,40 +1148,6 @@ class Service {
 	 */
 	public function setPerishables($perishables) {
 		$this->perishables = $perishables;
-	}
-
-	/**
-	 * Get if the Service "PersonalHandover" is enabled
-	 *
-	 * @return bool|null - Is the Service "PersonalHandover" enabled or null for default
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getPersonalHandover() {
-		trigger_error(
-			'[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon ( Called method ' . __METHOD__ .
-			' - Version 2 Function: getNamedPersonOnly() )!',
-			E_USER_DEPRECATED
-		);
-
-		return $this->personalHandover;
-	}
-
-	/**
-	 * Set if the Service "PersonalHandover" is enabled
-	 *
-	 * @param bool|null $personalHandover - Is the Service "PersonalHandover" enabled or null for default
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function setPersonalHandover($personalHandover) {
-		trigger_error(
-			'[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon ( Called method ' . __METHOD__ .
-			' - Version2 Function: setNamedPersonOnly($name) )!',
-			E_USER_DEPRECATED
-		);
-
-		$this->personalHandover = $personalHandover;
 	}
 
 	/**
@@ -1488,21 +1404,6 @@ class Service {
 	 */
 	public function setParcelOutletRoutingDetails(?string $parcelOutletRoutingDetails): void {
 		$this->parcelOutletRoutingDetails = $parcelOutletRoutingDetails;
-	}
-
-	/**
-	 * Get the Class of this Service-Object
-	 *
-	 * @param string $productType - Type of the Product
-	 * @return StdClass - Service-DHL-Class
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getServiceClass_v1($productType) {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
-
-		return new StdClass;
 	}
 
 	/**

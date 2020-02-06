@@ -244,20 +244,6 @@ class BankData {
 	}
 
 	/**
-	 * Returns a DHL-Bank-Class for API v1
-	 *
-	 * @return stdClass - DHL-Bank-Class
-	 *
-	 * @deprecated - DHL-API-Version 1 Method
-	 */
-	public function getBankClass_v1() {
-		trigger_error('[DHL-PHP-SDK]: Version 1 Methods are deprecated and will removed soon (Called method ' . __METHOD__ . ')!', E_USER_DEPRECATED);
-		trigger_error('[DHL-PHP-SDK]: Called Version 1 Method: ' . __METHOD__ . ' is incomplete (does nothing)!', E_USER_WARNING);
-
-		return new StdClass;
-	}
-
-	/**
 	 * Returns a DHL-Bank-Class for API v2
 	 *
 	 * @return StdClass - DHL-Bank-Class
