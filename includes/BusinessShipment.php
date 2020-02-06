@@ -428,10 +428,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - Removed Log-Function
 	 */
 	public function isLog() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ . ' Logging has been removed',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Logging has been removed');
 
 		return false;
 	}
@@ -444,10 +441,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - Removed Log-Function
 	 */
 	public function setLog($log) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ . ' Logging has been removed',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Logging has been removed');
 	}
 
 	/**
@@ -476,12 +470,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getShipmentDetails() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->shipmentDetails;
 	}
@@ -494,12 +483,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setShipmentDetails($shipmentDetails) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->shipmentDetails = $shipmentDetails;
 	}
@@ -512,13 +496,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function getService() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
-			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
-			' on the Shipment instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->service;
 	}
@@ -531,13 +509,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function setService($service) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
-			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
-			' on the Shipment instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->service = $service;
 	}
@@ -550,13 +522,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function getBank() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
-			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
-			' on the Shipment instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->bank;
 	}
@@ -569,13 +535,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
 	 */
 	public function setBank($bank) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentDetails` Object, please do/get them there and assign the' .
-			' `ShipmentDetails` Object to the `ShipmentOrder` Object by using `setShipmentDetails($shipmentDetails)`' .
-			' on the Shipment instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->bank = $bank;
 	}
@@ -588,12 +548,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getSender() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->sender;
 	}
@@ -606,12 +561,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setSender($sender) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->sender = $sender;
 	}
@@ -624,12 +574,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getReceiver() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->receiver;
 	}
@@ -642,12 +587,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setReceiver($receiver) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->receiver = $receiver;
 	}
@@ -662,12 +602,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getReturnReceiver() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->returnReceiver;
 	}
@@ -682,12 +617,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setReturnReceiver($returnReceiver) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->returnReceiver = $returnReceiver;
 	}
@@ -700,12 +630,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getExportDocument() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->exportDocument;
 	}
@@ -718,12 +643,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setExportDocument($exportDocument) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->exportDocument = $exportDocument;
 	}
@@ -736,12 +656,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getSequenceNumber() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->sequenceNumber;
 	}
@@ -754,12 +669,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setSequenceNumber($sequenceNumber) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->sequenceNumber = $sequenceNumber;
 	}
@@ -772,9 +682,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	public function getReceiverEmail() {
-		trigger_error('[DHL-PHP-SDK]: Called deprecated method ' . __METHOD__ . ' in class ' . __CLASS__ .
-			'. The notification E-Mail (or receiver E-Mail) was moved into the ShipmentDetail class!' .
-			' Please use the new function, this here will removed in the future!', E_USER_DEPRECATED);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Moved Receiver E-Mail to correct Class (Shipment-Details)');
 
 		return $this->receiverEmail;
 	}
@@ -787,9 +695,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
 	 */
 	public function setReceiverEmail($receiverEmail) {
-		trigger_error('[DHL-PHP-SDK]: Called deprecated method ' . __METHOD__ . ' in class ' . __CLASS__ .
-			'. The notification E-Mail (or receiver E-Mail) was moved into the ShipmentDetail class!' .
-			' Please use the new function, this here will removed in the future!', E_USER_DEPRECATED);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Moved Receiver E-Mail to correct Class (Shipment-Details)');
 
 		$this->receiverEmail = $receiverEmail;
 	}
@@ -802,12 +708,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function getPrintOnlyIfReceiverIsValid() {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		return $this->printOnlyIfReceiverIsValid;
 	}
@@ -822,12 +723,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
 	 */
 	public function setPrintOnlyIfReceiverIsValid($printOnlyIfReceiverIsValid) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' These details belong to the `ShipmentOrder` Object, please do/get them there and assign the' .
-			' `ShipmentOrder` Object to this Object by using `addShipmentOrder($shipmentOrder)` on this instance!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
 
 		$this->printOnlyIfReceiverIsValid = $printOnlyIfReceiverIsValid;
 	}
@@ -1359,12 +1255,7 @@ class BusinessShipment extends Version {
 	 * @deprecated - Old Shipment creation class (Supports only 1 Shipment)
 	 */
 	private function createShipmentClass_v2_legacy($shipmentNumber = null) {
-		trigger_error(
-			'[DHL-PHP-SDK]: ' . __CLASS__ . '->' . __METHOD__ .
-			' This method was called for Backward-Compatibility, please create `ShipmentOrder` Objects' .
-			' and assign them with `addShipmentOrder($shipmentOrder)` on this instance.',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__);
 
 		// Set old values
 		$this->getShipmentDetails()->setService($this->getService());

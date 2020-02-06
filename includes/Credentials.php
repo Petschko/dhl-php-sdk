@@ -207,7 +207,7 @@ class Credentials {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getEpk($len = null) {
-		trigger_error('Called deprecated method ' . __METHOD__ . ': Use getEkp() instead, this method will removed in the future!', E_USER_DEPRECATED);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use getEkp() instead');
 
 		return $this->getEkp($len);
 	}
@@ -229,7 +229,7 @@ class Credentials {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setEpk($ekp) {
-		trigger_error('Called deprecated method ' . __METHOD__ . ': Use setEkp() instead, this method will removed in the future!', E_USER_DEPRECATED);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use setEkp() instead');
 
 		$this->setEkp($ekp);
 	}

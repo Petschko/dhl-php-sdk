@@ -375,7 +375,7 @@ abstract class Address {
 	 * @deprecated - Buggy on some addresses, please separate the number and street by yourself
 	 */
 	public final function setFullStreet($street) {
-		trigger_error('[DHL-PHP-SDK]: Called deprecated method ' . __METHOD__ . ': Buggy on some addresses, please separate the number and street by yourself. This method will removed in the future!', E_USER_DEPRECATED);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__);
 
 		$match = array();
 

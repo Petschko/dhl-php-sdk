@@ -664,10 +664,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getIndividualSenderRequiredmentsEnabled() {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use getIndividualSenderRequirementsEnabled() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use getIndividualSenderRequirementsEnabled() instead, this method will removed in the future!');
 
 		return $this->getIndividualSenderRequirementsEnabled();
 	}
@@ -680,10 +677,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setIndividualSenderRequiredmentsEnabled($individualSenderRequirementsEnabled) {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use setIndividualSenderRequirementsEnabled() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use setIndividualSenderRequirementsEnabled() instead, this method will removed in the future!');
 
 		$this->setIndividualSenderRequirementsEnabled($individualSenderRequirementsEnabled);
 	}
@@ -696,10 +690,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getIndividualSenderRequiredmentsText() {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use getIndividualSenderRequirementsText() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use getIndividualSenderRequirementsText() instead, this method will removed in the future!');
 
 		return $this->getIndividualSenderRequirementsText();
 	}
@@ -712,10 +703,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setIndividualSenderRequiredmentsText($individualSenderRequirementsText) {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use setIndividualSenderRequirementsText() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use setIndividualSenderRequirementsText() instead, this method will removed in the future!');
 
 		$this->setIndividualSenderRequirementsText($individualSenderRequirementsText);
 	}
@@ -782,10 +770,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getReturnImmediatlyIfShipmentFailed() {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use getReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use getReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!');
 
 		return $this->getReturnImmediatelyIfShipmentFailed();
 	}
@@ -798,10 +783,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setReturnImmediatlyIfShipmentFailed($returnImmediatelyIfShipmentFailed) {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use setReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use setReturnImmediatelyIfShipmentFailed() instead, this method will removed in the future!');
 
 		$this->setReturnImmediatelyIfShipmentFailed($returnImmediatelyIfShipmentFailed);
 	}
@@ -832,10 +814,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function getNoticeNonDeliverability() {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use getNoticeOnNonDeliverable() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use getNoticeOnNonDeliverable() instead, this method will removed in the future!');
 
 		return $this->getNoticeOnNonDeliverable();
 	}
@@ -848,10 +827,7 @@ class Service {
 	 * @deprecated - Invalid name of the function
 	 */
 	public function setNoticeNonDeliverability($noticeOnNonDeliverable) {
-		trigger_error(
-			'Called deprecated method ' . __METHOD__ . ': Use setNoticeOnNonDeliverable() instead, this method will removed in the future!',
-			E_USER_DEPRECATED
-		);
+		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Use setNoticeOnNonDeliverable() instead, this method will removed in the future!');
 
 		$this->setNoticeOnNonDeliverable($noticeOnNonDeliverable);
 	}
