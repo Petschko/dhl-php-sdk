@@ -34,13 +34,9 @@ require_once(__DIR__ . '/includes/_nonComposerLoader.php');
 
 This Project is written for the DHL-SOAP-API **Version 2 or higher**.
 
-### API Version 3.0
-
-This Project is **currently** not available for Version 3.0+, I plan to update it soon! Please don't send me any E-Mails about this! If you want to talk about Version 3.0, please use the Issue for it: https://github.com/Petschko/dhl-php-sdk/issues/64
-
 ### Version 1
 
-Version 1 Methods are marked as deprecated and will removed soon. Please upgrade to the API-Version 2 as soon as possible.
+Version 1 Methods were removed. Please upgrade to the DHL-API-Version 2 or 3.
 
 ## Usage / Getting started
 
@@ -68,8 +64,10 @@ All these Persons helped to create this SDK for the DHL-API:
 - [cedricziel](https://github.com/cedricziel) - For turning this Project into a [Composer](https://getcomposer.org/)-Package
 - [Dakror](https://github.com/Dakror) - For the `ProductInfo`-Class
 - [octlabs](https://github.com/octlabs) - For adding some missing Documentation
+- [OliverTempel](https://github.com/OliverTempel) - For adding label-types in Version 3
 - [Petschko](https://github.com/Petschko) - Initially created this Project and decided to share it for free
 - [tobias-redmann](https://github.com/tobias-redmann) - For the `setFullStreet` method and the PHP-DHL-Example-Project for Version 1 _(This helped a lot to understand how the API works)_
+- [Tune389](https://github.com/Tune389) - For fixing the `updateShipmentOrder` for API-Version 2
 
 
 ## Donate

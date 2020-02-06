@@ -403,6 +403,7 @@ class ShipmentOrder {
 			$class->PrintOnlyIfCodeable->active = (int) $this->getPrintOnlyIfReceiverIsValid();
 		}
 
+		// Fixme: It doesnt seem to affect the single format, maybe it was just a bug
 		if($this->getLabelResponseType() !== null)
 			$class->labelResponseType = $this->getLabelResponseType();
 
