@@ -65,6 +65,11 @@ class BusinessShipment extends Version {
 	const RESPONSE_TYPE_XML = 'XML';
 
 	/**
+	 * Response-Type ZPL2
+	 */
+	const RESPONSE_TYPE_ZPL2 = 'ZPL2';
+
+	/**
 	 * Maximum requests to DHL in one call
 	 */
 	const MAX_DHL_REQUESTS = 30;
