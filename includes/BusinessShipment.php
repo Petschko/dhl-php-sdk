@@ -302,7 +302,7 @@ class BusinessShipment extends Version {
 
 		$this->setCredentials($credentials);
 
-		// @deprecated Set Shipment-Class for Backward-Compatibility todo remove in newer versions
+		// @deprecated Set Shipment-Class for Backward-Compatibility (remove in newer versions)
 		$this->shipmentDetails = new ShipmentDetails($credentials->getEkp(10) . '0101');
 	}
 
