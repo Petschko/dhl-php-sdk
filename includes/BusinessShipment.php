@@ -114,6 +114,7 @@ class BusinessShipment extends Version {
 	 * @var ShipmentDetails $shipmentDetails - Shipment Details Object
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $shipmentDetails;
 
@@ -125,6 +126,8 @@ class BusinessShipment extends Version {
 	 * @var Service|null $service - Service Object | null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	private $service = null;
 
@@ -136,6 +139,8 @@ class BusinessShipment extends Version {
 	 * @var BankData|null $bank - Bank-Object | null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	private $bank = null;
 
@@ -145,6 +150,7 @@ class BusinessShipment extends Version {
 	 * @var Sender|null $sender - Sender Object
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $sender = null;
 
@@ -154,6 +160,7 @@ class BusinessShipment extends Version {
 	 * @var Receiver|PackStation|Filial|null $receiver - Receiver Object
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $receiver = null;
 
@@ -165,6 +172,7 @@ class BusinessShipment extends Version {
 	 * @var ReturnReceiver|null $returnReceiver - Return Receiver Object | null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $returnReceiver = null;
 
@@ -176,6 +184,7 @@ class BusinessShipment extends Version {
 	 * @var ExportDocument|null $exportDocument - Export-Document-Settings Object | null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $exportDocument = null;
 
@@ -189,6 +198,7 @@ class BusinessShipment extends Version {
 	 * @var string $sequenceNumber - Sequence-Number
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $sequenceNumber = '1';
 
@@ -203,6 +213,8 @@ class BusinessShipment extends Version {
 	 * @var string|null $receiverEmail - Receiver-E-Mail | null for none
 	 *
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	private $receiverEmail = null;
 
@@ -214,6 +226,7 @@ class BusinessShipment extends Version {
 	 * @var bool|null $printOnlyIfReceiverIsValid - true will only print if receiver address is valid else false (null uses default)
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	private $printOnlyIfReceiverIsValid = null;
 
@@ -444,6 +457,7 @@ class BusinessShipment extends Version {
 	 * @return ShipmentDetails - Shipment-Details-Object
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getShipmentDetails() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -457,6 +471,7 @@ class BusinessShipment extends Version {
 	 * @param ShipmentDetails $shipmentDetails - Shipment-Details-Object
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setShipmentDetails($shipmentDetails) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -470,6 +485,8 @@ class BusinessShipment extends Version {
 	 * @return Service|null - Service-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	public function getService() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -483,6 +500,8 @@ class BusinessShipment extends Version {
 	 * @param Service|null $service - Service-Object or null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	public function setService($service) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -496,6 +515,8 @@ class BusinessShipment extends Version {
 	 * @return BankData|null - Bank-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	public function getBank() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -509,6 +530,8 @@ class BusinessShipment extends Version {
 	 * @param BankData|null $bank - Bank-Object or null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentDetails` Object, please do them there
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	public function setBank($bank) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -522,6 +545,7 @@ class BusinessShipment extends Version {
 	 * @return Sender|null - Sender-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getSender() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -535,6 +559,7 @@ class BusinessShipment extends Version {
 	 * @param Sender|null $sender - Sender-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setSender($sender) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -548,6 +573,7 @@ class BusinessShipment extends Version {
 	 * @return Receiver|PackStation|Filial|null - Receiver-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getReceiver() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -561,6 +587,7 @@ class BusinessShipment extends Version {
 	 * @param Receiver|PackStation|Filial|null $receiver - Receiver-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setReceiver($receiver) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -576,6 +603,7 @@ class BusinessShipment extends Version {
 	 * @return ReturnReceiver|null - ReturnReceiver-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getReturnReceiver() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -591,6 +619,7 @@ class BusinessShipment extends Version {
 	 * @param ReturnReceiver|null $returnReceiver - ReturnReceiver-Object or null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setReturnReceiver($returnReceiver) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -604,6 +633,7 @@ class BusinessShipment extends Version {
 	 * @return ExportDocument|null - ExportDocument-Object or null if none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getExportDocument() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -617,6 +647,7 @@ class BusinessShipment extends Version {
 	 * @param ExportDocument|null $exportDocument - ExportDocument-Object or null for none
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setExportDocument($exportDocument) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -630,6 +661,7 @@ class BusinessShipment extends Version {
 	 * @return string - Sequence-Number
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getSequenceNumber() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -643,6 +675,7 @@ class BusinessShipment extends Version {
 	 * @param string $sequenceNumber - sequence-Number
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setSequenceNumber($sequenceNumber) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -656,6 +689,8 @@ class BusinessShipment extends Version {
 	 * @return null|string - Receiver-Email or null if none
 	 *
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	public function getReceiverEmail() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Moved Receiver E-Mail to correct Class (Shipment-Details)');
@@ -669,6 +704,8 @@ class BusinessShipment extends Version {
 	 * @param null|string $receiverEmail - Receiver-Email or null for none
 	 *
 	 * @deprecated - Moved Receiver E-Mail to correct Class (Shipment-Details)
+	 * @see ShipmentOrder - Which includes ShipmentDetails
+	 * @see ShipmentDetails
 	 */
 	public function setReceiverEmail($receiverEmail) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, 'Moved Receiver E-Mail to correct Class (Shipment-Details)');
@@ -682,6 +719,7 @@ class BusinessShipment extends Version {
 	 * @return bool|null - Should the label only printed on a valid Address | null means DHL-Default
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function getPrintOnlyIfReceiverIsValid() {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
@@ -697,6 +735,7 @@ class BusinessShipment extends Version {
 	 * @param bool|null $printOnlyIfReceiverIsValid - Should the label only printed on a valid Address | null uses default from DHL
 	 *
 	 * @deprecated - These details belong to the `ShipmentOrder` Object, please do them there
+	 * @see ShipmentOrder
 	 */
 	public function setPrintOnlyIfReceiverIsValid($printOnlyIfReceiverIsValid) {
 		Deprecated::methodIsDeprecated(__METHOD__, __CLASS__, Deprecated::BUSINESS_SHIPMENT_BIG_FIELD_DEPRECATION_REASON);
