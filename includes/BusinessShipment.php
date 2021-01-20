@@ -767,9 +767,6 @@ class BusinessShipment extends Version {
 				__METHOD__ . ' in class ' . __CLASS__,
 				E_USER_ERROR
 			);
-			$this->addError(__METHOD__ . ': Non-Array value given');
-
-			return;
 		}
 
 		$this->shipmentOrders = $shipmentOrders;
