@@ -98,13 +98,6 @@ class BankData {
 	private $accountReference = null;
 
 	/**
-	 * BankData constructor.
-	 */
-	public function __construct() {
-		// VOID
-	}
-
-	/**
 	 * Get the Account Owner Name
 	 *
 	 * @return string - Account Owner Name

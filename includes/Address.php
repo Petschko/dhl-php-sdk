@@ -137,13 +137,6 @@ abstract class Address {
 	private $state = null;
 
 	/**
-	 * Address constructor.
-	 */
-	public function __construct() {
-		// VOID
-	}
-
-	/**
 	 * Get the Street name
 	 *
 	 * @return string - Street name
