@@ -883,7 +883,11 @@ class BusinessShipment extends Version {
 			'login' => $this->getCredentials()->getApiUser(),
 			'password' => $this->getCredentials()->getApiPassword(),
 			'location' => $location,
-			'trace' => 1
+			'trace' => 1,
+			'soap_version' => SOAP_1_1,
+			'stream_context' => stream_context_create(array(
+				'ssl' => array('crypto_method' =>  STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT),
+			)),
 		);
 
 		$this->setSoapClient(new SoapClient($this->getAPIUrl(), $auth_params));
