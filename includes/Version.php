@@ -50,15 +50,6 @@ abstract class Version {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	protected function __destruct() {
-		unset($this->version);
-		unset($this->mayor);
-		unset($this->minor);
-	}
-
-	/**
 	 * Getter for Current-Version
 	 *
 	 * @return string - Current-Version

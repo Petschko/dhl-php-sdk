@@ -113,21 +113,6 @@ class LabelData extends Version implements LabelResponse {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->statusCode);
-		unset($this->statusText);
-		unset($this->statusMessage);
-		unset($this->sequenceNumber);
-		unset($this->shipmentNumber);
-		unset($this->label);
-		unset($this->returnLabel);
-		unset($this->exportDoc);
-		unset($this->codLabel);
-	}
-
-	/**
 	 * Getter for Status-Code
 	 *
 	 * - Response::DHL_ERROR_NOT_SET (-1) -> Status-Code was not set

@@ -97,17 +97,6 @@ class LabelFormat {
 	private $feederSystem = null;
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->groupProfileName);
-		unset($this->labelFormat);
-		unset($this->labelFormatRetoure);
-		unset($this->combinedPrinting);
-		unset($this->feederSystem);
-	}
-
-	/**
 	 * Get the Group-Profile name - Choose between multiple user groups
 	 *
 	 * @return string|null - Group-Profile name | null uses default from DHL

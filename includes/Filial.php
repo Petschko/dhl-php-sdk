@@ -40,15 +40,6 @@ class Filial extends Receiver {
 	private $filialNumber = '';
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		parent::__destruct();
-		unset($this->postNumber);
-		unset($this->filialNumber);
-	}
-
-	/**
 	 * Get the Post-Number
 	 *
 	 * @return string - Post-Number

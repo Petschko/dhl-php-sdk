@@ -77,16 +77,6 @@ class IdentCheck {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->lastName);
-		unset($this->firstName);
-		unset($this->birthday);
-		unset($this->minimumAge);
-	}
-
-	/**
 	 * Get the Last-Name
 	 *
 	 * @return string - Last-Name

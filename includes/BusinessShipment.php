@@ -293,31 +293,6 @@ class BusinessShipment extends Version {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		parent::__destruct();
-		unset($this->soapClient);
-		unset($this->errors);
-		unset($this->test);
-		unset($this->credentials);
-		unset($this->shipmentDetails);
-		unset($this->service);
-		unset($this->bank);
-		unset($this->sender);
-		unset($this->receiver);
-		unset($this->returnReceiver);
-		unset($this->exportDocument);
-		unset($this->sequenceNumber);
-		unset($this->receiverEmail);
-		unset($this->printOnlyIfReceiverIsValid);
-		unset($this->labelResponseType);
-		unset($this->shipmentOrders);
-		unset($this->labelFormat);
-		unset($this->customAPIURL);
-	}
-
-	/**
 	 * Get the Business-API-URL for this Version
 	 *
 	 * @return string - Business-API-URL

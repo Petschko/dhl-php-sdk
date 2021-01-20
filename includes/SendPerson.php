@@ -91,19 +91,6 @@ abstract class SendPerson extends Address {
 	private $contactPerson = null;
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		parent::__destruct();
-		unset($this->name);
-		unset($this->name2);
-		unset($this->name3);
-		unset($this->phone);
-		unset($this->email);
-		unset($this->contactPerson);
-	}
-
-	/**
 	 * Get the Name
 	 *
 	 * @return string - Name

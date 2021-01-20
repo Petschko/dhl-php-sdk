@@ -163,22 +163,6 @@ class ExportDocument {
 	private $exportDocPosition = null;
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->invoiceNumber);
-		unset($this->exportType);
-		unset($this->exportTypeDescription);
-		unset($this->termsOfTrade);
-		unset($this->placeOfCommittal);
-		unset($this->additionalFee);
-		unset($this->permitNumber);
-		unset($this->attestationNumber);
-		unset($this->withElectronicExportNotification);
-		unset($this->exportDocPosition);
-	}
-
-	/**
 	 * Get the Invoice-Number
 	 *
 	 * @return float|int|null|string - Invoice-Number or null if none

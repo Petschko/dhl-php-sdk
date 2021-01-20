@@ -477,50 +477,6 @@ class Service {
 	private $parcelOutletRoutingDetails = null;
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->dayOfDeliveryEnabled);
-		unset($this->dayOfDeliveryDate);
-		unset($this->deliveryTimeframeEnabled);
-		unset($this->deliveryTimeframe);
-		unset($this->preferredTimeEnabled);
-		unset($this->preferredTime);
-		unset($this->individualSenderRequirementsEnabled);
-		unset($this->individualSenderRequirementsText);
-		unset($this->packagingReturn);
-		unset($this->returnImmediatelyIfShipmentFailed);
-		unset($this->noticeOnNonDeliverable);
-		unset($this->shipmentHandlingEnabled);
-		unset($this->shipmentHandlingType);
-		unset($this->endorsementEnabled);
-		unset($this->endorsementType);
-		unset($this->visualCheckOfAgeEnabled);
-		unset($this->visualCheckOfAgeType);
-		unset($this->preferredLocationEnabled);
-		unset($this->preferredLocationDetails);
-		unset($this->preferredNeighbourEnabled);
-		unset($this->preferredNeighbourText);
-		unset($this->preferredDayEnabled);
-		unset($this->preferredDayText);
-		unset($this->perishables);
-		unset($this->disableNeighbourDelivery);
-		unset($this->namedPersonOnly);
-		unset($this->returnReceipt);
-		unset($this->premium);
-		unset($this->cashOnDeliveryEnabled);
-		unset($this->cashOnDeliveryAddFee);
-		unset($this->cashOnDeliveryAmount);
-		unset($this->additionalInsuranceEnabled);
-		unset($this->additionalInsuranceAmount);
-		unset($this->bulkyGoods);
-		unset($this->identCheckEnabled);
-		unset($this->identCheckObj);
-		unset($this->parcelOutletRoutingEnabled);
-		unset($this->parcelOutletRoutingDetails);
-	}
-
-	/**
 	 * Get if the Service "DayOfDelivery" is enabled
 	 *
 	 * @return bool|null - Is the Service "DayOfDelivery" enabled or null for default

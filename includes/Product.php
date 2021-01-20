@@ -104,23 +104,6 @@ class Product {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->type);
-		unset($this->name);
-		unset($this->austria);
-		unset($this->minLength);
-		unset($this->maxLength);
-		unset($this->minWidth);
-		unset($this->maxWidth);
-		unset($this->minHeight);
-		unset($this->maxHeight);
-		unset($this->maxWeight);
-		unset($this->services);
-	}
-
-	/**
 	 * Get the Product-Type
 	 *
 	 * @return string - Product-Type

@@ -214,26 +214,6 @@ class ShipmentDetails {
 	}
 
 	/**
-	 * Clears the Memory
-	 */
-	public function __destruct() {
-		unset($this->product);
-		unset($this->accountNumber);
-		unset($this->customerReference);
-		unset($this->shipmentDate);
-		unset($this->costCentre);
-		unset($this->returnAccountNumber);
-		unset($this->returnReference);
-		unset($this->weight);
-		unset($this->length);
-		unset($this->width);
-		unset($this->height);
-		unset($this->service);
-		unset($this->notificationEmail);
-		unset($this->bank);
-	}
-
-	/**
 	 * Get which Product is used
 	 *
 	 * 	Return values: (Use PRODUCT_TYPE_* constants - See above)

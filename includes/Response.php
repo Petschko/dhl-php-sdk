@@ -108,18 +108,6 @@ class Response extends Version implements LabelResponse {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		parent::__destruct();
-		unset($this->manifestData);
-		unset($this->statusCode);
-		unset($this->statusText);
-		unset($this->statusMessage);
-		unset($this->labelData);
-	}
-
-	/**
 	 * Getter for Shipment-Number
 	 *
 	 * @return null|string - Shipment-Number or null if not set

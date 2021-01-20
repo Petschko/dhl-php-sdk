@@ -112,22 +112,6 @@ class ShipmentOrder {
 	private $labelFormat = null;
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->sequenceNumber);
-		unset($this->shipmentDetails);
-		unset($this->sender);
-		unset($this->receiver);
-		unset($this->returnReceiver);
-		unset($this->exportDocument);
-		unset($this->shipperReference);
-		unset($this->printOnlyIfReceiverIsValid);
-		unset($this->labelResponseType);
-		unset($this->labelFormat);
-	}
-
-	/**
 	 * Get the Sequence-Number
 	 *
 	 * @return string - Sequence-Number

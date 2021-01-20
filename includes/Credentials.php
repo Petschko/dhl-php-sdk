@@ -142,17 +142,6 @@ class Credentials {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->user);
-		unset($this->signature);
-		unset($this->ekp);
-		unset($this->apiUser);
-		unset($this->apiPassword);
-	}
-
-	/**
 	 * Get the DHL-Intraship Username
 	 *
 	 * @return string - DHL-Intraship Username

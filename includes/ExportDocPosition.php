@@ -100,18 +100,6 @@ class ExportDocPosition {
 	}
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		unset($this->description);
-		unset($this->countryCodeOrigin);
-		unset($this->customsTariffNumber);
-		unset($this->amount);
-		unset($this->netWeightInKG);
-		unset($this->customsValue);
-	}
-
-	/**
 	 * Get the Description
 	 *
 	 * @return string|null - Description or null on failure

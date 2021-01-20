@@ -40,15 +40,6 @@ class PackStation extends Receiver {
 	private $packStationNumber = '';
 
 	/**
-	 * Clears Memory
-	 */
-	public function __destruct() {
-		parent::__destruct();
-		unset($this->postNumber);
-		unset($this->packStationNumber);
-	}
-
-	/**
 	 * Get the Post-Number
 	 *
 	 * @return string - Post-Number
