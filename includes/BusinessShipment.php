@@ -10,7 +10,8 @@ namespace Petschko\DHL;
  *
  * Notes: Contains all Functions/Values for DHL-Business-Shipment
  *
- * Checkout the repo which inspired me to improve this: https://github.com/tobias-redmann/dhl-php-sdk
+ * Checkout the repo which inspired me to improve this:
+ * @link https://github.com/tobias-redmann/dhl-php-sdk
  */
 
 use Exception;
