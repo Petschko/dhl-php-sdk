@@ -41,6 +41,14 @@ This Project is written for the DHL-SOAP-API **Version 2 or higher**.
 
 This Project is **currently** not available for Version 3.0+, I plan to update it soon! Please don't send me any E-Mails about this! If you want to talk about Version 3.0, please use the Issue for it: https://github.com/Petschko/dhl-php-sdk/issues/64
 
+#### Use BETA for Version 3.0
+
+You can still try out the dev-branch of this repo for Version 3:
+
+```
+composer require petschko/dhl-php-sdk:dev-dev
+```
+
 ### Version 1
 
 Version 1 Methods are marked as deprecated and will removed soon. Please upgrade to the API-Version 2 as soon as possible.
