@@ -2,3 +2,4 @@
 /vendor/
 Doxyfile.conf
 testDhl.php
+.env

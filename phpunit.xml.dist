@@ -1,0 +1,7 @@
+<phpunit bootstrap="tests/bootstrap.php">
+    <testsuites>
+        <testsuite name="dhl-php-sdk">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
