@@ -1,6 +1,8 @@
 # INACTIVE Repo
 ** This REPO is out of support ** Please checkout other repos or request examples from DHL
 
+In case you still have questions, you can send me an E-Mail or visit this Project on [Gitlab.com](https://gitlab.com/Petschko/dhl-php-sdk)
+
 # DHL PHP SDK
 
 This *unofficial* library is wrapping some functions of the DHL SOAP API in order to easy create/delete shipments and labels.
